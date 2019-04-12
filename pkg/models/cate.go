@@ -1,14 +1,18 @@
 package models
 
 import (
-	"time"
+	"github.com/lilonghe/simple-blog/pkg/global"
 )
 
 type Cate struct {
-	Id         int32     `json:"id,omitempty"`
-	Name       string    `json:"name,omitempty"`
-	Pid        int32     `json:"pid,omitempty"`
-	Pathname   string    `json:"pathname,omitempty"`
-	CreateTime time.Time `json:"create_time,omitempty"`
-	UpdateTime time.Time `json:"update_time,omitempty"`
+	Id       int32  `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Pid      int32  `json:"pid,omitempty"`
+	Pathname string `json:"pathname,omitempty"`
+}
+
+func GetAllCate() ([]Cate, error) {
+	datas := make([]Cate, 0)
+	err := global.Store.Find(&datas)
+	return datas, err
 }

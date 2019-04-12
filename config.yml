@@ -1,0 +1,4 @@
+dev: true
+
+dburl: root:root@/blog?charset=utf8
+dbtableprefix: fk_
