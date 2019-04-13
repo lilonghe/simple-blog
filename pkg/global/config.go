@@ -3,6 +3,8 @@ package global
 import (
 	"fmt"
 
+	"github.com/lilonghe/simple-blog/pkg/utils"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
@@ -16,19 +18,19 @@ var (
 var (
 	Config = struct {
 		Dev           bool
-		DbUrl         string
-		DbTablePrefix string
+		DbUrl         string `default:"root:root@/blog?charset=utf8"`
+		DbTablePrefix string `default:"fk_"`
 	}{}
 )
 
 func init() {
 	configor.Load(&Config, "config.yml")
-	fmt.Println(Config.Dev)
+	fmt.Println("Config -> ", utils.ToJson(Config))
 	initDB()
 }
 
 func initDB() {
-	engine, err := xorm.NewEngine("mysql", "root:root@/blog?charset=utf8")
+	engine, err := xorm.NewEngine("mysql", Config.DbUrl)
 	if err != nil {
 		panic(err)
 	}
@@ -37,9 +39,11 @@ func initDB() {
 	if err != nil {
 		panic(err)
 	}
-	Store.ShowSQL(true)
-	Store.SetMaxIdleConns(5)
 
-	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, "fk_")
+	if Config.Dev {
+		Store.ShowSQL(true)
+	}
+
+	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, Config.DbTablePrefix)
 	Store.SetTableMapper(tbMapper)
 }
