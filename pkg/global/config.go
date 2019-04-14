@@ -2,8 +2,8 @@ package global
 
 import (
 	"fmt"
-
 	"github.com/lilonghe/simple-blog/pkg/utils"
+	"html/template"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
@@ -21,6 +21,9 @@ var (
 		DbUrl         string `default:"root:root@/blog?charset=utf8"`
 		DbTablePrefix string `default:"fk_"`
 	}{}
+
+	Options     = map[string]string{}
+	ThemeConfig = map[string]template.HTML{}
 )
 
 func init() {
@@ -35,10 +38,6 @@ func initDB() {
 		panic(err)
 	}
 	Store = engine
-	err = Store.Ping()
-	if err != nil {
-		panic(err)
-	}
 
 	if Config.Dev {
 		Store.ShowSQL(true)

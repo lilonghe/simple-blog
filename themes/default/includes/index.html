@@ -5,6 +5,10 @@
             <h1 class="title"><a href="/post/{{.Pathname}}.html">{{ .Title }}</a></h1>
             <div class="entry-content">
                 {{.Summary}}
+
+                <p class="more">
+                    <a href="/post/{{.Pathname}}.html">阅读全文 »</a>
+                </p>
             </div>
         </article>
     {{ end}}

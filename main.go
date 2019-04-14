@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/lilonghe/simple-blog/pkg/models"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
@@ -16,12 +18,18 @@ func main() {
 		gin.SetMode("release")
 	}
 
+	// 加载站点配置
+	models.LoadOption()
+
 	r := gin.Default()
-	theme := "default"
+	theme := global.Options["theme"]
 	r.HTMLRender = loadTemplates("./themes/" + theme)
 	r.GET("/", routers.Index)
+	r.GET("/post/:pathname", routers.PostDetail)
+
 	r.Static("/static", "./themes/"+theme+"/res")
 
+	go tickerRefreshOption()
 	r.Run()
 }
 
@@ -46,4 +54,17 @@ func loadTemplates(templatesDir string) multitemplate.Renderer {
 		r.AddFromFiles(filepath.Base(include), files...)
 	}
 	return r
+}
+
+// 因为暂无控制面板，所以暂时为定时刷新主题配置
+func tickerRefreshOption() {
+	d := time.Duration(time.Minute * 5)
+
+	t := time.NewTicker(d)
+	defer t.Stop()
+
+	for {
+		<-t.C
+		models.LoadOption()
+	}
 }
