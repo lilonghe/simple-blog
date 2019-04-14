@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"html/template"
+	"sync"
 	"time"
 
 	"github.com/lilonghe/simple-blog/pkg/global"
@@ -45,14 +46,23 @@ func GetPostByPathname(pathname string) (*Post, error) {
 func GetPostCateAndTag(postId int32) ([]Cate, []Tag) {
 	cates := make([]Cate, 0)
 	tags := make([]Tag, 0)
-	err1 := global.Store.Join("left", PostCate{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostCate{}.TableName(), postId)).Find(&cates)
-	err2 := global.Store.Join("left", PostTag{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostTag{}.TableName(), postId)).Find(&tags)
-	if err1 != nil {
-		fmt.Println("GetPostCateAndTag -> ", err1)
-	}
-	if err2 != nil {
-		fmt.Println("GetPostCateAndTag -> ", err2)
-	}
 
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	go func() {
+		err1 := global.Store.Join("left", PostCate{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostCate{}.TableName(), postId)).Find(&cates)
+		if err1 != nil {
+			fmt.Println("GetPostCateAndTag -> ", err1)
+		}
+		wg.Done()
+	}()
+	go func() {
+		err2 := global.Store.Join("left", PostTag{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostTag{}.TableName(), postId)).Find(&tags)
+		if err2 != nil {
+			fmt.Println("GetPostCateAndTag -> ", err2)
+		}
+		wg.Done()
+	}()
+	wg.Wait()
 	return cates, tags
 }
