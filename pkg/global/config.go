@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/lilonghe/simple-blog/pkg/utils"
 	"html/template"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
@@ -20,6 +21,9 @@ var (
 		Dev           bool
 		DbUrl         string `default:"root:root@/blog?charset=utf8"`
 		DbTablePrefix string `default:"fk_"`
+		Author        string
+		AuthorLink    string
+		SiteBegin     *time.Time
 	}{}
 
 	Options     = map[string]string{}

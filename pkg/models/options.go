@@ -3,6 +3,9 @@ package models
 import (
 	"encoding/json"
 	"github.com/lilonghe/simple-blog/pkg/global"
+	"github.com/lilonghe/simple-blog/pkg/utils"
+	"strconv"
+	"time"
 )
 
 type Options struct {
@@ -32,5 +35,12 @@ func LoadOption() {
 				panic(err)
 			}
 		}
+	}
+
+	global.Options["author"] = global.Config.Author
+	global.Options["authorlink"] = global.Config.AuthorLink
+
+	if global.Config.SiteBegin != nil {
+		global.Options["runday"] = strconv.FormatInt(utils.DayDiff(time.Now(), *global.Config.SiteBegin), 10)
 	}
 }

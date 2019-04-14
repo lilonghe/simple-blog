@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"fmt"
 	"github.com/lilonghe/simple-blog/pkg/global"
 	"strconv"
 	"strings"
@@ -11,7 +10,7 @@ import (
 )
 
 func Index(c *gin.Context) {
-	limit := 10
+	limit, _ := strconv.Atoi(global.Options["postsListSize"])
 	page, _ := strconv.Atoi(c.Query("page"))
 	if page == 0 {
 		page = 1
@@ -52,8 +51,6 @@ func PostDetail(c *gin.Context) {
 		"themeConfig": global.ThemeConfig,
 	}
 
-	fmt.Println(global.ThemeConfig)
-
 	if post != nil {
 		cates, tags := models.GetPostCateAndTag(post.Id)
 		post.Cates = cates
@@ -64,4 +61,29 @@ func PostDetail(c *gin.Context) {
 	}
 
 	c.HTML(200, "post.html", resp)
+}
+
+func Archives(c *gin.Context) {
+	posts, _, _ := models.GetPostList(30000, 0)
+	respData := make(map[string][]models.PostArchiveView, 0)
+	for _, v := range posts {
+		key := strconv.FormatInt(int64(v.CreateTime.Year()), 10) + "年" + v.CreateTime.Format("01") + "月"
+		if respData[key] == nil {
+			respData[key] = make([]models.PostArchiveView, 0)
+		} else {
+			respData[key] = append(respData[key], models.PostArchiveView{
+				Pathname:   v.Pathname,
+				Title:      v.Title,
+				CreateTime: v.CreateTime,
+				UpdateTime: v.UpdateTime,
+			})
+		}
+	}
+
+	resp := map[string]interface{}{
+		"options": global.Options,
+		"datas":   respData,
+	}
+
+	c.HTML(200, "archive.html", resp)
 }

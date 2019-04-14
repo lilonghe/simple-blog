@@ -8,6 +8,12 @@
 
             <div class="post-info">
                 <p>
+                    {{if index .options "author"}}
+                        作者
+                        <a data-author="{{index .options "author"}}" href="{{index .options "authorlink"}}">
+                            <code class="notebook">{{index .options "author"}}</code>
+                        </a>
+                    {{end}}
                     发表于<i>{{.post.CreateTime.Format "2006-01-02 15:04:05"}}</i>
 
                     {{if .post.Cates }}

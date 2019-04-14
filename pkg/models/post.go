@@ -10,7 +10,7 @@ import (
 )
 
 type Post struct {
-	Id              int32         `json:"id,omitempty"`
+	Id              int32         `json:"-"`
 	Status          int32         `json:"status,omitempty"`
 	Title           string        `json:"title,omitempty"`
 	Pathname        string        `json:"pathname,omitempty"`
@@ -26,16 +26,25 @@ type Post struct {
 	Tags  []Tag  `json:"tags,omitempty" sql:"-" xorm:"-"`
 }
 
+func (Post) TableName() string { return global.Config.DbTablePrefix + "post" }
+
+type PostArchiveView struct {
+	Title      string    `json:"title,omitempty"`
+	Pathname   string    `json:"pathname,omitempty"`
+	CreateTime time.Time `json:"create_time,omitempty"`
+	UpdateTime time.Time `json:"update_time,omitempty"`
+}
+
 func GetPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
-	err = global.Store.OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	err = global.Store.Where(" status = 3 and is_public = true ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	return datas, total, err
 }
 
 func GetPostByPathname(pathname string) (*Post, error) {
 	var post Post
-	has, err := global.Store.Where(" pathname = ? ", pathname).Get(&post)
+	has, err := global.Store.Where(" status = 3 and pathname = ? ", pathname).Get(&post)
 	if has {
 		return &post, err
 	} else {
