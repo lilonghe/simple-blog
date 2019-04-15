@@ -63,19 +63,42 @@ func PostDetail(c *gin.Context) {
 	c.HTML(200, "post.html", resp)
 }
 
+type archivesModel struct {
+	Year  string
+	Month string
+	List  []models.PostArchiveView
+}
+
 func Archives(c *gin.Context) {
 	posts, _, _ := models.GetPostList(30000, 0)
-	respData := make(map[string][]models.PostArchiveView, 0)
+	respData := make([]archivesModel, 0)
+
 	for _, v := range posts {
-		key := strconv.FormatInt(int64(v.CreateTime.Year()), 10) + "年" + v.CreateTime.Format("01") + "月"
-		if respData[key] == nil {
-			respData[key] = make([]models.PostArchiveView, 0)
-		} else {
-			respData[key] = append(respData[key], models.PostArchiveView{
-				Pathname:   v.Pathname,
-				Title:      v.Title,
-				CreateTime: v.CreateTime,
-				UpdateTime: v.UpdateTime,
+		year := strconv.FormatInt(int64(v.CreateTime.Year()), 10)
+		month := v.CreateTime.Format("01")
+		match := false
+		for k, item := range respData {
+			if item.Year == year && item.Month == month {
+				respData[k].List = append(respData[k].List, models.PostArchiveView{
+					Pathname:   v.Pathname,
+					Title:      v.Title,
+					CreateTime: v.CreateTime,
+					UpdateTime: v.UpdateTime,
+				})
+				match = true
+				break
+			}
+		}
+		if !match {
+			respData = append(respData, archivesModel{
+				Year:  year,
+				Month: month,
+				List: []models.PostArchiveView{{
+					Pathname:   v.Pathname,
+					Title:      v.Title,
+					CreateTime: v.CreateTime,
+					UpdateTime: v.UpdateTime,
+				}},
 			})
 		}
 	}

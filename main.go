@@ -26,9 +26,9 @@ func main() {
 	r.HTMLRender = loadTemplates("./themes/" + theme)
 	r.GET("/", routers.Index)
 	r.GET("/post/:pathname", routers.PostDetail)
-	r.GET("/archive", routers.Archives)
+	r.GET("/archives", routers.Archives)
 
-	r.Static("/static", "./themes/"+theme+"/res")
+	r.Static("/assets", "./themes/"+theme+"/res")
 
 	go tickerRefreshOption()
 	r.Run()

@@ -3,13 +3,13 @@
         <h1 class="title">归档</h1>
 
         <div class="entry-content">
-            {{range $key, $value := .datas }}
-                <h3>{{$key}}&nbsp;({{len $value}})</h3>
+            {{range .datas }}
+                <h3>{{.Year}}年{{.Month}}月&nbsp;({{len .List}})</h3>
                 <ul>
-                    {{range $value}}
+                    {{range.List}}
                     <li>
                         <a href="/post/{{.Pathname}}.html" title="{{.Title}}">{{.Title}}</a>&nbsp;
-                        <span class="date">{{.CreateTime.Format "2006-01-02 15:04:05"}}}}</span>
+                        <span class="date">{{.CreateTime.Format "2006-01-02 15:04:05"}}</span>
                     </li>
                     {{end}}
                 </ul>
