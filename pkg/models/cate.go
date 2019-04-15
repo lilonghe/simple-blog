@@ -11,6 +11,8 @@ type Cate struct {
 	Pathname string `json:"pathname,omitempty"`
 }
 
+func (Cate) TableName() string { return global.Config.DbTablePrefix + "cate" }
+
 func GetAllCate() ([]Cate, error) {
 	datas := make([]Cate, 0)
 	err := global.Store.Find(&datas)

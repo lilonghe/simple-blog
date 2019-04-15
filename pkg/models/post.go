@@ -59,14 +59,14 @@ func GetPostCateAndTag(postId int32) ([]Cate, []Tag) {
 	wg := sync.WaitGroup{}
 	wg.Add(2)
 	go func() {
-		err1 := global.Store.Join("left", PostCate{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostCate{}.TableName(), postId)).Find(&cates)
+		err1 := global.Store.Join("inner", PostCate{}.TableName(), fmt.Sprintf("%v.post_id = %d and %v.cate_id = %v.id", PostCate{}.TableName(), postId, PostCate{}.TableName(), Cate{}.TableName())).Find(&cates)
 		if err1 != nil {
 			fmt.Println("GetPostCateAndTag -> ", err1)
 		}
 		wg.Done()
 	}()
 	go func() {
-		err2 := global.Store.Join("left", PostTag{}.TableName(), fmt.Sprintf("%v.post_id = %d", PostTag{}.TableName(), postId)).Find(&tags)
+		err2 := global.Store.Join("inner", PostTag{}.TableName(), fmt.Sprintf("%v.post_id = %d and %v.tag_id = %v.id", PostTag{}.TableName(), postId, PostTag{}.TableName(), Tag{}.TableName())).Find(&tags)
 		if err2 != nil {
 			fmt.Println("GetPostCateAndTag -> ", err2)
 		}
