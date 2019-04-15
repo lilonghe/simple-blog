@@ -8,24 +8,23 @@
     color: #ffffff;
 }
 
-body {
-    font-family: -apple-system, "Open Sans", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#busuanzi_container_site_uv {
-    margin-left: 5px;
-}
-
 pre .name {
     display: none;
 }
 
+.toc {
+    min-width: 260px;
+    margin-left: 0;
+}
 @media screen and (min-width: 1700px) {
     .toc {
         position: fixed;
-        right: 100px;
-        border-left: 1px solid #CCC;
-        top: 90px;
+        top: 40px;
+        transform: translateX(100%);
+        right: 280px;
+        border: 0;
+        box-shadow: 0 0 3px #CCC;
+
     }
 }
 
@@ -62,6 +61,7 @@ article blockquote {
     box-shadow: 0 0 3px #CCC;
     padding: 0px 20px;
     padding-top: 10px;
+    border-top: 0;
 }
 
 #sidebar .profile span, #sidebar .buttons li a, #sidebar .buttons li a:hover {
@@ -157,12 +157,23 @@ article h1.title {
     color: #CCC;
 }
 
+#main {
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+.archive-link {
+    text-align: right;
+}
 @media screen and (max-width: 768px) {
     #nav {
         margin-bottom: 20px;
     }
     #main {
-        padding-top: 0;
+        padding-top: 20px;
         padding-bottom: 20px;
     }
+    .archive-link {
+        text-align: center;
+    }
 }
+

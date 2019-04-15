@@ -8,7 +8,7 @@ body {
   transition: transform .2s cubic-bezier(.4,.01,.165,.99);
   transition: transform .2s cubic-bezier(.4,.01,.165,.99),-webkit-transform .2s cubic-bezier(.4,.01,.165,.99);
   -webkit-tap-highlight-color: transparent;
-  font-family: "Helvetica Neue",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei";
+  font-family: "思源黑体",arial,sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-overflow-scrolling: touch;
 }
