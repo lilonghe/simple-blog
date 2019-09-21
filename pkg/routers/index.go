@@ -1,9 +1,10 @@
 package routers
 
 import (
-	"github.com/lilonghe/simple-blog/pkg/global"
 	"strconv"
 	"strings"
+
+	"github.com/lilonghe/simple-blog/pkg/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lilonghe/simple-blog/pkg/models"

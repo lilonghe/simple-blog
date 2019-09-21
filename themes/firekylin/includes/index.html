@@ -3,6 +3,7 @@
     {{ range .posts }}
         <article class="post">
             <h1 class="title"><a href="/post/{{.Pathname}}.html">{{ .Title }}</a></h1>
+            <small class="index-post-time">发布于 {{.CreateTime}}</small>
             <div class="entry-content">
                 {{.Summary}}
 
