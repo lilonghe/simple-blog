@@ -2,26 +2,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-<title>{{index .options "title"}}</title>
+<title>{{.post.Title}}</title>
 {{if index .options "favicon_url"}}<link rel="icon" href="{{index .options "favicon_url"}}">{{end}}
 {{if index .options "keywords"}}<meta name="keywords" content="{{index .options "keywords"}}">{{end}}
 {{if index .options "description"}}<meta name="description" content="{{index .options "description"}}">{{end}}
 <link rel="stylesheet" href="/assets/css/all.css" type="text/css" />
 </head>
 <body>
-{{/*    <nav id="nav">*/}}
-{{/*        <ul>*/}}
-{{/*            <li><a href="/">首页</a></li><li><a href="/archive">归档</a></li>*/}}
-{{/*        </ul>*/}}
-{{/*    </nav>*/}}
     <div id="main">
         {{template "content" .}}
     </div>
-{{/*    <footer id="footer">*/}}
-{{/*        {{if index .options "runday"}}*/}}
-{{/*            Has been running {{index .options "runday"}} days.*/}}
-{{/*        {{end}}*/}}
-{{/*    </footer>*/}}
     <script src="/assets/js/main.js"></script>
 </body>
 </html>
