@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/lilonghe/simple-blog/pkg/models"
+	"simple-blog/pkg/models"
 	"path/filepath"
 	"time"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
-	"github.com/lilonghe/simple-blog/pkg/global"
-	"github.com/lilonghe/simple-blog/pkg/routers"
+	"simple-blog/pkg/global"
+	"simple-blog/pkg/routers"
 )
 
 func main() {
@@ -27,6 +27,7 @@ func main() {
 	r.GET("/", routers.Index)
 	r.GET("/post/:pathname", routers.PostDetail)
 	r.GET("/archives", routers.Archives)
+	r.GET("/cate/wiki", routers.Wiki)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 

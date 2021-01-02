@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lilonghe/simple-blog/pkg/global"
+	"simple-blog/pkg/global"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lilonghe/simple-blog/pkg/models"
+	"simple-blog/pkg/models"
 )
 
 func Index(c *gin.Context) {
@@ -72,6 +72,48 @@ type archivesModel struct {
 
 func Archives(c *gin.Context) {
 	posts, _, _ := models.GetPostList(30000, 0)
+	respData := make([]archivesModel, 0)
+
+	for _, v := range posts {
+		year := strconv.FormatInt(int64(v.CreateTime.Year()), 10)
+		month := v.CreateTime.Format("01")
+		match := false
+		for k, item := range respData {
+			if item.Year == year && item.Month == month {
+				respData[k].List = append(respData[k].List, models.PostArchiveView{
+					Pathname:   v.Pathname,
+					Title:      v.Title,
+					CreateTime: v.CreateTime,
+					UpdateTime: v.UpdateTime,
+				})
+				match = true
+				break
+			}
+		}
+		if !match {
+			respData = append(respData, archivesModel{
+				Year:  year,
+				Month: month,
+				List: []models.PostArchiveView{{
+					Pathname:   v.Pathname,
+					Title:      v.Title,
+					CreateTime: v.CreateTime,
+					UpdateTime: v.UpdateTime,
+				}},
+			})
+		}
+	}
+
+	resp := map[string]interface{}{
+		"options": global.Options,
+		"datas":   respData,
+	}
+
+	c.HTML(200, "archive.html", resp)
+}
+
+func Wiki(c *gin.Context) {
+	posts, _, _ := models.GetPostListByCate(30000, 0, 4)
 	respData := make([]archivesModel, 0)
 
 	for _, v := range posts {

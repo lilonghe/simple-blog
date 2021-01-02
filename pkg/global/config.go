@@ -2,7 +2,7 @@ package global
 
 import (
 	"fmt"
-	"github.com/lilonghe/simple-blog/pkg/utils"
+	"simple-blog/pkg/utils"
 	"html/template"
 	"time"
 

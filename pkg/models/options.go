@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"github.com/lilonghe/simple-blog/pkg/global"
-	"github.com/lilonghe/simple-blog/pkg/utils"
+	"simple-blog/pkg/global"
+	"simple-blog/pkg/utils"
 	"strconv"
 	"time"
 )

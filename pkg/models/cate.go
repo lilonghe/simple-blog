@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/lilonghe/simple-blog/pkg/global"
+	"simple-blog/pkg/global"
 )
 
 type Cate struct {

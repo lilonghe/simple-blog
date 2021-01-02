@@ -1,6 +1,6 @@
 package models
 
-import "github.com/lilonghe/simple-blog/pkg/global"
+import "simple-blog/pkg/global"
 
 type Tag struct {
 	Id       int32  `json:"id,omitempty"`

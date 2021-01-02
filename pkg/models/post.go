@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lilonghe/simple-blog/pkg/global"
+	"simple-blog/pkg/global"
 )
 
 type Post struct {
@@ -39,6 +39,16 @@ func GetPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
 	err = global.Store.Where(" status = 3 and is_public = true ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	return datas, total, err
+}
+
+/**
+ * Custom action, Only show target cate
+ */
+func GetPostListByCate(limit, offset int, CateId int32) ([]Post, int64, error) {
+	datas := make([]Post, 0)
+	total, err := global.Store.Count(&Post{})
+	err = global.Store.Where(" status = 3 and is_public = true and id in (select post_id from "+ PostCate{}.TableName() +" where cate_id = ? ) ", CateId).OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	return datas, total, err
 }
 
