@@ -17,10 +17,10 @@ type Post struct {
 	Summary         template.HTML `json:"summary,omitempty"`
 	MarkdownContent string        `json:"markdown_content,omitempty"`
 	Content         template.HTML `json:"content,omitempty"`
-	IsPublic        bool          `json:"is_public,omitempty"`
 	Options         string        `json:"options,omitempty"`
 	CreateTime      time.Time     `json:"create_time,omitempty"`
 	UpdateTime      time.Time     `json:"update_time,omitempty"`
+	IsPublic        bool          `json:"is_public,omitempty"`
 
 	Cates []Cate `json:"cates,omitempty" sql:"-" xorm:"-"`
 	Tags  []Tag  `json:"tags,omitempty" sql:"-" xorm:"-"`
@@ -48,7 +48,7 @@ func GetPostList(limit, offset int) ([]Post, int64, error) {
 func GetPostListByCate(limit, offset int, CateId int32) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
-	err = global.Store.Where(" status = 3 and is_public = true and id in (select post_id from "+ PostCate{}.TableName() +" where cate_id = ? ) ", CateId).OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	err = global.Store.Where(" status = 3 and is_public = true and id in (select post_id from "+PostCate{}.TableName()+" where cate_id = ? ) ", CateId).OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	return datas, total, err
 }
 
