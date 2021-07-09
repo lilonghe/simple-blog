@@ -9,3 +9,9 @@ type PostCate struct {
 }
 
 func (PostCate) TableName() string { return global.Config.DbTablePrefix + "post_cate" }
+
+func GetAllPostCate() ([]PostCate, error) {
+	datas := make([]PostCate, 0)
+	err := global.Store.Find(&datas)
+	return datas, err
+}

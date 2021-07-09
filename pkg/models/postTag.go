@@ -9,3 +9,9 @@ type PostTag struct {
 }
 
 func (PostTag) TableName() string { return global.Config.DbTablePrefix + "post_tag" }
+
+func GetAllPostTag() ([]PostTag, error) {
+	datas := make([]PostTag, 0)
+	err := global.Store.Find(&datas)
+	return datas, err
+}

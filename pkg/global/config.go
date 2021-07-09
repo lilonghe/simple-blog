@@ -1,8 +1,6 @@
 package global
 
 import (
-	"fmt"
-	"simple-blog/pkg/utils"
 	"html/template"
 	"time"
 
@@ -32,7 +30,6 @@ var (
 
 func init() {
 	configor.Load(&Config, "config.yml")
-	fmt.Println("Config -> ", utils.ToJson(Config))
 	initDB()
 }
 

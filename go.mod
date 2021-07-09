@@ -11,4 +11,6 @@ require (
 	github.com/go-xorm/xorm v0.7.4
 	github.com/jinzhu/configor v1.0.0
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
+	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

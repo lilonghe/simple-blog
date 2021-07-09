@@ -42,6 +42,13 @@ func GetPostList(limit, offset int) ([]Post, int64, error) {
 	return datas, total, err
 }
 
+func GetAllPostList(limit, offset int) ([]Post, int64, error) {
+	datas := make([]Post, 0)
+	total, err := global.Store.Count(&Post{})
+	err = global.Store.Where(" status != 4 and is_public = true ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	return datas, total, err
+}
+
 /**
  * Custom action, Only show target cate
  */

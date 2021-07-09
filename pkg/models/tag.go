@@ -9,3 +9,9 @@ type Tag struct {
 }
 
 func (Tag) TableName() string { return global.Config.DbTablePrefix + "tag" }
+
+func GetAllTag() ([]Tag, error) {
+	datas := make([]Tag, 0)
+	err := global.Store.Find(&datas)
+	return datas, err
+}
