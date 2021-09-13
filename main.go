@@ -1,14 +1,15 @@
 package main
 
 import (
-	"simple-blog/pkg/models"
 	"path/filepath"
+	"simple-blog/pkg/models"
 	"time"
+
+	"simple-blog/pkg/global"
+	"simple-blog/pkg/routers"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
-	"simple-blog/pkg/global"
-	"simple-blog/pkg/routers"
 )
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 
-	go tickerRefreshOption()
+	// go tickerRefreshOption()
 	r.Run()
 }
 
