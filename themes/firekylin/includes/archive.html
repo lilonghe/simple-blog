@@ -1,10 +1,10 @@
 {{define "content"}}
     <article class="post archive">
-        <h1 class="title">归档</h1>
+        <h1 class="title">Archives</h1>
 
         <div class="entry-content">
             {{range .datas }}
-                <h3>{{.Year}}年{{.Month}}月&nbsp;({{len .List}})</h3>
+                <h3>{{.Year}}-{{.Month}}</h3>
                 <ul>
                     {{range.List}}
                     <li>

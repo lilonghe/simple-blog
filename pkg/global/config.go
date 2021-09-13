@@ -8,6 +8,7 @@ import (
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 	"github.com/jinzhu/configor"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 var (
@@ -26,6 +27,8 @@ var (
 
 	Options     = map[string]string{}
 	ThemeConfig = map[string]template.HTML{}
+
+	HTMLFormat = bluemonday.StripTagsPolicy()
 )
 
 func init() {

@@ -6,8 +6,9 @@ import (
 
 	"simple-blog/pkg/global"
 
-	"github.com/gin-gonic/gin"
 	"simple-blog/pkg/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Index(c *gin.Context) {
@@ -18,6 +19,13 @@ func Index(c *gin.Context) {
 	}
 
 	posts, total, _ := models.GetPostList(limit, (page-1)*limit)
+
+	for k, v := range posts {
+		plainSummary := global.HTMLFormat.Sanitize(v.Summary)
+		subSummary := []rune(plainSummary)
+		posts[k].Summary = string(subSummary[0:140])
+	}
+
 	resp := map[string]interface{}{
 		"options":     global.Options,
 		"themeConfig": global.ThemeConfig,

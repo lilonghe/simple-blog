@@ -3,12 +3,12 @@
     {{ range .posts }}
         <article class="post">
             <h1 class="title"><a href="/post/{{.Pathname}}.html">{{ .Title }}</a></h1>
-            <small class="index-post-time">发布于 {{.CreateTime}}</small>
+            <small class="index-post-time">{{.CreateTime.Format "2006-01-02 15:04:05"}}</small>
             <div class="entry-content">
                 {{.Summary}}
 
                 <p class="more">
-                    <a href="/post/{{.Pathname}}.html">阅读全文 »</a>
+                    <a href="/post/{{.Pathname}}.html">Read »</a>
                 </p>
             </div>
         </article>
@@ -17,10 +17,10 @@
     {{ if or .prev .next}}
     <nav class="pagination">
         {{ if .prev }}
-            <a class="prev" href="/?page={{.prev}}">上一页</a>
+            <a class="prev" href="/?page={{.prev}}">Prev</a>
         {{ end }}
         {{ if .next }}
-            <a class="next" href="/?page={{.next}}">下一页</a>
+            <a class="next" href="/?page={{.next}}">Next</a>
         {{ end }}
     </nav>
     {{ end }}

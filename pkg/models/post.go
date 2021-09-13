@@ -14,7 +14,7 @@ type Post struct {
 	Status          int32         `json:"status,omitempty"`
 	Title           string        `json:"title,omitempty"`
 	Pathname        string        `json:"pathname,omitempty"`
-	Summary         template.HTML `json:"summary,omitempty"`
+	Summary         string        `json:"summary,omitempty"`
 	MarkdownContent string        `json:"markdown_content,omitempty"`
 	Content         template.HTML `json:"content,omitempty"`
 	Options         string        `json:"options,omitempty"`
