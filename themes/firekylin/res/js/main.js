@@ -1,4 +1,19 @@
- // 行号和高亮行处理 @xuexb
+window.addEventListener('load', function(){
+  if (window.location.pathname.indexOf('/post') === 0) {
+    let ctimeStr = document.querySelector('.ctime').innerText;
+    let ctime = new Date(ctimeStr);
+    let diff = parseInt((new Date() - ctime) / 1000 / 60 / 60 / 24);
+    if (diff > 60) {
+      let tipNode = document.createElement("div");
+      tipNode.style.border = "1px dashed #CCC";
+      tipNode.style.padding = "4px 10px";
+      tipNode.innerText = "It has been " + diff +  " days since the article was published, the article may have expired.";
+      document.querySelector('.entry-content').parentNode.insertBefore(tipNode, document.querySelector('.entry-content'))
+    }
+  }
+});
+
+// 行号和高亮行处理 @xuexb
  var hljs = {
     $code: document.querySelectorAll('pre code'),
     hasClass: function (ele, cls) {
