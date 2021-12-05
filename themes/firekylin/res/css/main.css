@@ -22,6 +22,10 @@ a,a:hover {
     text-decoration: none;
 }
 
+img {
+    max-width: 30vw;
+}
+
 #main {
     background-color: #fff;
     max-width: 1200px;
@@ -53,7 +57,7 @@ h3 {
 }
 
 h1,h2,h3 {
-    font-weight: 300;
+    font-weight: 400;
 }
 
 article {
@@ -101,7 +105,7 @@ article .entry-content .date {
     font-style: italic;
 }
 
-article .entry-content :where(p, blockquote, ul, ol, dl, table, iframe, h1, h2, h3, h4, h5, h6, p, pre) {
+article .entry-content :where(p, blockquote, dl, table, iframe, h1, h2, h3, h4, h5, h6, p, pre) {
     margin-top: 15px;
 }
 
@@ -111,14 +115,17 @@ article .entry-content :where(ul, ol, dl) {
 }
 
 article code, article .hljs {
+    display: block;
+    background: white;
+    overflow-x: auto;
+    -webkit-text-size-adjust: none;
+
     font-family: "Consolas","Courier New",Courier,mono,serif;
     font-size: 80%;
     margin: 0 2px;
     padding: 4px 5px;
     background-color: #f2f2f2;
-    vertical-align: middle;
     border-radius: 5px;
-    color: #d82451;
 }
 
 article .hljs .name {
@@ -129,8 +136,13 @@ article .hljs ul {
     list-style: nu;
 }
 
-article .hljs li:nth-child(2n) {
+article .firekylin-code li:nth-child(2n) {
     background-color: #ECECEC;
+}
+
+article code {
+    display: inline-block;
+    padding: 1px 4px;
 }
 
 article .post-info {
@@ -157,6 +169,10 @@ article p {
     display: none;
 }
 
+.toc ul {
+    margin-top: 0;
+}
+
 #page-index .post {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .06), 0 3px 1px -2px rgba(0, 0, 0, .1), 0 1px 5px 0 rgba(0, 0, 0, .06);
     padding: 0 20px;
@@ -178,11 +194,21 @@ article p {
     gap: 20px;
 }
 
+.post-url {
+    display: none;
+}
+
 @media screen and (max-width: 769px) {
+    img {
+        max-width: 100%;
+    }
+
     .toc {
         float: none;
+	margin: 0;
+	max-width: 100%;
     }
-    
+
     #main {
         width: 100%;
         min-height: 100%;
@@ -213,8 +239,17 @@ article p {
     }
 }
 
+@media screen and (min-width: 1460px) {
+    .toc {
+        position: sticky;
+        left: 0;
+        top: 2px;
+        transform: translateX(100%);
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     body {
-        filter: invert(1);
+        filter: invert(.02);
     }
 }
