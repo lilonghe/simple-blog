@@ -36,7 +36,7 @@
                         」标签
                     {{end}}
 
-                    {{if .post.UpdateTime.After .post.CreateTime}}
+                    {{if gt (.post.UpdateTime.Sub .post.CreateTime).Milliseconds 86400000}}
                     ，最后修改于<i>{{.post.UpdateTime.Format "2006-01-02 15:04:05"}}</i>
                     {{end}}
                 </p>
