@@ -6,7 +6,6 @@
 
 body {
     color: #333;
-    transition: transform .2s cubic-bezier(.4,.01,.165,.99);
     font-family: monospace;
     font-weight: 300;
 }
@@ -30,20 +29,12 @@ img {
 
 #main {
     background-color: #fff;
-    max-width: 900px;
-    -webkit-overflow-scrolling: touch;
+    width: 900px;
+    max-width: 95%;
     margin: auto;
-    transition: width .2s;
 
     padding-top: 40px;
     padding-bottom: 20px;
-}
-
-h1.intro {
-    padding: 20px 30px;
-    background-color: #f6f9fa;
-    text-align: center;
-    color: #999;
 }
 
 h1 {
@@ -64,7 +55,6 @@ h1,h2,h3 {
 
 article {
     position: relative;
-    padding: 30px 0;
     word-wrap: break-word;
 }
 
@@ -114,18 +104,15 @@ article .entry-content :where(ul, ol, dl) {
     list-style: nu;
 }
 
-article code, article .hljs {
+article code {
     display: block;
-    background: white;
     overflow-x: auto;
     -webkit-text-size-adjust: none;
 
-    font-family: "Consolas","Courier New",Courier,mono,serif;
     font-size: 80%;
     margin: 0 2px;
     padding: 4px 5px;
     background-color: #f2f2f2;
-    vertical-align: middle;
     border-radius: 5px;
 }
 
@@ -168,6 +155,7 @@ article p {
     min-width: 260px;
     padding: 6px;
     background: #FFF;
+    position: relative;
 }
 
 .toc:empty {
@@ -188,22 +176,11 @@ article p {
 }
 
 .post.detail {
-    padding: 0px 20px;
     padding-top: 10px;
     border-top: 0;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.post-url {
-    display: none;
-}
-
-.more {
+.pagination, .post-url, .more {
     display: none;
 }
 
@@ -214,37 +191,25 @@ article p {
 
     .toc {
         float: none;
-	margin: 0;
-	max-width: 100%;
+        margin: 0;
+        max-width: 100%;
     }
     
     #main {
         width: 100%;
+        max-width: 100%;
         min-height: 100%;
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding: 20px 10px;
     }
 
     article {
         background-color: #fff;
-        padding: 10px;
-    }
-
-    article .meta {
-        display: none;
     }
 
     article h1 {
         font-size: 22px;
         padding: 5px 0 10px;
         margin: 0;
-    }
-
-    article p.more {
-        font-size: 14px;
-        margin: 5px 0;
     }
 }
 

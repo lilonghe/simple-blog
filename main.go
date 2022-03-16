@@ -3,7 +3,6 @@ package main
 import (
 	"path/filepath"
 	"simple-blog/pkg/models"
-	"time"
 
 	"simple-blog/pkg/global"
 	"simple-blog/pkg/routers"
@@ -27,12 +26,12 @@ func main() {
 	r.HTMLRender = loadTemplates("./themes/" + theme)
 	r.GET("/", routers.Index)
 	r.GET("/post/:pathname", routers.PostDetail)
+	r.GET("/page/:pathname", routers.PageDetail)
 	r.GET("/archives", routers.Archives)
 	r.GET("/cate/wiki", routers.Wiki)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 
-	// go tickerRefreshOption()
 	r.Run()
 }
 
@@ -57,17 +56,4 @@ func loadTemplates(templatesDir string) multitemplate.Renderer {
 		r.AddFromFiles(filepath.Base(include), files...)
 	}
 	return r
-}
-
-// 因为暂无控制面板，所以暂时为定时刷新主题配置
-func tickerRefreshOption() {
-	d := time.Duration(time.Minute * 5)
-
-	t := time.NewTicker(d)
-	defer t.Stop()
-
-	for {
-		<-t.C
-		models.LoadOption()
-	}
 }

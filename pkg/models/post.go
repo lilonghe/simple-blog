@@ -38,14 +38,14 @@ type PostArchiveView struct {
 func GetPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
-	err = global.Store.Where(" status = 3 and is_public = true ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	err = global.Store.Where(" status = 3 and is_public = true and type = 0 ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	return datas, total, err
 }
 
 func GetAllPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
-	err = global.Store.Where(" status != 4 and is_public = true ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	err = global.Store.Where(" status != 4 and is_public = true and type = 0").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	return datas, total, err
 }
 
@@ -59,9 +59,12 @@ func GetPostListByCate(limit, offset int, CateId int32) ([]Post, int64, error) {
 	return datas, total, err
 }
 
-func GetPostByPathname(pathname string) (*Post, error) {
+/**
+ * postType: 0-Post, 1-Page
+ */
+func GetPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
-	has, err := global.Store.Where(" status = 3 and pathname = ? ", pathname).Get(&post)
+	has, err := global.Store.Where(" status = 3 and pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
 		return &post, err
 	} else {

@@ -58,7 +58,7 @@ func PostDetail(c *gin.Context) {
 		pathname = paths[0]
 	}
 
-	post, _ := models.GetPostByPathname(pathname)
+	post, _ := models.GetPostByPathname(pathname, 0)
 	resp := map[string]interface{}{
 		"options":     global.Options,
 		"themeConfig": global.ThemeConfig,
@@ -74,6 +74,28 @@ func PostDetail(c *gin.Context) {
 	}
 
 	c.HTML(200, "post.html", resp)
+}
+
+func PageDetail(c *gin.Context) {
+	paths := strings.Split(c.Param("pathname"), ".html")
+	pathname := ""
+	if len(paths) > 0 {
+		pathname = paths[0]
+	}
+
+	post, _ := models.GetPostByPathname(pathname, 1)
+	resp := map[string]interface{}{
+		"options":     global.Options,
+		"themeConfig": global.ThemeConfig,
+	}
+
+	if post != nil {
+		resp["post"] = *post
+	} else {
+		c.Redirect(301, "/")
+	}
+
+	c.HTML(200, "page.html", resp)
 }
 
 type archivesModel struct {

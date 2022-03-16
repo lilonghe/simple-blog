@@ -1,5 +1,12 @@
 {{define "content"}}
 <section id="page-index">
+    <article class="post">
+        <h1 class="title">{{index .options "title"}}</h1>
+        <div>
+            <a href="/post/about.html">关于</a>
+            <a href="/archives">归档</a>
+        </div>
+    </article>
     {{ range .posts }}
         <article class="post">
             <h1 class="title"><a href="/post/{{.Pathname}}.html">{{ .Title }}</a></h1>
