@@ -1,8 +1,10 @@
 package routers
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"simple-blog/pkg/global"
 
@@ -71,6 +73,17 @@ func PostDetail(c *gin.Context) {
 		resp["post"] = *post
 	} else {
 		c.Redirect(301, "/")
+	}
+
+	visitInfo := models.Visit{
+		Pathname:   pathname,
+		UserAgent:  c.GetHeader("User-Agent"),
+		Ip:         c.GetHeader("X-Real-IP"),
+		CreateTime: time.Now(),
+	}
+	err := models.AddVisit(visitInfo)
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	c.HTML(200, "post.html", resp)
