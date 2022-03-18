@@ -3,7 +3,7 @@
     <article class="post">
         <h1 class="title">{{index .options "title"}}</h1>
         <div>
-            <a href="/post/about.html">关于</a>
+            <a href="/page/about.html">关于</a>
             <a href="/archives">归档</a>
         </div>
     </article>
@@ -11,6 +11,11 @@
         <article class="post">
             <h1 class="title"><a href="/post/{{.Pathname}}.html">{{ .Title }}</a></h1>
             <small class="index-post-time">{{.CreateTime.Format "2006-01-02 15:04:05"}}</small>
+            {{if index .PostOptions "featuredImage"}}
+            <div class="featured-image-thump">
+                <img src="{{index .PostOptions "featuredImage"}}" loading="lazy" />
+            </div>
+            {{end}}
             <div class="entry-content">
                 {{.Summary}}
 

@@ -1,8 +1,12 @@
 {{define "content"}}
     <section id="page-post">
         <article class="post detail">
-            <h1 class="title">{{.post.Title}}</h1>
-
+        <h1 class="title">{{.post.Title}}</h1>
+        {{if index .post.PostOptions "featuredImage"}}
+            <div class="featured-image">
+                <img src="{{index .post.PostOptions "featuredImage"}}" loading="lazy">
+            </div>
+        {{end}}
 	    <div class="entry-content">{{.post.Content}}</div>
             <p class="post-url">本文链接：<a href="{{index .options "site_url"}}/post/{{.post.Pathname}}">{{index .options "site_url"}}/post/{{.post.Pathname}}.html</a></p>
             <p>-- <acronym title="End of File">EOF</acronym> --</p>

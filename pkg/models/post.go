@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"sync"
@@ -22,8 +23,9 @@ type Post struct {
 	UpdateTime      time.Time     `json:"update_time,omitempty"`
 	IsPublic        bool          `json:"is_public,omitempty"`
 
-	Cates []Cate `json:"cates,omitempty" sql:"-" xorm:"-"`
-	Tags  []Tag  `json:"tags,omitempty" sql:"-" xorm:"-"`
+	Cates       []Cate                 `json:"cates,omitempty" sql:"-" xorm:"-"`
+	Tags        []Tag                  `json:"tags,omitempty" sql:"-" xorm:"-"`
+	PostOptions map[string]interface{} `json:"post_options,omitempty" sql:"-" xorm:"-"`
 }
 
 func (Post) TableName() string { return global.Config.DbTablePrefix + "post" }
@@ -39,6 +41,15 @@ func GetPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
 	err = global.Store.Where(" status = 3 and is_public = true and type = 0 ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
+	if err == nil {
+		for k, v := range datas {
+			err = json.Unmarshal([]byte(v.Options), &datas[k].PostOptions)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
+
 	return datas, total, err
 }
 
@@ -66,6 +77,10 @@ func GetPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
 	has, err := global.Store.Where(" status = 3 and pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
+		err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
+		if err != nil {
+			fmt.Println(err)
+		}
 		return &post, err
 	} else {
 		return nil, err
