@@ -2,6 +2,8 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -17,4 +19,17 @@ func DayDiff(t1, t2 time.Time) int64 {
 func abs(n int64) int64 {
 	y := n >> 63
 	return (n ^ y) - y
+}
+
+func GetCommonError(err error, c *gin.Context) {
+	fmt.Println(err)
+	c.JSON(200, map[string]string{"code": "10000", "msg": "Something was wrong"})
+}
+
+func GetCommonSuccess(c *gin.Context) {
+	c.JSON(200, map[string]interface{}{"code": "", "msg": ""})
+}
+
+func GetCommonResponse(c *gin.Context, data interface{}) {
+	c.JSON(200, map[string]interface{}{"code": "", "msg": "", "data": data})
 }

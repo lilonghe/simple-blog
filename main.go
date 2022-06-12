@@ -28,7 +28,8 @@ func main() {
 	r.GET("/post/:pathname", routers.PostDetail)
 	r.GET("/page/:pathname", routers.PageDetail)
 	r.GET("/archives", routers.Archives)
-	r.GET("/cate/wiki", routers.Wiki)
+	r.POST("/comment", routers.AddComment)
+	r.GET("/comments", routers.Comments)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 
