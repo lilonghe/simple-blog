@@ -1,8 +1,13 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"path/filepath"
+	"simple-blog/pkg/middlewares"
 	"simple-blog/pkg/models"
+	"time"
 
 	"simple-blog/pkg/global"
 	"simple-blog/pkg/routers"
@@ -22,6 +27,18 @@ func main() {
 	models.LoadOption()
 
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowHeaders:     []string{"content-type"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return true
+		},
+		MaxAge: 12 * time.Hour,
+	}))
+
+	store := cookie.NewStore([]byte(global.Options["password_salt"]))
+	r.Use(sessions.Sessions("SESSIONID", store))
+
 	theme := global.Options["theme"]
 	r.HTMLRender = loadTemplates("./themes/" + theme)
 	r.GET("/", routers.Index)
@@ -32,6 +49,13 @@ func main() {
 	r.GET("/comments", routers.Comments)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
+
+	r.POST("/api/admin/login", routers.Login)
+	authorized := r.Group("/api/admin")
+	authorized.Use(middlewares.AuthRequired())
+	{
+		authorized.GET("/user", routers.GetCurrentUser)
+	}
 
 	r.Run()
 }

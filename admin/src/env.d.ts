@@ -11,3 +11,9 @@ interface User {
   id: number;
   username: string;
 }
+
+declare global {
+  interface Window {
+    $message: any;
+  }
+}

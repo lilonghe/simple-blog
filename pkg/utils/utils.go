@@ -26,6 +26,10 @@ func GetCommonError(err error, c *gin.Context) {
 	c.JSON(200, map[string]string{"code": "10000", "msg": "Something was wrong"})
 }
 
+func GetMessageError(code string, message string, c *gin.Context) {
+	c.JSON(200, map[string]string{"code": code, "msg": message})
+}
+
 func GetCommonSuccess(c *gin.Context) {
 	c.JSON(200, map[string]interface{}{"code": "", "msg": ""})
 }
