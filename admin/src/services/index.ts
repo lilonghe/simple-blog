@@ -9,3 +9,20 @@ export async function loginReq(name: string, password: string) {
         }
     });
 }
+
+export interface ISystemInfoResponse {
+    count: {
+        posts: number;
+        categories: number;
+        tags: number;
+    },
+    versions: any;
+}
+
+export async function getSystemInfoReq() {
+    return request("/admin/system");
+}
+
+export async function getUserReq() {
+    return request("admin/user")
+}

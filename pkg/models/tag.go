@@ -15,3 +15,11 @@ func GetAllTag() ([]Tag, error) {
 	err := global.Store.Find(&datas)
 	return datas, err
 }
+
+func GetTagCount() int64 {
+	count, err := global.Store.Count(&Tag{})
+	if err != nil {
+		panic(err)
+	}
+	return count
+}

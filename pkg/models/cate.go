@@ -18,3 +18,11 @@ func GetAllCate() ([]Cate, error) {
 	err := global.Store.Find(&datas)
 	return datas, err
 }
+
+func GetCateCount() int64 {
+	count, err := global.Store.Count(&Cate{})
+	if err != nil {
+		panic(err)
+	}
+	return count
+}

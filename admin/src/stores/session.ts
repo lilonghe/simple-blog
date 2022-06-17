@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { getUserReq } from '@/services'
 
 interface ISessionState {
     user: User | null;
@@ -11,8 +12,11 @@ export const useSesssionStore = defineStore('session', {
       }
     },
     actions: {
-      saveUser(user: User) {
-        this.user = user
+      async getUser() {
+        let { data } = await getUserReq()
+        if (data) {
+          this.user = data
+        }
       },
       clearUser() {
         this.user = null

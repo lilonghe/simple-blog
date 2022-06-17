@@ -55,6 +55,7 @@ func main() {
 	authorized.Use(middlewares.AuthRequired())
 	{
 		authorized.GET("/user", routers.GetCurrentUser)
+		authorized.GET("/system", routers.Dashboard)
 	}
 
 	r.Run()

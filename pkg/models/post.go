@@ -110,3 +110,11 @@ func GetPostCateAndTag(postId int32) ([]Cate, []Tag) {
 	wg.Wait()
 	return cates, tags
 }
+
+func GetPostCount() int64 {
+	count, err := global.Store.Where("type = 0").Count(Post{})
+	if err != nil {
+		panic(err)
+	}
+	return count
+}

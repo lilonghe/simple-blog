@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginReq } from '@/services'
-import { NButton, NForm, NFormItem, NInput, FormInst, FormRules } from 'naive-ui';
+import { NButton, NForm, NFormItem, NInput, FormInst, FormRules } from 'naive-ui'
+import { useSesssionStore } from '@/stores/session'
 
 interface ModelType {
     name: string
     password: string
 }
 
+const sessionStore = useSesssionStore()
 const formRef = ref<FormInst | null>();
 const model = ref<ModelType>({ name: '', password: '' });
 const rules: FormRules = {
@@ -24,6 +26,7 @@ const login = (e: any) => {
         if (!errors) {
             let { code } = await loginReq(model.value.name, model.value.password)
             if (!code) {
+                sessionStore.getUser()
                 router.replace('/')
             }
         }

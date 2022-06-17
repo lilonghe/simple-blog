@@ -44,3 +44,11 @@ func LoadOption() {
 		global.Options["runday"] = strconv.FormatInt(utils.DayDiff(time.Now(), *global.Config.SiteBegin), 10)
 	}
 }
+
+func GetDBVersion() string {
+	r, err := global.Store.QueryString("SELECT VERSION() as version")
+	if err != nil {
+		panic(err)
+	}
+	return r[0]["version"]
+}
