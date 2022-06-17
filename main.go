@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"simple-blog/pkg/middlewares"
 	"simple-blog/pkg/models"
+	adminRouters "simple-blog/pkg/routers/admin"
 	"time"
 
 	"simple-blog/pkg/global"
@@ -56,6 +57,7 @@ func main() {
 	{
 		authorized.GET("/user", routers.GetCurrentUser)
 		authorized.GET("/system", routers.Dashboard)
+		authorized.GET("/post/list", adminRouters.GetPostList)
 	}
 
 	r.Run()

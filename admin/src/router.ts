@@ -6,7 +6,7 @@ import Login from './pages/Login.vue'
 
 const routes = [
     { path: '/', component: Home },
-    { path: '/post', component: PostList },
+    { path: '/post/list', component: PostList },
     { path: '/login', component: Login },
 ]
 

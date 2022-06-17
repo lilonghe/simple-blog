@@ -11,7 +11,7 @@ import (
 )
 
 type Post struct {
-	Id              int32         `json:"-"`
+	Id              int32         `json:"id"`
 	Status          int32         `json:"status,omitempty"`
 	Title           string        `json:"title,omitempty"`
 	Pathname        string        `json:"pathname,omitempty"`
@@ -117,4 +117,17 @@ func GetPostCount() int64 {
 		panic(err)
 	}
 	return count
+}
+
+func GetAdminPostList(limit, offset int, condiBean Post) ([]Post, int64) {
+	datas := make([]Post, 0)
+	total, err := global.Store.Count(&Post{})
+	if err != nil {
+		panic(err)
+	}
+	err = global.Store.Where(" type = 0").OrderBy("create_time desc").Limit(limit, offset).Find(&datas, condiBean)
+	if err != nil {
+		panic(err)
+	}
+	return datas, total
 }

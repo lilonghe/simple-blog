@@ -24,5 +24,9 @@ export async function getSystemInfoReq() {
 }
 
 export async function getUserReq() {
-    return request("admin/user")
+    return request("/admin/user")
+}
+
+export async function getPostListReq(params: any) {
+    return request("/admin/post/list", { params })
 }

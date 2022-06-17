@@ -37,3 +37,10 @@ func GetCommonSuccess(c *gin.Context) {
 func GetCommonResponse(c *gin.Context, data interface{}) {
 	c.JSON(200, map[string]interface{}{"code": "", "msg": "", "data": data})
 }
+
+func GetPageResponse(c *gin.Context, list interface{}, total int64) {
+	c.JSON(200, map[string]interface{}{"code": "", "msg": "", "data": map[string]interface{}{
+		"list":  list,
+		"total": total,
+	}})
+}

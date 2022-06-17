@@ -4,6 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.3
   autoprefixer: ^10.4.7
   axios: ^0.27.2
+  dayjs: ^1.11.3
   naive-ui: ^2.30.4
   pinia: ^2.0.14
   postcss: ^8.4.14
@@ -17,6 +18,7 @@ specifiers:
 
 dependencies:
   axios: 0.27.2
+  dayjs: 1.11.3
   pinia: 2.0.14_vcmyupim4cga7k7f5hngmth5py
   vue: 3.2.37
   vue-router: 4.0.16_vue@3.2.37
@@ -424,6 +426,10 @@ packages:
     resolution: {integrity: sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==}
     engines: {node: '>=0.11'}
     dev: true
+
+  /dayjs/1.11.3:
+    resolution: {integrity: sha512-xxwlswWOlGhzgQ4TKzASQkUhqERI3egRNqgV4ScR8wlANA/A9tZ7miXa44vTTKEq5l7vWoL5G57bG3zA+Kow0A==}
+    dev: false
 
   /defined/1.0.0:
     resolution: {integrity: sha512-Y2caI5+ZwS5c3RiNDJ6u53VhQHv+hHKwhkI1iHvceKUHw9Df6EK2zRLfjejRgMuCuxK7PfSWIMwWecceVvThjQ==}

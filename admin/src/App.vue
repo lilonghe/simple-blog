@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createDiscreteApi, NLayout, NLayoutSider, NLayoutContent } from 'naive-ui'
+import { createDiscreteApi, NLayout, NLayoutSider, NLayoutContent, NElement } from 'naive-ui'
 import Sider from '@/components/layout/sider.vue'
 import { getUserReq } from "@/services"
 import { onBeforeMount, onMounted } from 'vue'
@@ -19,21 +19,22 @@ onMounted(() => {
 </script>
 
 <template>
-<div v-if="route.fullPath === '/login'">
-  <router-view></router-view>
-</div>
-<div v-else>
-  <n-layout has-sider v-if="sessionStore.user">
-    <n-layout-sider>
-      <sider />
-    </n-layout-sider>
-    <n-layout-content class="pt-1">
-      <router-view></router-view>
-    </n-layout-content>
-  </n-layout>
-  <div v-else>
-    loading
+<n-element>
+  <div v-if="route.fullPath === '/login'">
+    <router-view></router-view>
   </div>
-</div>
-
+  <div v-else>
+    <n-layout has-sider v-if="sessionStore.user">
+      <n-layout-sider>
+        <sider />
+      </n-layout-sider>
+      <n-layout-content class="pt-1 pr-1">
+        <router-view></router-view>
+      </n-layout-content>
+    </n-layout>
+    <div v-else class="flex justify-center mt-20">
+      Loading
+    </div>
+  </div>
+</n-element>
 </template>
