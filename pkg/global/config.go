@@ -3,12 +3,12 @@ package global
 import (
 	"html/template"
 	"time"
+	"xorm.io/xorm/names"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/core"
-	"github.com/go-xorm/xorm"
 	"github.com/jinzhu/configor"
 	"github.com/microcosm-cc/bluemonday"
+	"xorm.io/xorm"
 )
 
 var (
@@ -47,6 +47,6 @@ func initDB() {
 		Store.ShowSQL(true)
 	}
 
-	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, Config.DbTablePrefix)
+	tbMapper := names.NewPrefixMapper(names.SnakeMapper{}, Config.DbTablePrefix)
 	Store.SetTableMapper(tbMapper)
 }

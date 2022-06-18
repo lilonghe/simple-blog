@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { createDiscreteApi, NLayout, NLayoutSider, NLayoutContent, NElement } from 'naive-ui'
-import Sider from '@/components/layout/sider.vue'
-import { getUserReq } from "@/services"
-import { onBeforeMount, onMounted } from 'vue'
+import { createDiscreteApi, NElement } from 'naive-ui'
+import MainLayout from '@/components/layout/Index.vue'
+import { onMounted } from 'vue'
 import { useSesssionStore } from './stores/session'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const sessionStore = useSesssionStore()
-const router = useRouter()
 const route = useRoute()
 
 onMounted(() => {
@@ -24,14 +22,7 @@ onMounted(() => {
     <router-view></router-view>
   </div>
   <div v-else>
-    <n-layout has-sider v-if="sessionStore.user">
-      <n-layout-sider>
-        <sider />
-      </n-layout-sider>
-      <n-layout-content class="pt-1 pr-1">
-        <router-view></router-view>
-      </n-layout-content>
-    </n-layout>
+    <main-layout v-if="sessionStore.user" />
     <div v-else class="flex justify-center mt-20">
       Loading
     </div>

@@ -3,17 +3,15 @@ module simple-blog
 go 1.16
 
 require (
-	cloud.google.com/go v0.41.0 // indirect
-	github.com/gin-contrib/cors v1.3.1 // indirect
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/multitemplate v0.0.0-20190528082104-30e424939505
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-sql-driver/mysql v1.5.0
-	github.com/go-xorm/core v0.6.0
-	github.com/go-xorm/xorm v0.7.4
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/jameskeane/bcrypt v0.0.0-20120420032655-c3cd44c1e20f
 	github.com/jinzhu/configor v1.0.0
 	github.com/microcosm-cc/bluemonday v1.0.15
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	xorm.io/xorm v1.3.1
 )

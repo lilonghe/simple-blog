@@ -58,6 +58,10 @@ func main() {
 		authorized.GET("/user", routers.GetCurrentUser)
 		authorized.GET("/system", routers.Dashboard)
 		authorized.GET("/post/list", adminRouters.GetPostList)
+		authorized.POST("/post", adminRouters.CreatePost)
+		authorized.GET("/options", adminRouters.GetOptions)
+		authorized.GET("/cate/list", adminRouters.GetCateList)
+		authorized.GET("/tag/list", adminRouters.GetTagList)
 	}
 
 	r.Run()

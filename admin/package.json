@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dayjs": "^1.11.3",
+    "mavon-editor": "3.0.0-beta",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
     "vue-router": "4"

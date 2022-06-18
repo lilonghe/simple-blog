@@ -30,3 +30,22 @@ export async function getUserReq() {
 export async function getPostListReq(params: any) {
     return request("/admin/post/list", { params })
 }
+
+export async function getOptionsReq() {
+    return request("/admin/options")
+}
+
+export async function getCateListReq() {
+    return request("/admin/cate/list")
+}
+
+export async function getTagListReq() {
+    return request("/admin/tag/list")
+}
+
+export async function createPostReq(params:any) {
+    return request("/admin/post", {
+        method: "POST",
+        data: params,
+    })
+}

@@ -22,13 +22,35 @@ type Post struct {
 	CreateTime      time.Time     `json:"create_time,omitempty"`
 	UpdateTime      time.Time     `json:"update_time,omitempty"`
 	IsPublic        bool          `json:"is_public,omitempty"`
+	AllowComment    bool          `json:"allow_comment"`
 
 	Cates       []Cate                 `json:"cates,omitempty" sql:"-" xorm:"-"`
 	Tags        []Tag                  `json:"tags,omitempty" sql:"-" xorm:"-"`
 	PostOptions map[string]interface{} `json:"post_options,omitempty" sql:"-" xorm:"-"`
 }
 
-func (Post) TableName() string { return global.Config.DbTablePrefix + "post" }
+type CreatePostModel struct {
+	Id              int32         `json:"id" xorm:"autoincr"`
+	Status          int32         `json:"status,omitempty"`
+	Title           string        `json:"title,omitempty"`
+	Pathname        string        `json:"pathname,omitempty"`
+	Summary         string        `json:"summary,omitempty"`
+	MarkdownContent string        `json:"markdown_content,omitempty"`
+	Content         template.HTML `json:"content,omitempty"`
+	Options         *string       `json:"options,omitempty"`
+	CreateTime      time.Time     `json:"create_time,omitempty"`
+	UpdateTime      time.Time     `json:"update_time,omitempty"`
+	IsPublic        bool          `json:"is_public,omitempty"`
+	AllowComment    bool          `json:"allow_comment"`
+	UserId          int32         `json:"-"`
+	Type            int           `json:"type"`
+
+	CateList []int32  `json:"cate_list" sql:"-" xorm:"-"`
+	TagList  []string `json:"tag_list" sql:"-" xorm:"-"`
+}
+
+func (Post) TableName() string            { return global.Config.DbTablePrefix + "post" }
+func (CreatePostModel) TableName() string { return global.Config.DbTablePrefix + "post" }
 
 type PostArchiveView struct {
 	Title      string    `json:"title,omitempty"`
@@ -119,15 +141,82 @@ func GetPostCount() int64 {
 	return count
 }
 
-func GetAdminPostList(limit, offset int, condiBean Post) ([]Post, int64) {
+func GetAdminPostList(limit, offset int, condiBean Post, keyword string) ([]Post, int64) {
 	datas := make([]Post, 0)
-	total, err := global.Store.Count(&Post{})
-	if err != nil {
-		panic(err)
+	sess := global.Store.Where(" type = 0")
+	if keyword != "" {
+		sess = sess.Where("title like ?", "%"+keyword+"%")
 	}
-	err = global.Store.Where(" type = 0").OrderBy("create_time desc").Limit(limit, offset).Find(&datas, condiBean)
+	total, err := sess.OrderBy("create_time desc").Limit(limit, offset).FindAndCount(&datas, condiBean)
 	if err != nil {
 		panic(err)
 	}
 	return datas, total
+}
+
+func CreatePost(post *CreatePostModel) {
+	sess := global.Store.NewSession()
+	sess.Begin()
+
+	_, err := sess.Insert(post)
+	if err != nil {
+		sess.Rollback()
+		panic(err)
+	}
+
+	_, err = sess.Delete(PostCate{PostId: post.Id})
+	if err != nil {
+		sess.Rollback()
+		panic(err)
+	}
+
+	if len(post.CateList) > 0 {
+		postCate := make([]PostCate, 0)
+		for _, v := range post.CateList {
+			postCate = append(postCate, PostCate{PostId: post.Id, CateId: v})
+		}
+		_, err = sess.InsertMulti(&postCate)
+		if err != nil {
+			sess.Rollback()
+			panic(err)
+		}
+	}
+
+	_, err = sess.Delete(PostTag{PostId: post.Id})
+	if err != nil {
+		sess.Rollback()
+		panic(err)
+	}
+
+	if len(post.TagList) > 0 {
+		postTag := make([]PostTag, 0)
+		for _, v := range post.TagList {
+			tag := Tag{Name: v}
+			has, err := sess.Get(&tag)
+			if err != nil {
+				sess.Rollback()
+				panic(err)
+			}
+			if !has {
+				tag.Pathname = tag.Name
+				_, err = sess.Insert(&tag)
+				if err != nil {
+					sess.Rollback()
+					panic(err)
+				}
+			}
+			postTag = append(postTag, PostTag{PostId: post.Id, TagId: tag.Id})
+		}
+		_, err = sess.InsertMulti(&postTag)
+		if err != nil {
+			sess.Rollback()
+			panic(err)
+		}
+	}
+
+	err = sess.Commit()
+	if err != nil {
+		sess.Rollback()
+		panic(err)
+	}
 }
