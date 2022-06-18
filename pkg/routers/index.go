@@ -60,7 +60,7 @@ func PostDetail(c *gin.Context) {
 		pathname = paths[0]
 	}
 
-	post, _ := models.GetPostByPathname(pathname, 0)
+	post, _ := models.GetPublishedPostByPathname(pathname, 0)
 	resp := map[string]interface{}{
 		"options":     global.Options,
 		"themeConfig": global.ThemeConfig,
@@ -96,7 +96,7 @@ func PageDetail(c *gin.Context) {
 		pathname = paths[0]
 	}
 
-	post, _ := models.GetPostByPathname(pathname, 1)
+	post, _ := models.GetPublishedPostByPathname(pathname, 1)
 	resp := map[string]interface{}{
 		"options":     global.Options,
 		"themeConfig": global.ThemeConfig,

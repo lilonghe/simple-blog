@@ -95,9 +95,26 @@ func GetPostListByCate(limit, offset int, CateId int32) ([]Post, int64, error) {
 /**
  * postType: 0-Post, 1-Page
  */
-func GetPostByPathname(pathname string, postType int) (*Post, error) {
+func GetPublishedPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
 	has, err := global.Store.Where(" status = 3 and pathname = ? and type = ? ", pathname, postType).Get(&post)
+	if has {
+		err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return &post, err
+	} else {
+		return nil, err
+	}
+}
+
+/**
+ * postType: 0-Post, 1-Page
+ */
+func GetPostByPathname(pathname string, postType int) (*Post, error) {
+	var post Post
+	has, err := global.Store.Where(" pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
 		err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
 		if err != nil {
@@ -154,17 +171,25 @@ func GetAdminPostList(limit, offset int, condiBean Post, keyword string) ([]Post
 	return datas, total
 }
 
-func CreatePost(post *CreatePostModel) {
+func CreateOrEditPost(post *CreatePostModel) {
 	sess := global.Store.NewSession()
 	sess.Begin()
 
-	_, err := sess.Insert(post)
-	if err != nil {
-		sess.Rollback()
-		panic(err)
+	if post.Id == 0 {
+		_, err := sess.Insert(post)
+		if err != nil {
+			sess.Rollback()
+			panic(err)
+		}
+	} else {
+		_, err := sess.Update(post, CreatePostModel{Id: post.Id})
+		if err != nil {
+			sess.Rollback()
+			panic(err)
+		}
 	}
 
-	_, err = sess.Delete(PostCate{PostId: post.Id})
+	_, err := sess.Delete(PostCate{PostId: post.Id})
 	if err != nil {
 		sess.Rollback()
 		panic(err)
@@ -219,4 +244,27 @@ func CreatePost(post *CreatePostModel) {
 		sess.Rollback()
 		panic(err)
 	}
+}
+
+func GetEditPost(id int32) *CreatePostModel {
+	p := CreatePostModel{Id: id}
+	has, err := global.Store.Get(&p)
+	if err != nil {
+		panic(err)
+	}
+	if !has {
+		return nil
+	}
+
+	p.CateList = make([]int32, 0)
+	p.TagList = make([]string, 0)
+	cates, tags := GetPostCateAndTag(id)
+	for _, v := range cates {
+		p.CateList = append(p.CateList, v.Id)
+	}
+	for _, v := range tags {
+		p.TagList = append(p.TagList, v.Name)
+	}
+
+	return &p
 }

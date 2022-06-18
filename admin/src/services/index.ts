@@ -49,3 +49,7 @@ export async function createPostReq(params:any) {
         data: params,
     })
 }
+
+export async function getEditPostReq(id: number) {
+    return request(`/admin/post/${id}`)
+}

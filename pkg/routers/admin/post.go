@@ -24,7 +24,7 @@ func GetPostList(c *gin.Context) {
 	utils.GetPageResponse(c, list, total)
 }
 
-func CreatePost(c *gin.Context) {
+func CreateOrEditPost(c *gin.Context) {
 	var m models.CreatePostModel
 	err := c.ShouldBindJSON(&m)
 	if err != nil {
@@ -35,12 +35,29 @@ func CreatePost(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	if existPost != nil {
-		utils.GetMessageError("REPEAT_PATHNAME", "Repeat pathname", c)
-		return
+	if m.Id == 0 {
+		if existPost != nil {
+			utils.GetMessageError("REPEAT_PATHNAME", "Repeat pathname", c)
+			return
+		}
+	} else {
+		if existPost == nil {
+			utils.GetMessageError("POST_NOT_FOUND", "Post not found", c)
+			return
+		}
 	}
 
 	m.UserId = 1
-	models.CreatePost(&m)
+	models.CreateOrEditPost(&m)
 	utils.GetCommonResponse(c, m)
+}
+
+func GetEditPost(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	post := models.GetEditPost(int32(id))
+	if post == nil {
+		utils.GetMessageError("POST_NOT_FOUND", "Post not found", c)
+	}
+	utils.GetCommonResponse(c, post)
 }

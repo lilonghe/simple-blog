@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm } from 'naive-ui'
+import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin } from 'naive-ui'
 import { useGlobalStore } from '@/stores/global'
-import { onMounted, ref } from 'vue'
-import { createPostReq } from '@/services'
+import { computed, onMounted, ref } from 'vue'
+import { createPostReq, getEditPostReq } from '@/services'
 import dayjs from 'dayjs';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 interface PostFormModel {
+  id?: number;
   title?: string
   content?: string
   is_public?: boolean
@@ -27,13 +28,30 @@ const form = ref<PostFormModel>({
     allow_comment: true,
     status: 0,
 })
+const targetPost = ref<PostFormModel>()
 const formRef = ref()
 const router = useRouter()
+const route = useRoute()
 
 onMounted(() => {
     globalStore.getCates()
     globalStore.getTags()
+    if (route.params.id) {
+        getTargetPost(route.params.id as any)
+    }
 })
+
+const getTargetPost = async (id: number) => {
+    let { data } = await getEditPostReq(id)
+    if (data) {
+        targetPost.value = data
+        form.value = data
+        if (data.options) {
+            let { featuredImage } = JSON.parse(data.options)
+            form.value.featuredImage = featuredImage
+        }
+    }
+}
 
 const preProcessFormData = () => {
     if (form.value.featuredImage) {
@@ -45,20 +63,24 @@ const preProcessFormData = () => {
     }
 }
 
-const submit = async () => {
+const submit = async (type?: string) => {
     preProcessFormData()
     let params = {
         ...form.value,
         create_time: dayjs().format(),
         update_time: dayjs().format(),
     }
+    if (type === 'publish') {
+        params.status = 3
+    }
+
     let { code } = await createPostReq(params)
     if (!code) {
         if (form.value.status === 0) {
             $message.success('Save success')
             router.push('/post/list')
         } else {
-            $message.success('Create post success')
+            $message.success('Publish success')
             router.push('/post/list')
         }
     }
@@ -75,8 +97,7 @@ const handleSave = async () => {
 const handlePublish = async () => {
     formRef.value.validate(async (error: any) => {
         if (!error) {
-            form.value.status = 3
-            submit()
+            submit('publish')
         }
     })
 }
@@ -86,37 +107,37 @@ const handleEditChange = (markdown: string, html: string) => {
     form.value.content = html
 }
 
+const loaded = computed(() => !route.params.id || (route.params.id && targetPost.value?.id !== undefined))
 </script>
 <template>
+<n-spin :show="!loaded">
 <n-form ref="formRef" :model="form">
-    <n-grid x-gap="10">
+    <n-grid x-gap="20">
         <n-gi :span="18" class="flex flex-col gap-6">
-            <n-form-item 
-                        :show-label="false" 
-                        :show-feedback="false"
-                        path="title"
-                        :rule="[{required: true, trigger: ['blur', 'input']}]">
+            <n-form-item
+                :show-label="false" 
+                :show-feedback="false"
+                path="title"
+                :rule="[{required: true, trigger: ['blur', 'input']}]">
                 <n-input placeholder="Title" v-model:value="form.title" />
             </n-form-item>
-            <div class="flex items-center gap-1">
-                <n-form-item 
-                        :show-label="false" 
-                        :show-feedback="false"
-                        path="pathname"
-                        :rule="[{required: true, trigger: ['blur', 'input']}]">
-                    <n-input-group>
-                        <n-input-group-label>{{globalStore.options.site_url}}/post/</n-input-group-label>
-                        <n-input
-                            :style="{ width: '33%' }" 
-                            placeholder="Path name" 
-                            v-model:value="form.pathname" />
-                        <n-input-group-label>.html</n-input-group-label>
-                    </n-input-group>
-                </n-form-item>
-            </div>
-            <div>
+            <n-form-item
+                :show-label="false" 
+                :show-feedback="false"
+                path="pathname"
+                :rule="[{required: true, trigger: ['blur', 'input']}]">
+                <n-input-group>
+                    <n-input-group-label>{{globalStore.options.site_url}}/post/</n-input-group-label>
+                    <n-input
+                        :disabled="targetPost?.id != undefined"
+                        placeholder="Path name" 
+                        v-model:value="form.pathname" />
+                    <n-input-group-label>.html</n-input-group-label>
+                </n-input-group>
+            </n-form-item>
+            <div v-if="!route.params.id || (route.params.id && targetPost?.id)">
                 <mavon-editor 
-                    :value="form.markdown_content"
+                    v-model="form.markdown_content"
                     :onChange="handleEditChange"
                     :boxShadow="false" class="h-screen"
                     :ishljs="false" />
@@ -124,7 +145,7 @@ const handleEditChange = (markdown: string, html: string) => {
         </n-gi>
         <n-gi :span="6">
             <div class="flex gap-1">
-                <n-button v-on:click="handleSave">Save</n-button>
+                <n-button v-on:click="handleSave" v-if="!targetPost?.id">Save</n-button>
                 <n-button type="primary" v-on:click="handlePublish">Publish</n-button>
             </div>
             <div>
@@ -160,4 +181,5 @@ const handleEditChange = (markdown: string, html: string) => {
         </n-gi>
     </n-grid>
 </n-form>
+</n-spin>
 </template>
