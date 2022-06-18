@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { getPostListReq } from '@/services'
-import { onMounted, ref, h, computed } from 'vue'
-import { NDataTable, NTag } from 'naive-ui'
+import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
+import { NDataTable, NTag, NInput } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-import { formatTime } from '@/utils'
+import { formatTime, debounce } from '@/utils'
 
-const params = ref({ pageSize: 10, page: 1, status: '' })
+const params = ref({ pageSize: 10, page: 1, status: '', keyword: undefined })
 const postList = ref([])
 const total = ref(0)
 const pagination = computed(() => {
@@ -29,6 +29,13 @@ const loadData = async () => {
 
 onMounted(() => {
   loadData()
+})
+
+watch(() => params.value.keyword, (n, old) => {
+  if (n !== old) {
+    params.value.page = 1
+    debounce(loadData)
+  }
 })
 
 const columns = [
@@ -90,6 +97,9 @@ const handlePageChange = (page: number) => {
 
 <template>
 <div>
+  <div class="mb-2 w-1/3">
+    <n-input placeholder="Search" v-model:value="params.keyword" />
+  </div>
   <n-data-table
     :loading="loading"
     :remote="true"
