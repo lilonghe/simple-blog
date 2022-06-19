@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin } from 'naive-ui'
+import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin, NImage } from 'naive-ui'
 import { useGlobalStore } from '@/stores/global'
 import { computed, onMounted, ref } from 'vue'
 import { createPostReq, getEditPostReq } from '@/services'
@@ -20,6 +20,7 @@ interface PostFormModel {
   pathname?: string
   featuredImage?: string
   options?: string
+  create_time?: string
 }
 
 const globalStore = useGlobalStore();
@@ -67,22 +68,21 @@ const submit = async (type?: string) => {
     preProcessFormData()
     let params = {
         ...form.value,
-        create_time: dayjs().format(),
+        create_time: form.value.create_time || dayjs().format(),
         update_time: dayjs().format(),
     }
     if (type === 'publish') {
         params.status = 3
     }
 
-    let { code } = await createPostReq(params)
+    let { code, data } = await createPostReq(params)
     if (!code) {
         if (form.value.status === 0) {
-            $message.success('Save success')
-            router.push('/post/list')
+            window.$message.success('Save success')
         } else {
-            $message.success('Publish success')
-            router.push('/post/list')
+            window.$message.success('Publish success')
         }
+        getEditPostReq(data.id)
     }
 }
 
@@ -134,6 +134,7 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
                         v-model:value="form.pathname" />
                     <n-input-group-label>.html</n-input-group-label>
                 </n-input-group>
+                <a class="link ml-2" target="_blank" :href="globalStore.options.site_url + `/post/${targetPost?.pathname}.html`">View</a>
             </n-form-item>
             <div v-if="!route.params.id || (route.params.id && targetPost?.id)">
                 <mavon-editor 
@@ -177,6 +178,7 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
             <div>
                 <div class="text-xl mt-4">Featured Image</div>
                 <n-input placeholder="img url" v-model:value="form.featuredImage" />
+                <n-image :src="form.featuredImage" />
             </div>
         </n-gi>
     </n-grid>
