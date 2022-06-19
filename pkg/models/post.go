@@ -119,7 +119,7 @@ func GetPublishedPostByPathname(pathname string, postType int) (*Post, error) {
  */
 func GetPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
-	has, err := global.Store.Where(" pathname = ? and type = ? ", pathname, postType).Get(&post)
+	has, err := global.Store.Where("status != 4 and pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
 		if post.Options != "" {
 			err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
@@ -158,7 +158,7 @@ func GetPostCateAndTag(postId int32) ([]Cate, []Tag) {
 }
 
 func GetPostCount() int64 {
-	count, err := global.Store.Where("type = 0").Count(Post{})
+	count, err := global.Store.Where("status != 4 and type = 0").Count(Post{})
 	if err != nil {
 		panic(err)
 	}
@@ -167,7 +167,7 @@ func GetPostCount() int64 {
 
 func GetAdminPostList(limit, offset int, condiBean Post, keyword string) ([]Post, int64) {
 	datas := make([]Post, 0)
-	sess := global.Store.Where(" type = 0")
+	sess := global.Store.Where(" status != 4 and type = 0")
 	if keyword != "" {
 		sess = sess.Where("title like ?", "%"+keyword+"%")
 	}
