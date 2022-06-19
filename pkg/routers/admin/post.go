@@ -47,7 +47,7 @@ func CreateOrEditPost(c *gin.Context) {
 		}
 	}
 
-	m.UserId = 1
+	m.UserId = int32(c.GetInt("id"))
 	models.CreateOrEditPost(&m)
 	utils.GetCommonResponse(c, m)
 }

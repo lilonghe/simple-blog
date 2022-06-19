@@ -36,3 +36,12 @@ func GetUserByName(name string) (*User, error) {
 	}
 	return nil, err
 }
+
+func GetUserById(id int32) (*User, error) {
+	var user User
+	has, err := global.Store.Where("id = ?", id).Get(&user)
+	if has {
+		return &user, err
+	}
+	return nil, err
+}

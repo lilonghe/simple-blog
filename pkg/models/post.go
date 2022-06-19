@@ -31,7 +31,7 @@ type Post struct {
 
 type CreatePostModel struct {
 	Id              int32         `json:"id" xorm:"autoincr"`
-	Status          int32         `json:"status,omitempty"`
+	Status          int32         `json:"status"`
 	Title           string        `json:"title,omitempty"`
 	Pathname        string        `json:"pathname,omitempty"`
 	Summary         string        `json:"summary,omitempty"`
@@ -40,7 +40,7 @@ type CreatePostModel struct {
 	Options         *string       `json:"options,omitempty"`
 	CreateTime      time.Time     `json:"create_time,omitempty"`
 	UpdateTime      time.Time     `json:"update_time,omitempty"`
-	IsPublic        bool          `json:"is_public,omitempty"`
+	IsPublic        bool          `json:"is_public"`
 	AllowComment    bool          `json:"allow_comment"`
 	UserId          int32         `json:"-"`
 	Type            int           `json:"type"`
@@ -65,9 +65,11 @@ func GetPostList(limit, offset int) ([]Post, int64, error) {
 	err = global.Store.Where(" status = 3 and is_public = true and type = 0 ").OrderBy("create_time desc").Limit(limit, offset).Find(&datas)
 	if err == nil {
 		for k, v := range datas {
-			err = json.Unmarshal([]byte(v.Options), &datas[k].PostOptions)
-			if err != nil {
-				fmt.Println(err)
+			if v.Options != "" {
+				err = json.Unmarshal([]byte(v.Options), &datas[k].PostOptions)
+				if err != nil {
+					fmt.Println(err)
+				}
 			}
 		}
 	}
@@ -99,9 +101,12 @@ func GetPublishedPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
 	has, err := global.Store.Where(" status = 3 and pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
-		err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
-		if err != nil {
-			fmt.Println(err)
+		if post.Options != "" {
+			fmt.Println(post.Options)
+			err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 		return &post, err
 	} else {
@@ -116,9 +121,11 @@ func GetPostByPathname(pathname string, postType int) (*Post, error) {
 	var post Post
 	has, err := global.Store.Where(" pathname = ? and type = ? ", pathname, postType).Get(&post)
 	if has {
-		err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
-		if err != nil {
-			fmt.Println(err)
+		if post.Options != "" {
+			err = json.Unmarshal([]byte(post.Options), &post.PostOptions)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 		return &post, err
 	} else {

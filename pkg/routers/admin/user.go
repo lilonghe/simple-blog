@@ -1,4 +1,4 @@
-package routers
+package adminRouters
 
 import (
 	"fmt"
@@ -34,15 +34,14 @@ func Login(c *gin.Context) {
 
 	// Save user session
 	session := sessions.Default(c)
-	session.Set("name", user.Name)
+	session.Set("id", user.Id)
 	session.Save()
 	utils.GetCommonSuccess(c)
 }
 
 func GetCurrentUser(c *gin.Context) {
-	session := sessions.Default(c)
-	name := session.Get("name").(string)
-	user, err := models.GetUserByName(name)
+	id := c.GetInt("id")
+	user, err := models.GetUserById(int32(id))
 	if err != nil {
 		utils.GetCommonError(err, c)
 		return

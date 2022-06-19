@@ -14,10 +14,10 @@ func TestGetPostCateAndTag(t *testing.T) {
 }
 
 func TestGetAdminPostList(t *testing.T) {
-	list, count, err := GetAdminPostList(10, 0, &Post{
-		Status: 1,
-	})
-	t.Log(list)
-	t.Log(count)
-	t.Log(err)
+	//list, count, err := GetAdminPostList(10, 0, &Post{
+	//	Status: 1,
+	//})
+	//t.Log(list)
+	//t.Log(count)
+	//t.Log(err)
 }

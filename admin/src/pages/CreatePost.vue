@@ -82,7 +82,7 @@ const submit = async (type?: string) => {
         } else {
             window.$message.success('Publish success')
         }
-        getEditPostReq(data.id)
+        getTargetPost(data.id)
     }
 }
 
@@ -134,7 +134,13 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
                         v-model:value="form.pathname" />
                     <n-input-group-label>.html</n-input-group-label>
                 </n-input-group>
-                <a class="link ml-2" target="_blank" :href="globalStore.options.site_url + `/post/${targetPost?.pathname}.html`">View</a>
+                <a 
+                    v-if="targetPost?.pathname" 
+                    class="link ml-2" 
+                    target="_blank" 
+                    :href="globalStore.options.site_url + `/post/${targetPost?.pathname}.html${targetPost.status === 0 ? '?preview=true':''}`">
+                    View
+                </a>
             </n-form-item>
             <div v-if="!route.params.id || (route.params.id && targetPost?.id)">
                 <mavon-editor 
@@ -146,7 +152,7 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
         </n-gi>
         <n-gi :span="6">
             <div class="flex gap-1">
-                <n-button v-on:click="handleSave" v-if="!targetPost?.id">Save</n-button>
+                <n-button v-on:click="handleSave" v-if="targetPost?.status != 3">Save</n-button>
                 <n-button type="primary" v-on:click="handlePublish">Publish</n-button>
             </div>
             <div>

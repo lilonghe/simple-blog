@@ -51,12 +51,12 @@ func main() {
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 
-	r.POST("/api/admin/login", routers.Login)
+	r.POST("/api/admin/login", adminRouters.Login)
 	authorized := r.Group("/api/admin")
 	authorized.Use(middlewares.AuthRequired())
 	{
-		authorized.GET("/user", routers.GetCurrentUser)
-		authorized.GET("/system", routers.Dashboard)
+		authorized.GET("/user", adminRouters.GetCurrentUser)
+		authorized.GET("/system", adminRouters.Dashboard)
 		authorized.GET("/post/list", adminRouters.GetPostList)
 		authorized.POST("/post", adminRouters.CreateOrEditPost)
 		authorized.GET("/post/:id", adminRouters.GetEditPost)

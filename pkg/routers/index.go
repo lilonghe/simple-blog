@@ -55,12 +55,18 @@ func Index(c *gin.Context) {
 
 func PostDetail(c *gin.Context) {
 	paths := strings.Split(c.Param("pathname"), ".html")
+	preview := c.Query("preview")
 	pathname := ""
 	if len(paths) > 0 {
 		pathname = paths[0]
 	}
 
-	post, _ := models.GetPublishedPostByPathname(pathname, 0)
+	var post *models.Post
+	if preview == "true" {
+		post, _ = models.GetPostByPathname(pathname, 0)
+	} else {
+		post, _ = models.GetPublishedPostByPathname(pathname, 0)
+	}
 	resp := map[string]interface{}{
 		"options":     global.Options,
 		"themeConfig": global.ThemeConfig,
