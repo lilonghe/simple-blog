@@ -16,3 +16,8 @@ will generate all article into posts dir.
 so just run `cp ./posts/* hugo-site/content/posts/`, but static assets need you config nginx path.
 
 adapter hugo theme -> [hugo-theme-simply](https://github.com/lilonghe/hugo-theme-simply)
+
+---
+## Record some bug
+
+1. xorm `*string` column can not update except use AllCols().

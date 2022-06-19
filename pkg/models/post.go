@@ -30,16 +30,16 @@ type Post struct {
 }
 
 type CreatePostModel struct {
-	Id              int32         `json:"id" xorm:"autoincr"`
+	Id              int32         `json:"id" xorm:"pk autoincr"`
 	Status          int32         `json:"status"`
-	Title           string        `json:"title,omitempty"`
-	Pathname        string        `json:"pathname,omitempty"`
-	Summary         string        `json:"summary,omitempty"`
-	MarkdownContent string        `json:"markdown_content,omitempty"`
-	Content         template.HTML `json:"content,omitempty"`
-	Options         *string       `json:"options,omitempty"`
-	CreateTime      time.Time     `json:"create_time,omitempty"`
-	UpdateTime      time.Time     `json:"update_time,omitempty"`
+	Title           string        `json:"title"`
+	Pathname        string        `json:"pathname"`
+	Summary         string        `json:"summary"`
+	MarkdownContent string        `json:"markdown_content"`
+	Content         template.HTML `json:"content"`
+	Options         *string       `json:"options"`
+	CreateTime      time.Time     `json:"create_time"`
+	UpdateTime      time.Time     `json:"update_time"`
 	IsPublic        bool          `json:"is_public"`
 	AllowComment    bool          `json:"allow_comment"`
 	UserId          int32         `json:"-"`
@@ -189,7 +189,13 @@ func CreateOrEditPost(post *CreatePostModel) {
 			panic(err)
 		}
 	} else {
-		_, err := sess.Update(post, CreatePostModel{Id: post.Id})
+		/**
+		* MustCols("is_public", "allow_comment", "options")
+		* condiBean 和 MustCols 冲突，所以改成了 column 加 pk，然后用 ID()
+		* 或者使用 Where("id = ? ", id) 也可
+		* 但是 options 仍然不更新，没辙只能换成 AllCols
+		 */
+		_, err := sess.ID(post.Id).AllCols().Update(post)
 		if err != nil {
 			sess.Rollback()
 			panic(err)
