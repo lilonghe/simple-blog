@@ -24,6 +24,10 @@ const columns = [
         key: 'pathname'
     },
     {
+        title: 'Post count',
+        key: 'post_count'
+    },
+    {
         title: 'Action',
         key: 'action',
         render: (row: any) => {

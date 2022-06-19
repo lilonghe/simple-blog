@@ -8,7 +8,7 @@ import (
 )
 
 func GetCateList(c *gin.Context) {
-	list, err := models.GetAllCate()
+	list, err := models.GetAllCateWithCount()
 	if err != nil {
 		panic(err)
 	}
@@ -29,6 +29,12 @@ func CreateOrEditCate(c *gin.Context) {
 			utils.GetMessageError("CATE_NOT_FOUND", "Cate not found", c)
 			return
 		}
+	}
+
+	repeat := models.CheckCateNameOrPathRepeat(cate.Name, cate.Pathname, cate.Id)
+	if repeat {
+		utils.GetMessageError("REPEAT_CATE_INFO", "Cate name or pathname repeat", c)
+		return
 	}
 
 	models.CreateOrEditCate(cate)

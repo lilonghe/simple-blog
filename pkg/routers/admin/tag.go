@@ -8,7 +8,7 @@ import (
 )
 
 func GetTagList(c *gin.Context) {
-	list, err := models.GetAllTag()
+	list, err := models.GetAllTagWithCount()
 	if err != nil {
 		panic(err)
 	}
@@ -29,6 +29,12 @@ func CreateOrEditTag(c *gin.Context) {
 			utils.GetMessageError("TAG_NOT_FOUND", "Tag not found", c)
 			return
 		}
+	}
+
+	repeat := models.CheckCateNameOrPathRepeat(tag.Name, tag.Pathname, tag.Id)
+	if repeat {
+		utils.GetMessageError("REPEAT_TAG_INFO", "Tag name or pathname repeat", c)
+		return
 	}
 
 	models.CreateOrEditTag(tag)
