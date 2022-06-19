@@ -12,8 +12,8 @@ interface User {
   username: string;
 }
 
-declare global {
-  interface Window {
-    $message: any;
-  }
+interface Window {
+  $message: any;
+  timeout: any;
+  baseUrl: string;
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 axios.interceptors.request.use(config => {
-    config.baseURL = "http://localhost:8080/api"
+    config.baseURL = window.baseUrl
     config.withCredentials = true
     return config
 })
