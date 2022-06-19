@@ -23,7 +23,6 @@ export const useGlobalStore = defineStore('global', {
           data.forEach((item: any) => {
             options[item.key] = item.value
           })
-          console.log(options)
           this.options = options
         }
       },

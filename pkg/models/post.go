@@ -275,3 +275,10 @@ func GetEditPost(id int32) *CreatePostModel {
 
 	return &p
 }
+
+func DeletePost(id int32) {
+	_, err := global.Store.Update(Post{Id: id, Status: 4, UpdateTime: time.Now()}, Post{Id: id})
+	if err != nil {
+		panic(err)
+	}
+}

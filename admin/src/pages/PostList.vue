@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { getPostListReq } from '@/services'
+import { getPostListReq, deletePost } from '@/services'
 import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
-import { NDataTable, NTag, NInput } from 'naive-ui'
+import { NDataTable, NTag, NInput, NPopconfirm } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { formatTime, debounce } from '@/utils'
 
@@ -53,7 +53,7 @@ const columns = [
             type: row.status === 3 ? 'success' : 'default',
           },
           {
-            default: row.status === 3 ? 'Published' : 'Draft'
+            default: () => row.status === 3 ? 'Published' : 'Draft'
           }
         ) 
     }
@@ -75,14 +75,39 @@ const columns = [
     key: 'action',
     render: (row: any) => {
       return h(
-        RouterLink,
+        'div',
         {
-          to: '/post/edit/' + row.id,
-          class: 'link'
+          class: 'flex gap-4',
         },
-        {
-          default: 'Edit',
-        }
+        [
+          h(
+            RouterLink,
+            {
+              to: '/post/edit/' + row.id,
+              class: 'link'
+            },
+            {
+              default: () => 'Edit',
+            }
+          ),
+          h(
+            NPopconfirm,
+            {
+              onPositiveClick: () => handleDelete(row.id),
+
+            },
+            {
+              trigger: () => h(
+                'a',
+                {
+                  class: 'link cursor-pointer',
+                }, {
+                  default: () => 'Delete',
+              }),
+              default: () => `Are you sure to delete ${row.title}?`,
+            }
+          )
+        ]
       )
     }
   }
@@ -91,6 +116,17 @@ const columns = [
 const handlePageChange = (page: number) => {
   params.value.page = page
   loadData()
+}
+
+const handleDelete = async (id: number) => {
+  let { code } = await deletePost(id)
+  if (!code) {
+    window.$message.success('Delete success')
+    if (postList.value.length === 1) {
+      params.value.page--
+    }
+    loadData()
+  }
 }
 
 </script>

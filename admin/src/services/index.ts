@@ -53,3 +53,9 @@ export async function createPostReq(params:any) {
 export async function getEditPostReq(id: number) {
     return request(`/admin/post/${id}`)
 }
+
+export async function deletePost(id:number) {
+    return request(`/admin/post/${id}`, {
+        method: "DELETE",
+    })
+}

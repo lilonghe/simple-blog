@@ -61,3 +61,14 @@ func GetEditPost(c *gin.Context) {
 	}
 	utils.GetCommonResponse(c, post)
 }
+
+func DeletePost(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	post := models.GetEditPost(int32(id))
+	if post == nil {
+		utils.GetMessageError("POST_NOT_FOUND", "Post not found", c)
+	}
+
+	models.DeletePost(int32(id))
+	utils.GetCommonSuccess(c)
+}

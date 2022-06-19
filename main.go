@@ -31,6 +31,7 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"content-type"},
 		AllowCredentials: true,
+		AllowMethods:     []string{"DELETE"},
 		AllowOriginFunc: func(origin string) bool {
 			return true
 		},
@@ -61,6 +62,7 @@ func main() {
 		authorized.POST("/post", adminRouters.CreateOrEditPost)
 		authorized.GET("/post/:id", adminRouters.GetEditPost)
 		authorized.POST("/post/:id", adminRouters.CreateOrEditPost)
+		authorized.DELETE("/post/:id", adminRouters.DeletePost)
 		authorized.GET("/options", adminRouters.GetOptions)
 		authorized.GET("/cate/list", adminRouters.GetCateList)
 		authorized.GET("/tag/list", adminRouters.GetTagList)
