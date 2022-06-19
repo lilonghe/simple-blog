@@ -58,6 +58,7 @@ func GetEditPost(c *gin.Context) {
 	post := models.GetEditPost(int32(id))
 	if post == nil {
 		utils.GetMessageError("POST_NOT_FOUND", "Post not found", c)
+		return
 	}
 	utils.GetCommonResponse(c, post)
 }
@@ -67,6 +68,7 @@ func DeletePost(c *gin.Context) {
 	post := models.GetEditPost(int32(id))
 	if post == nil {
 		utils.GetMessageError("POST_NOT_FOUND", "Post not found", c)
+		return
 	}
 
 	models.DeletePost(int32(id))

@@ -58,14 +58,22 @@ func main() {
 	{
 		authorized.GET("/user", adminRouters.GetCurrentUser)
 		authorized.GET("/system", adminRouters.Dashboard)
+		authorized.GET("/options", adminRouters.GetOptions)
+
 		authorized.GET("/post/list", adminRouters.GetPostList)
 		authorized.POST("/post", adminRouters.CreateOrEditPost)
 		authorized.GET("/post/:id", adminRouters.GetEditPost)
-		authorized.POST("/post/:id", adminRouters.CreateOrEditPost)
 		authorized.DELETE("/post/:id", adminRouters.DeletePost)
-		authorized.GET("/options", adminRouters.GetOptions)
+
 		authorized.GET("/cate/list", adminRouters.GetCateList)
+		authorized.POST("/cate", adminRouters.CreateOrEditCate)
+		authorized.GET("/cate/:id", adminRouters.GetCate)
+		authorized.DELETE("/cate/:id", adminRouters.DeleteCate)
+
 		authorized.GET("/tag/list", adminRouters.GetTagList)
+		authorized.POST("/tag", adminRouters.CreateOrEditTag)
+		authorized.GET("/tag/:id", adminRouters.GetTag)
+		authorized.DELETE("/tag/:id", adminRouters.DeleteTag)
 	}
 
 	r.Run()

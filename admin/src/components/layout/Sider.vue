@@ -46,6 +46,62 @@ const menuOptions: MenuOption[] = [
       }
     ]
   },
+  {
+    label: "Cate management",
+    key: 'cate-management',
+    children: [
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/cate/list'
+            },
+            { default: () => 'Cate list' }
+        ),
+        key: '/cate/list',
+      },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/cate/create'
+            },
+            { default: () => 'Cate create' }
+        ),
+        key: '/cate/create',
+      }
+    ]
+  },
+  {
+    label: "Tag management",
+    key: 'tag-management',
+    children: [
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/tag/list'
+            },
+            { default: () => 'Tag list' }
+        ),
+        key: '/tag/list',
+      },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/tag/create'
+            },
+            { default: () => 'Tag create' }
+        ),
+        key: '/tag/create',
+      }
+    ]
+  },
 ]
 
 </script>

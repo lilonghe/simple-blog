@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getPostListReq, deletePost } from '@/services'
+import { getPostListReq, deletePostReq } from '@/services'
 import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
 import { NDataTable, NTag, NInput, NPopconfirm } from 'naive-ui'
 import { RouterLink } from 'vue-router'
@@ -119,7 +119,7 @@ const handlePageChange = (page: number) => {
 }
 
 const handleDelete = async (id: number) => {
-  let { code } = await deletePost(id)
+  let { code } = await deletePostReq(id)
   if (!code) {
     window.$message.success('Delete success')
     if (postList.value.length === 1) {

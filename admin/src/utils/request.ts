@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 axios.interceptors.request.use(config => {
     config.baseURL = window.baseUrl
@@ -18,6 +18,7 @@ axios.interceptors.response.use(response => {
             }
         }
     }
+    console.log(response)
     return response
 })
 
@@ -28,5 +29,7 @@ export default function request(url: string, config?: object) {
     };
     return axios.request(userConfig).then(res => {
         return res.data
+    }).catch((err: AxiosError) => {
+        window.$message.error(err.message)
     });
 }

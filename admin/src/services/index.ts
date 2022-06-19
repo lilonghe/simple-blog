@@ -54,8 +54,42 @@ export async function getEditPostReq(id: number) {
     return request(`/admin/post/${id}`)
 }
 
-export async function deletePost(id:number) {
+export async function deletePostReq(id:number) {
     return request(`/admin/post/${id}`, {
         method: "DELETE",
     })
+}
+
+export async function deleteCateReq(id:number) {
+    return request(`/admin/cate/${id}`, {
+        method: "DELETE",
+    })
+}
+
+export async function createOrEditCateReq(params:any) {
+    return request(`/admin/cate`, {
+        method: "POST",
+        data: params,
+    })
+}
+
+export async function getCateReq(id: number) {
+    return request(`/admin/cate/${id}`)
+}
+
+export async function deleteTagReq(id:number) {
+    return request(`/admin/tag/${id}`, {
+        method: "DELETE",
+    })
+}
+
+export async function createOrEditTagReq(params:any) {
+    return request(`/admin/tag`, {
+        method: "POST",
+        data: params,
+    })
+}
+
+export async function getTagReq(id: number) {
+    return request(`/admin/tag/${id}`)
 }
