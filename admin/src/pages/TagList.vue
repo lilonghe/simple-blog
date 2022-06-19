@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { NDataTable, NPopconfirm } from 'naive-ui';
-import { h, onMounted } from 'vue';
+import { NDataTable, NPopconfirm, NInput } from 'naive-ui';
+import { h, onMounted, ref, computed } from 'vue';
 import { useGlobalStore } from '@/stores/global';
 import { RouterLink } from 'vue-router';
 
 const globalStore = useGlobalStore();
+const keyword = ref()
 
 onMounted(() => {
     globalStore.getTags()
@@ -69,10 +70,25 @@ const columns = [
         }
     },
 ]
+
+const list = computed(() => {
+    if (keyword.value) {
+        return globalStore.tags.filter((tag: any) => {
+            return tag.name.includes(keyword.value) || tag.pathname.includes(keyword.value)
+        })
+    }
+    return globalStore.tags
+})
 </script>
 <template>
-<n-data-table 
-    :columns="columns"
-    :data="globalStore.tags"
-    :pagination="{pageSize: 10}" />
+<div>
+    <div class="mb-2 w-1/3">
+        <n-input placeholder="Search" v-model:value="keyword" />
+    </div>
+    <n-data-table 
+        :columns="columns"
+        :data="list"
+        :pagination="{pageSize: 10}" />
+</div>
+
 </template>
