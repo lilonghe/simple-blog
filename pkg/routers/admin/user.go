@@ -1,11 +1,11 @@
 package adminRouters
 
 import (
-	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"simple-blog/pkg/models"
 	"simple-blog/pkg/utils"
+	"time"
 )
 
 type loginReqModel struct {
@@ -25,12 +25,15 @@ func Login(c *gin.Context) {
 		utils.GetMessageError("ACCOUNT_NOT_EXIST", "Account not exist", c)
 		return
 	}
-	fmt.Println(params.Password, user.Password)
 	matchPass := models.CheckPass(params.Password, user.Password)
 	if !matchPass {
 		utils.GetMessageError("PASSWORD_ERROR", "Password error", c)
 		return
 	}
+
+	user.LastLoginTime = time.Now()
+	user.LastLoginIp = c.GetHeader("X-Real-IP")
+	models.UpdateUser(*user)
 
 	// Save user session
 	session := sessions.Default(c)

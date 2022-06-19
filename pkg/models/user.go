@@ -6,17 +6,18 @@ import (
 	"github.com/jameskeane/bcrypt"
 	"simple-blog/pkg/global"
 	"strings"
+	"time"
 )
 
 type User struct {
-	Id            int    `json:"id"`
-	Name          string `json:"name"`
-	DisplayName   string `json:"display_name"`
-	Password      string `json:"-"`
-	Email         string `json:"-"`
-	Status        int    `json:"-"`
-	LastLoginTime string `json:"-"`
-	LastLoginIp   string `json:"-"`
+	Id            int       `json:"id"`
+	Name          string    `json:"name"`
+	DisplayName   string    `json:"display_name"`
+	Password      string    `json:"-"`
+	Email         string    `json:"-"`
+	Status        int       `json:"-"`
+	LastLoginTime time.Time `json:"-"`
+	LastLoginIp   string    `json:"-"`
 }
 
 func (User) TableName() string { return global.Config.DbTablePrefix + "user" }
@@ -44,4 +45,11 @@ func GetUserById(id int32) (*User, error) {
 		return &user, err
 	}
 	return nil, err
+}
+
+func UpdateUser(user User) {
+	_, err := global.Store.Update(user, User{Id: user.Id})
+	if err != nil {
+		panic(err)
+	}
 }
