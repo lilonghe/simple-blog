@@ -102,6 +102,23 @@ const menuOptions: MenuOption[] = [
       }
     ]
   },
+  {
+    label: "System management",
+    key: 'system-management',
+    children: [
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/options/general'
+            },
+            { default: () => 'Basic setting' }
+        ),
+        key: '/options/general',
+      },
+    ]
+  },
 ]
 
 </script>

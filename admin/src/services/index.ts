@@ -93,3 +93,10 @@ export async function createOrEditTagReq(params:any) {
 export async function getTagReq(id: number) {
     return request(`/admin/tag/${id}`)
 }
+
+export async function updateOptionsReq(params:any) {
+    return request(`/admin/options`, {
+        method: "POST",
+        data: params,
+    })
+}

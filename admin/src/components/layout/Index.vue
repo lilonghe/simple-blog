@@ -15,10 +15,10 @@ onMounted(() => {
 
 <template>
 <n-layout has-sider>
-    <n-layout-sider bordered class="mr-1 min-h-screen sticky top-0">
+    <n-layout-sider bordered class="mr-3 min-h-screen sticky top-0">
         <sider />
     </n-layout-sider>
-    <n-layout-content class="pt-2 pr-1">
+    <n-layout-content class="pt-2 pb-2 mr-3">
         <content />
     </n-layout-content>
 </n-layout>

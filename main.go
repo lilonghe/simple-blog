@@ -59,6 +59,7 @@ func main() {
 		authorized.GET("/user", adminRouters.GetCurrentUser)
 		authorized.GET("/system", adminRouters.Dashboard)
 		authorized.GET("/options", adminRouters.GetOptions)
+		authorized.POST("/options", adminRouters.UpdateOptions)
 
 		authorized.GET("/post/list", adminRouters.GetPostList)
 		authorized.POST("/post", adminRouters.CreateOrEditPost)

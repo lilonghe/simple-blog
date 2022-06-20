@@ -52,3 +52,14 @@ func GetDBVersion() string {
 	}
 	return r[0]["version"]
 }
+
+func UpdateOptions(list []Options) {
+	sess := global.Store.NewSession()
+	for _, v := range list {
+		_, err := sess.Update(&v, Options{Key: v.Key})
+		if err != nil {
+			sess.Rollback()
+			panic(err)
+		}
+	}
+}
