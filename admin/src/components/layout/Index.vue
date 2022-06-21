@@ -27,7 +27,7 @@ const handleLogout = async () => {
 </script>
 
 <template>
-<n-layout>
+<n-layout class="h-screen">
     <n-layout-header bordered class="h-12 flex flex-row items-center">
         <div class="ml-3">
             <span class="font-bold text-lg">{{globalStore.options.title}}</span>
@@ -37,11 +37,11 @@ const handleLogout = async () => {
             <a class="link cursor-pointer" v-on:click="handleLogout">Logout</a>
         </div>
     </n-layout-header>
-    <n-layout has-sider>
-        <n-layout-sider bordered class="mr-3 min-h-screen sticky top-0">
+    <n-layout has-sider style="height: calc(100vh - 3rem)">
+        <n-layout-sider bordered>
             <sider />
         </n-layout-sider>
-        <n-layout-content class="pt-2 pb-2 mr-3">
+        <n-layout-content class="pt-2 pb-2 mr-3 ml-3">
             <content />
         </n-layout-content>
     </n-layout>
