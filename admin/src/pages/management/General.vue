@@ -21,7 +21,7 @@ const globalStore = useGlobalStore()
 
 onMounted(() => {
     globalStore.getOptions().then(() => {
-        formModel.value = globalStore.options
+        formModel.value = {...globalStore.options}
     })
 })
 

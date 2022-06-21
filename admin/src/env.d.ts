@@ -9,7 +9,7 @@ declare module '*.vue' {
 
 interface User {
   id: number;
-  username: string;
+  name: string;
 }
 
 interface Window {

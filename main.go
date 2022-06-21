@@ -60,6 +60,7 @@ func main() {
 		authorized.GET("/system", adminRouters.Dashboard)
 		authorized.GET("/options", adminRouters.GetOptions)
 		authorized.POST("/options", adminRouters.UpdateOptions)
+		authorized.POST("/logout", adminRouters.Logout)
 
 		authorized.GET("/post/list", adminRouters.GetPostList)
 		authorized.POST("/post", adminRouters.CreateOrEditPost)

@@ -100,3 +100,9 @@ export async function updateOptionsReq(params:any) {
         data: params,
     })
 }
+
+export async function logoutReq() {
+    return request(`/admin/logout`, {
+        method: "POST",
+    })
+}

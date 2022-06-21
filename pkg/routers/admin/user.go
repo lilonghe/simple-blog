@@ -51,3 +51,10 @@ func GetCurrentUser(c *gin.Context) {
 	}
 	utils.GetCommonResponse(c, user)
 }
+
+func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Clear()
+	session.Save()
+	utils.GetCommonSuccess(c)
+}
