@@ -55,6 +55,7 @@ func GetCurrentUser(c *gin.Context) {
 func Logout(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
+	session.Options(sessions.Options{MaxAge: -1})
 	session.Save()
 	utils.GetCommonSuccess(c)
 }

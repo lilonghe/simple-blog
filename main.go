@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
+	"net/http"
 	"path/filepath"
 	"simple-blog/pkg/middlewares"
 	"simple-blog/pkg/models"
@@ -39,6 +40,7 @@ func main() {
 	}))
 
 	store := cookie.NewStore([]byte(global.Options["password_salt"]))
+	store.Options(sessions.Options{MaxAge: 86400, HttpOnly: true, Secure: true, SameSite: http.SameSiteLaxMode})
 	r.Use(sessions.Sessions("SESSIONID", store))
 
 	theme := global.Options["theme"]
