@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginReq } from '@/services'
 import { NButton, NForm, NFormItem, NInput, FormInst, FormRules } from 'naive-ui'
@@ -47,11 +47,11 @@ const login = (e: any) => {
       <n-input v-model:value="model.name" placeholder="Username" />
     </n-form-item>
     <n-form-item label="Password" path="password">
-      <n-input type="password" v-model:value="model.password" placeholder="Password" />
+      <n-input @keyup.enter.native="login" type="password" v-model:value="model.password" placeholder="Password" />
     </n-form-item>
-    <n-form-item class="flex justify-end">
-      <n-button attr-type="button" @click="login">Login</n-button>
-    </n-form-item>
+    <div class="flex justify-end">
+      <n-button :style="{width: '100%'}" block attr-type="button" @click="login">Login</n-button>
+    </div>
   </n-form>
 </div>
 </template>
