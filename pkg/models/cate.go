@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"simple-blog/pkg/global"
 )
 
@@ -33,11 +34,17 @@ func GetAllCateWithCount() ([]CateWithCountModel, error) {
 	datas := make([]CateWithCountModel, 0)
 	cateTable := Cate{}.TableName()
 	postCateTable := PostCate{}.TableName()
-	err := global.Store.
-		Select(cateTable+".*, count(1) as post_count").
-		Join("left", postCateTable, postCateTable+".cate_id = "+cateTable+".id").
-		GroupBy(cateTable + ".id").
-		Find(&datas)
+	postTable := Post{}.TableName()
+	err := global.Store.SQL(fmt.Sprintf(`
+		select %[1]s.*, (
+			select count(1) 
+			from %[2]s 
+			left join %[3]s on %[3]s.id = %[2]s.post_id
+			where cate_id = %[1]s.id and %[3]s.status != 4
+		) as post_count 
+		from %[1]s
+		group by %[1]s.id
+	`, cateTable, postCateTable, postTable)).Find(&datas)
 	return datas, err
 }
 

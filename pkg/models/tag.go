@@ -1,6 +1,9 @@
 package models
 
-import "simple-blog/pkg/global"
+import (
+	"fmt"
+	"simple-blog/pkg/global"
+)
 
 type Tag struct {
 	Id       int32  `json:"id,omitempty" xorm:"autoincr"`
@@ -29,11 +32,17 @@ func GetAllTagWithCount() ([]TagWithCountModel, error) {
 	datas := make([]TagWithCountModel, 0)
 	tagTable := Tag{}.TableName()
 	postTagTable := PostTag{}.TableName()
-	err := global.Store.
-		Select(tagTable+".*, count(1) as post_count").
-		Join("left", postTagTable, postTagTable+".tag_id = "+tagTable+".id").
-		GroupBy(tagTable + ".id").
-		Find(&datas)
+	postTable := Post{}.TableName()
+	err := global.Store.SQL(fmt.Sprintf(`
+		select %[1]s.*, (
+			select count(1) 
+			from %[2]s 
+			left join %[3]s on %[3]s.id = %[2]s.post_id
+			where tag_id = %[1]s.id and %[3]s.status != 4
+		) as post_count 
+		from %[1]s
+		group by %[1]s.id
+	`, tagTable, postTagTable, postTable)).Find(&datas)
 	return datas, err
 }
 
