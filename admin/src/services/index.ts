@@ -106,3 +106,11 @@ export async function logoutReq() {
         method: "POST",
     })
 }
+
+export async function uploadFileReq(params:any) {
+    return request(`/admin/upload`, {
+        method: 'POST',
+        data: params,
+        headers: { 'Content-Type': 'multipart/form-data' },
+    })
+}

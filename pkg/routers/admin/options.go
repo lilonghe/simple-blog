@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"simple-blog/pkg/models"
 	"simple-blog/pkg/utils"
+	"strings"
 )
 
 func GetOptions(c *gin.Context) {
@@ -24,6 +25,9 @@ func UpdateOptions(c *gin.Context) {
 
 	optionsArr := make([]models.Options, 0)
 	for k, v := range options {
+		if k == "site_url" && strings.HasSuffix(v, "/") {
+			v = strings.TrimRight(v, "/")
+		}
 		optionsArr = append(optionsArr, models.Options{
 			Key:   k,
 			Value: v,

@@ -53,6 +53,7 @@ func main() {
 	r.GET("/comments", routers.Comments)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
+	r.Static("/upload", "./upload")
 
 	r.POST("/api/admin/login", adminRouters.Login)
 	authorized := r.Group("/api/admin")
@@ -63,6 +64,7 @@ func main() {
 		authorized.GET("/options", adminRouters.GetOptions)
 		authorized.POST("/options", adminRouters.UpdateOptions)
 		authorized.POST("/logout", adminRouters.Logout)
+		authorized.POST("/upload", adminRouters.Upload)
 
 		authorized.GET("/post/list", adminRouters.GetPostList)
 		authorized.POST("/post", adminRouters.CreateOrEditPost)

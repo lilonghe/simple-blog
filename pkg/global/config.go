@@ -17,12 +17,14 @@ var (
 
 var (
 	Config = struct {
-		Dev           bool
-		DbUrl         string `default:"root:root@/blog?charset=utf8"`
-		DbTablePrefix string `default:"fk_"`
-		Author        string
-		AuthorLink    string
-		SiteBegin     *time.Time
+		Dev              bool
+		DbUrl            string `default:"root:root@/blog?charset=utf8"`
+		DbTablePrefix    string `default:"fk_"`
+		Author           string
+		AuthorLink       string
+		SiteBegin        *time.Time
+		UploadPath       string `yaml:"uploadPath"`
+		UploadAccessPath string `yaml:"uploadAccessPath"`
 	}{}
 
 	Options     = map[string]string{}

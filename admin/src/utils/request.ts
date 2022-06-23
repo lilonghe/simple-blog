@@ -30,5 +30,6 @@ export default function request(url: string, config?: object) {
         return res.data
     }).catch((err: AxiosError) => {
         window.$message.error(err.message)
+        return { code: err.code, msg: err.message }
     });
 }

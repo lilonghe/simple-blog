@@ -2,7 +2,7 @@
 import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin, NImage } from 'naive-ui'
 import { useGlobalStore } from '@/stores/global'
 import { computed, onMounted, ref } from 'vue'
-import { createPostReq, getEditPostReq } from '@/services'
+import { createPostReq, getEditPostReq, uploadFileReq } from '@/services'
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -33,6 +33,7 @@ const targetPost = ref<PostFormModel>()
 const formRef = ref()
 const router = useRouter()
 const route = useRoute()
+const editorRef = ref()
 
 onMounted(() => {
     globalStore.getCates()
@@ -107,6 +108,18 @@ const handleEditChange = (markdown: string, html: string) => {
     form.value.content = html
 }
 
+const handleUploadImage = (pos: string, file: any) => {
+    var formData = new FormData();
+    formData.append('file', file);
+    uploadFileReq(formData).then((res: any) => {
+        if (!res.code) {
+            editorRef.value.$img2Url(pos, res.data)
+        } else {
+            editorRef.value.$refs.toolbar_left.$imgDel(pos)
+        }
+    })
+}
+
 const loaded = computed(() => !route.params.id || (route.params.id && targetPost.value?.id !== undefined))
 </script>
 <template>
@@ -144,7 +157,9 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
             </n-form-item>
             <div v-if="!route.params.id || (route.params.id && targetPost?.id)">
                 <mavon-editor 
+                    ref="editorRef"
                     v-model="form.markdown_content"
+                    :onImgAdd="handleUploadImage"
                     :onChange="handleEditChange"
                     :boxShadow="false" class="h-screen"
                     :ishljs="false" />

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"os"
+	"path"
 	"time"
 )
 
@@ -43,4 +45,19 @@ func GetPageResponse(c *gin.Context, list interface{}, total int64) {
 		"list":  list,
 		"total": total,
 	}})
+}
+
+func AutoCreateFolder(basePath string, folder string) {
+	_, err := os.Stat(path.Join(basePath, folder))
+	if err != nil {
+		if os.IsNotExist(err) {
+			err = os.MkdirAll(path.Join(basePath, folder), 0711)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			panic(err)
+		}
+	}
+
 }
