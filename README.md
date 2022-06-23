@@ -1,7 +1,10 @@
 # Target
-a simple blog system, code is annotated.
+a simple blog system.
 
 base on [@firekylin](https://github.com/firekylin/firekylin) design.
+
+# Start
+- mv `config.default.yaml` -> `config.yaml` and edit config
 
 # Tools
 `export` can export all posts(exclude deleted) as markdown file. the markdown include `hugo` metadata(date, draft, tags, categories...).

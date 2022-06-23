@@ -1,9 +1,0 @@
-dev: true
-
-dburl: root:root@/blog?charset=utf8
-dbtableprefix: fk_
-
-author: lilonghe
-authorlink: https://www.lilonghe.net
-
-sitebegin: 2016-12-19 21:31:43
