@@ -35,5 +35,6 @@ func UpdateOptions(c *gin.Context) {
 	}
 
 	models.UpdateOptions(optionsArr)
+	models.LoadOption()
 	utils.GetCommonSuccess(c)
 }
