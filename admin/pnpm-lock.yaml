@@ -4,6 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.3
   autoprefixer: ^10.4.7
   axios: ^0.27.2
+  calendar-graph: ^1.0.1
   dayjs: ^1.11.3
   mavon-editor: 3.0.0-beta
   naive-ui: ^2.30.4
@@ -19,6 +20,7 @@ specifiers:
 
 dependencies:
   axios: 0.27.2
+  calendar-graph: 1.0.1
   dayjs: 1.11.3
   mavon-editor: 3.0.0-beta
   pinia: 2.0.14_vcmyupim4cga7k7f5hngmth5py
@@ -344,6 +346,10 @@ packages:
       node-releases: 2.0.5
       picocolors: 1.0.0
     dev: true
+
+  /calendar-graph/1.0.1:
+    resolution: {integrity: sha512-pT421YiZCKyyXYlO7EujdiTmyX/sM3l+RCPUChRxLsjG5TlI+jBHby7kHrfgHv7RtI8RPl1XPthNFGw96qgazg==}
+    dev: false
 
   /camelcase-css/2.0.1:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}

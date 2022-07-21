@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "calendar-graph": "^1.0.1",
     "dayjs": "^1.11.3",
     "mavon-editor": "3.0.0-beta",
     "pinia": "^2.0.14",

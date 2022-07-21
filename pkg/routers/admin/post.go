@@ -1,16 +1,18 @@
 package adminRouters
 
 import (
-	"github.com/gin-gonic/gin"
 	"simple-blog/pkg/models"
 	"simple-blog/pkg/utils"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetPostList(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
 	page, _ := strconv.Atoi(c.Query("page"))
 	keyword := c.Query("keyword")
+	archive := c.Query("archive")
 
 	condiBean := models.Post{}
 	if c.GetString("status") != "" {
@@ -21,7 +23,22 @@ func GetPostList(c *gin.Context) {
 	}
 
 	list, total := models.GetAdminPostList(pageSize, page*pageSize-pageSize, condiBean, keyword)
-	utils.GetPageResponse(c, list, total)
+
+	if archive == "true" {
+		archiveList := make([]models.PostArchiveView, 0)
+		for _, v := range list {
+			archiveList = append(archiveList, models.PostArchiveView{
+				Title:      v.Title,
+				Pathname:   v.Pathname,
+				CreateTime: v.CreateTime,
+				UpdateTime: v.UpdateTime,
+			})
+		}
+		utils.GetPageResponse(c, archiveList, total)
+	} else {
+		utils.GetPageResponse(c, list, total)
+	}
+
 }
 
 func CreateOrEditPost(c *gin.Context) {
