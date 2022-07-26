@@ -57,8 +57,10 @@ const rules = {
         <n-input v-model:value="formModel.title" placeholder="Title" />
     </n-form-item>
     <n-form-item label="Logo" path="logo_url">
-        <n-input v-model:value="formModel.logo_url" placeholder="Logo url" />
-        <n-image :src="formModel.logo_url" />
+        <div class="w-full">
+            <n-input v-model:value="formModel.logo_url" placeholder="Logo url" />
+            <n-image v-if="formModel.logo_url" :src="formModel.logo_url" class="logoPreview mt-1 block" />
+        </div>
     </n-form-item>
     <n-form-item label="Description" path="description">
         <n-input v-model:value="formModel.description" placeholder="Description" />
@@ -83,3 +85,11 @@ const rules = {
     <n-button v-on:click="handleSubmit" type="primary">Submit</n-button>
 </n-form>
 </template>
+<style scoped>
+.logoPreview {
+    display: block;
+    width: 130px;
+    height: 130px;
+    border: 1px solid #CCC;
+}
+</style>
