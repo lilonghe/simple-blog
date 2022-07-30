@@ -13,15 +13,18 @@ func GetPostList(c *gin.Context) {
 	page, _ := strconv.Atoi(c.Query("page"))
 	keyword := c.Query("keyword")
 	archive := c.Query("archive")
+	status := c.Query("status")
+	isPublic := c.Query("is_public")
 
-	condiBean := models.Post{}
-	if c.GetString("status") != "" {
-		condiBean.Status = int32(c.GetInt("status"))
+	condiBean := models.PostListFilterViewModal{}
+	if status != "" {
+		val, _ := strconv.Atoi(status)
+		condiBean.Status = &val
 	}
-	if c.GetString("is_public") != "" {
-		condiBean.IsPublic = c.GetBool("is_public")
+	if isPublic != "" {
+		val, _ := strconv.ParseBool(isPublic)
+		condiBean.IsPublic = &val
 	}
-
 	list, total := models.GetAdminPostList(pageSize, page*pageSize-pageSize, condiBean, keyword)
 
 	if archive == "true" {

@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { getPostListReq, deletePostReq } from '@/services'
 import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
-import { NDataTable, NTag, NInput, NPopconfirm } from 'naive-ui'
+import { NDataTable, NTag, NInput, NPopconfirm, NSelect } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { formatTime, debounce } from '@/utils'
 
-const params = ref({ pageSize: 10, page: 1, status: '', keyword: undefined })
+const paginationParams = ref({ pageSize: 10, page: 1,})
+const filterParams = ref({ status: undefined, is_public: undefined, keyword: undefined })
 const postList = ref([])
 const total = ref(0)
 const pagination = computed(() => {
   return {
-    ...params.value,
+    ...paginationParams.value,
     itemCount: total.value,
   }
 })
@@ -18,7 +19,7 @@ const loading = ref(false)
 
 const loadData = async () => {
   loading.value = true
-  let { data } = await getPostListReq(params.value);
+  let { data } = await getPostListReq({...paginationParams.value, ...filterParams.value});
   if (data) {
     const { list, total: totalCount } = data;
     postList.value = list
@@ -31,12 +32,14 @@ onMounted(() => {
   loadData()
 })
 
-watch(() => params.value.keyword, (n, old) => {
-  if (n !== old) {
-    params.value.page = 1
+watch(filterParams, (now, old) => {
+  if (now.keyword !== old.keyword) {
+    paginationParams.value.page = 1
     debounce(loadData)
+  } else {
+    handlePageChange(1)
   }
-})
+}, { deep: true })
 
 const columns = [
   {
@@ -113,8 +116,30 @@ const columns = [
   }
 ]
 
+const statusList = [
+  {
+    label: 'Published',
+    value: '3'
+  },
+  {
+    label: 'Draft',
+    value: '0'
+  },
+]
+
+const visibilityList = [
+  {
+    label: 'Public',
+    value: 'true'
+  },
+  {
+    label: 'Viewable With Link(Private)',
+    value: 'false'
+  }
+]
+
 const handlePageChange = (page: number) => {
-  params.value.page = page
+  paginationParams.value.page = page
   loadData()
 }
 
@@ -123,7 +148,7 @@ const handleDelete = async (id: number) => {
   if (!code) {
     window.$message.success('Delete success')
     if (postList.value.length === 1) {
-      params.value.page--
+      paginationParams.value.page--
     }
     loadData()
   }
@@ -133,8 +158,26 @@ const handleDelete = async (id: number) => {
 
 <template>
 <div>
-  <div class="mb-2 w-1/3">
-    <n-input placeholder="Search" v-model:value="params.keyword" />
+  <div class="mb-2 flex gap-4">
+    <div class="w-1/4" >
+      <n-input 
+        placeholder="Search title" 
+        v-model:value="filterParams.keyword" />
+    </div>
+    <div class="w-1/4" >
+      <n-select 
+        placeholder="Filter post status" 
+        clearable 
+        v-model:value="filterParams.status" 
+        :options="statusList" />
+    </div>
+    <div class="w-1/4" >
+      <n-select 
+        placeholder="Filter post visibility" 
+        clearable 
+        v-model:value="filterParams.is_public" 
+        :options="visibilityList" />
+    </div>
   </div>
   <n-data-table
     :loading="loading"

@@ -59,6 +59,11 @@ type PostArchiveView struct {
 	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
+type PostListFilterViewModal struct {
+	Status   *int
+	IsPublic *bool
+}
+
 func GetPostList(limit, offset int) ([]Post, int64, error) {
 	datas := make([]Post, 0)
 	total, err := global.Store.Count(&Post{})
@@ -165,12 +170,19 @@ func GetPostCount() int64 {
 	return count
 }
 
-func GetAdminPostList(limit, offset int, condiBean Post, keyword string) ([]Post, int64) {
+func GetAdminPostList(limit, offset int, condiBean PostListFilterViewModal, keyword string) ([]Post, int64) {
 	datas := make([]Post, 0)
 	sess := global.Store.Where(" status != 4 and type = 0")
 	if keyword != "" {
 		sess = sess.Where("title like ?", "%"+keyword+"%")
 	}
+	if condiBean.Status != nil {
+		sess = sess.Where("status = ?", *condiBean.Status)
+	}
+	if condiBean.IsPublic != nil {
+		sess = sess.Where("is_public = ?", *condiBean.IsPublic)
+	}
+
 	total, err := sess.OrderBy("create_time desc").Limit(limit, offset).FindAndCount(&datas, condiBean)
 	if err != nil {
 		panic(err)
