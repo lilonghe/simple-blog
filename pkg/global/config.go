@@ -3,6 +3,7 @@ package global
 import (
 	"html/template"
 	"time"
+
 	"xorm.io/xorm/names"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,6 +11,8 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"xorm.io/xorm"
 )
+
+type TranslateMessage map[string]string
 
 var (
 	Store *xorm.Engine
@@ -31,11 +34,14 @@ var (
 	ThemeConfig = map[string]template.HTML{}
 
 	HTMLFormat = bluemonday.StripTagsPolicy()
+
+	Translate = map[string]TranslateMessage{}
 )
 
 func init() {
 	configor.Load(&Config, "config.yml")
 	initDB()
+	initTranslate()
 }
 
 func initDB() {
@@ -51,4 +57,8 @@ func initDB() {
 
 	tbMapper := names.NewPrefixMapper(names.SnakeMapper{}, Config.DbTablePrefix)
 	Store.SetTableMapper(tbMapper)
+}
+
+func initTranslate() {
+	configor.Load(&Translate, "i18n.yml")
 }

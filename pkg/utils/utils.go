@@ -3,10 +3,13 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"os"
 	"path"
+	"simple-blog/pkg/global"
+	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func ToJson(obj interface{}) string {
@@ -25,11 +28,11 @@ func abs(n int64) int64 {
 
 func GetCommonError(err error, c *gin.Context) {
 	fmt.Println(err)
-	c.JSON(200, map[string]string{"code": "10000", "msg": "Something was wrong"})
+	c.JSON(200, map[string]string{"code": "10000", "msg": TranslateMessage(c, "Something was wrong")})
 }
 
 func GetMessageError(code string, message string, c *gin.Context) {
-	c.JSON(200, map[string]string{"code": code, "msg": message})
+	c.JSON(200, map[string]string{"code": code, "msg": TranslateMessage(c, message)})
 }
 
 func GetCommonSuccess(c *gin.Context) {
@@ -60,4 +63,18 @@ func AutoCreateFolder(basePath string, folder string) {
 		}
 	}
 
+}
+
+func TranslateMessage(c *gin.Context, key string) string {
+	lang := strings.Split(c.GetHeader("Accept-Language"), ",")[0]
+	if lang == "" {
+		return key
+	}
+	if global.Translate[key] == nil {
+		return key
+	}
+	if global.Translate[key][lang] == "" {
+		return key
+	}
+	return global.Translate[key][lang]
 }
