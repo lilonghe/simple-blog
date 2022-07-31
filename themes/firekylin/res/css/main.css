@@ -6,10 +6,17 @@
 
 :root {
     --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
+    --content-width: 800px;
+    --content-max-width: 95%;
+    --background-color: #fff;
+    --text-color: #333;
+    --border-color: #333;
+    --article-gap: 30px;
+    --article-radius: 6px;
 }
 
 body {
-    color: #333;
+    color: var(--text-color);
     font-family: monospace;
     font-weight: 300;
 }
@@ -17,7 +24,7 @@ body {
 body, html {
     width: 100%;
     min-height: 100%;
-    background-color: #FFF
+    background-color: var(--background-color)
 }
 
 a,a:hover {
@@ -28,16 +35,15 @@ a,a:hover {
 img {
     max-width: 30vw;
     max-height: 50vh;
-    border: 1px solid #333;
+    border: 1px solid var(--border-color);
 }
 
 #main {
-    background-color: #fff;
-    width: 800px;
-    max-width: 95%;
+    background-color: var(--background-color);
+    width: var(--content-width);
+    max-width: var(--content-max-width);
     margin: auto;
 
-    padding-top: 40px;
     padding-bottom: 20px;
 }
 
@@ -63,7 +69,7 @@ article {
 }
 
 article h1.title {
-    color: #333;
+    color: var(--text-color);
     margin-bottom: 15px;
     margin-top: 10px;
 }
@@ -76,7 +82,7 @@ article h1.title {
 }
 
 article h1.title a {
-    color: #333;
+    color: var(--text-color);
 }
 
 article h1.title a:hover {
@@ -109,14 +115,14 @@ article > code {
     display: inline;
     padding: 0 6px;
     background-color: #f2f2f2;
-    border-radius: 5px;
+    border-radius: var(--article-radius);
 }
 
 article pre code {
     display: block;
     padding: 4px 10px;
     background-color: #f2f2f2;
-    border-radius: 5px;
+    border-radius: var(--article-radius);
     width: 100%;
     overflow: auto;
 }
@@ -125,8 +131,10 @@ article .hljs .name {
     display: none;
 }
 
-article .hljs ul {
+article code ul {
     list-style: nu;
+    width: calc(100% - 35px);
+    min-width: fit-content;
 }
 
 article .firekylin-code li:nth-child(2n) {
@@ -171,7 +179,7 @@ article p {
     right: -1.5em;
     writing-mode: vertical-lr;
     background: #ffffffcc;
-    border-radius: 5px;
+    border-radius: var(--article-radius);
     box-shadow: var(--shadow);
     display: block;
     padding: 15px 0px;
@@ -195,13 +203,8 @@ article p {
     padding: 10px 20px;
     border: 0;
     overflow: hidden;
-    margin-bottom: 30px;
-    border-radius: 6px;
-}
-
-.post.detail {
-    padding-top: 10px;
-    border-top: 0;
+    margin-bottom: var(--article-gap);
+    border-radius: var(--article-radius);
 }
 
 .pagination, .post-url, .more {
@@ -216,7 +219,7 @@ article p {
     width: 100%;
     max-width: 100%;
     height: 300px;
-    border-radius: 6px;
+    border-radius: var(--article-radius);
     border: none;
     object-fit: cover;
 }
@@ -228,7 +231,7 @@ article p {
     height: 200px;
     display: block;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--article-radius);
     margin-bottom: 10px;
     position: relative;
 }
@@ -265,7 +268,7 @@ article p {
 
 .comment input[type=submit] {
     background-color: #DCDCDC;
-    color: #333;
+    color: var(--text-color);
     padding: 4px 6px;
 }
 
@@ -301,6 +304,30 @@ article p {
     border-radius: 3px;
 }
 
+.header {
+    box-shadow: var(--shadow);
+    padding: 10px 20px;
+    margin-bottom: var(--article-gap);
+}
+
+.header-content {
+    width: var(--content-width);
+    max-width: var(--content-max-width);
+    margin: auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.header-content nav {
+    display: flex;
+    gap: 12px;
+}
+
+.header-content .title {
+    color: var(--text-color);
+}
+
 @media screen and (max-width: 769px) {
     img {
         max-width: 100%;
@@ -320,6 +347,7 @@ article p {
         max-width: 100%;
         min-height: 100%;
         padding: 20px 10px;
+        padding-top: 0;
     }
 
     article {
@@ -330,6 +358,10 @@ article p {
         font-size: 22px;
         padding: 5px 0 10px;
         margin: 0;
+    }
+
+    :root {
+        --article-gap: 20px;
     }
 }
 
