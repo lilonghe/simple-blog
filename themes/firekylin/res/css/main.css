@@ -6,7 +6,7 @@
 
 :root {
     --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
-    --content-width: 800px;
+    --content-width: 900px;
     --content-max-width: 95%;
     --background-color: #fff;
     --text-color: #333;
