@@ -114,3 +114,7 @@ export async function uploadFileReq(params:any) {
         headers: { 'Content-Type': 'multipart/form-data' },
     })
 }
+
+export async function getVisitListReq(params: any) {
+    return request("/admin/visit/list", { params })
+}

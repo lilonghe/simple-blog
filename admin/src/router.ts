@@ -9,6 +9,7 @@ import CreateCate from './pages/CreateCate.vue'
 import TagList from './pages/TagList.vue'
 import CreateTag from './pages/CreateTag.vue'
 import OptionsGeneral from './pages/management/General.vue'
+import VisitList from './pages/management/VisitList.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -24,6 +25,7 @@ const routes = [
     { path: '/tag/edit/:id', component: CreateTag },
 
     { path: '/options/general', component: OptionsGeneral },
+    { path: '/options/visit/list', component: VisitList },
 ]
 
 const router = createRouter({

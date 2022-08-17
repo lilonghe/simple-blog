@@ -117,6 +117,17 @@ const menuOptions: MenuOption[] = [
         ),
         key: '/options/general',
       },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: '/options/visit/list'
+            },
+            { default: () => 'Visit List' }
+        ),
+        key: '/options/visit/list',
+      },
     ]
   },
 ]
