@@ -72,6 +72,7 @@ article h1.title {
     color: var(--text-color);
     margin-bottom: 15px;
     margin-top: 10px;
+    font-size: 40px;
 }
 
 .index-post-time {
