@@ -17,3 +17,12 @@ interface Window {
   timeout: any;
   baseUrl: string;
 }
+
+declare module "calendar-graph" {
+  class SVGGraph {
+    constructor(element: String, data: any, date: any){}
+  }
+  export {
+    SVGGraph
+  }
+}
