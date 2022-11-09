@@ -68,8 +68,9 @@ func PostDetail(c *gin.Context) {
 		post, _ = models.GetPublishedPostByPathname(pathname, 0)
 	}
 	resp := map[string]interface{}{
-		"options":     global.Options,
-		"themeConfig": global.ThemeConfig,
+		"options":       global.Options,
+		"themeConfig":   global.ThemeConfig,
+		"commentConfig": global.CommentConfig,
 	}
 
 	if post != nil {
@@ -104,8 +105,9 @@ func PageDetail(c *gin.Context) {
 
 	post, _ := models.GetPublishedPostByPathname(pathname, 1)
 	resp := map[string]interface{}{
-		"options":     global.Options,
-		"themeConfig": global.ThemeConfig,
+		"options":       global.Options,
+		"themeConfig":   global.ThemeConfig,
+		"commentConfig": global.CommentConfig,
 	}
 
 	if post != nil {

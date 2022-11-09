@@ -27,7 +27,11 @@
     <div id="main">
         
         {{template "content" .}}
+        {{if .post.AllowComment}}<div id="external-comment"></div>{{end}}
     </div>
     <script src="/assets/js/main.js"></script>
+    {{if .post.AllowComment}}
+        {{index .commentConfig "name"}}
+    {{end}}
 </body>
 </html>

@@ -1,6 +1,7 @@
 package global
 
 import (
+	"fmt"
 	"html/template"
 	"time"
 
@@ -30,8 +31,9 @@ var (
 		UploadAccessPath string     `yaml:"uploadAccessPath"`
 	}{}
 
-	Options     = map[string]string{}
-	ThemeConfig = map[string]template.HTML{}
+	Options       = map[string]string{}
+	ThemeConfig   = map[string]template.HTML{}
+	CommentConfig = map[string]template.HTML{}
 
 	HTMLFormat = bluemonday.StripTagsPolicy()
 
@@ -39,7 +41,11 @@ var (
 )
 
 func init() {
-	configor.Load(&Config, "config.yml")
+	err := configor.Load(&Config, "config.yml")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(CommentConfig["name"])
 	initDB()
 	initTranslate()
 }

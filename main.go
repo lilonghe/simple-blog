@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"net/http"
 	"path/filepath"
 	"simple-blog/pkg/middlewares"
 	"simple-blog/pkg/models"
 	adminRouters "simple-blog/pkg/routers/admin"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 
 	"simple-blog/pkg/global"
 	"simple-blog/pkg/routers"
@@ -49,8 +50,6 @@ func main() {
 	r.GET("/post/:pathname", routers.PostDetail)
 	r.GET("/page/:pathname", routers.PageDetail)
 	r.GET("/archives", routers.Archives)
-	r.POST("/comment", routers.AddComment)
-	r.GET("/comments", routers.Comments)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 	r.Static("/upload", "./upload")

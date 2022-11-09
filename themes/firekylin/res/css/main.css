@@ -380,3 +380,13 @@ article p {
         filter: invert(.02);
     }
 }
+
+
+#external-comment {
+    margin-top: 20px;
+}
+
+.wl-panel {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
