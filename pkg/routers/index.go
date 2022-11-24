@@ -26,7 +26,7 @@ func Index(c *gin.Context) {
 		plainSummary := global.HTMLFormat.Sanitize(v.Summary)
 		subSummary := []rune(plainSummary)
 		if len(subSummary) > 140 {
-			posts[k].Summary = string(subSummary[0:140])
+			posts[k].Summary = string(subSummary[0:140]) + "......"
 		} else {
 			posts[k].Summary = string(subSummary)
 		}
