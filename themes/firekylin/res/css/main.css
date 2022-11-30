@@ -13,6 +13,9 @@
     --border-color: #333;
     --article-gap: 30px;
     --article-radius: 6px;
+    --toc-bg: #ffffffed;
+    --toc-after-bg: #ffffffed;
+    --code-bg: #f2f2f2;
 }
 
 body {
@@ -115,14 +118,14 @@ article .entry-content :where(ul, ol, dl) {
 article > code {
     display: inline;
     padding: 0 6px;
-    background-color: #f2f2f2;
+    background-color: var(--code-bg);
     border-radius: var(--article-radius);
 }
 
 article pre code {
     display: block;
     padding: 4px 10px;
-    background-color: #f2f2f2;
+    background-color: var(--code-bg);
     border-radius: var(--article-radius);
     width: 100%;
     overflow: auto;
@@ -138,14 +141,6 @@ article code ul {
     min-width: fit-content;
 }
 
-article .firekylin-code li:nth-child(2n) {
-    background-color: #ECECEC;
-}
-
-article .firekylin-code {
-    width: 100%;
-}
-
 article .post-info {
     font-size: 14px;
     margin-bottom: 15px;
@@ -157,7 +152,7 @@ article p {
 
 .toc {
     padding: 20px 6px;
-    background-color: #ffffffed;
+    background-color: var(--toc-bg);
     position: fixed;
     top: 0;
     height: 100vh;
@@ -179,7 +174,7 @@ article p {
     position: absolute;
     right: -1.5em;
     writing-mode: vertical-lr;
-    background: #ffffffcc;
+    background: var(--toc-after-bg);
     border-radius: var(--article-radius);
     box-shadow: var(--shadow);
     display: block;
@@ -237,74 +232,6 @@ article p {
     position: relative;
 }
 
-.comment form{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-}
-
-.comment form > div {
-    width: 100%;
-}
-
-.comment input, .comment textarea {
-    outline: none;
-    border: 1px solid #DCDCDC;
-    padding: 6px 8px;
-    vertical-align: top;
-    color: inherit;
-    border-radius: 2px;
-    resize: none;
-    font-size: inherit;
-}
-
-.comment input:not(input[type=submit]), .comment textarea {
-    width: 100%;
-}
-
-.comment input:required, .comment textarea {
-    border-color: #ff7f506a;
-}
-
-.comment input[type=submit] {
-    background-color: #DCDCDC;
-    color: var(--text-color);
-    padding: 4px 6px;
-}
-
-.comment-additional {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fit,minmax(200px, 1fr));
-}
-
-.comment-brand {
-    margin: 15px 0;
-    line-height: 1.6;
-}
-
-.comment-list {
-    margin-left: 1em;
-    margin-top: 20px;
-}
-
-.comment-list ul {
-    list-style: circle;
-}
-
-.message {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #666;
-    color: #FFF;
-    box-shadow: 0 0 5px #ccc;
-    padding: 10px;
-    border-radius: 3px;
-}
-
 .header {
     box-shadow: var(--shadow);
     padding: 10px 20px;
@@ -352,7 +279,7 @@ article p {
     }
 
     article {
-        background-color: #fff;
+        background-color: var(--background-color);
     }
 
     article h1 {
@@ -376,8 +303,16 @@ article p {
 }
 
 @media (prefers-color-scheme: dark) {
-    body {
-        filter: invert(.02);
+    :root {
+        --shadow: 0 0px 0px 0 rgb(255 255 255 / 10%), 0 0px 1px 0px rgb(255 255 255 / 30%), 0 0px 5px 0 rgb(120 105 105 / 40%);
+        --content-width: 900px;
+        --content-max-width: 95%;
+        --background-color: #000;
+        --text-color: #ccc;
+        --border-color: #ccc;
+        --toc-bg: #111;
+        --toc-after-bg: #222;
+        --code-bg: #333;
     }
 }
 
