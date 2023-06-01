@@ -203,8 +203,12 @@ article p {
     border-radius: var(--article-radius);
 }
 
-.pagination, .post-url, .more {
+.post-url, .more {
     display: none;
+}
+
+.pagination {
+    text-align: right;
 }
 
 .featured-image {
