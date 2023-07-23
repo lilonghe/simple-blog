@@ -324,3 +324,21 @@ article p {
 #external-comment {
     margin-top: 20px;
 }
+
+table {
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    background: #cccccc7a;
+}
+
+th, td {
+    padding: 4px 6px;
+    max-width: 300px;
+}
