@@ -1,9 +1,10 @@
 package middlewares
 
 import (
+	"simple-blog/pkg/utils"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"simple-blog/pkg/utils"
 )
 
 func AuthRequired() gin.HandlerFunc {

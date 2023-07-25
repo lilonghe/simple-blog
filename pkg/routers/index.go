@@ -73,6 +73,7 @@ func PostDetail(c *gin.Context) {
 		post.Cates = cates
 		post.Tags = tags
 		post.Summary = utils.GetPostSummary(post.Summary, 200)
+		post.Content = utils.GetUseCDNContent(post.Content)
 		resp["post"] = *post
 	} else {
 		c.Redirect(301, "/")
@@ -108,6 +109,7 @@ func PageDetail(c *gin.Context) {
 
 	if post != nil {
 		post.Summary = utils.GetPostSummary(post.Summary, 200)
+		post.Content = utils.GetUseCDNContent(post.Content)
 		resp["post"] = *post
 		resp["pathname"] = pathname
 	} else {

@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"os"
 	"path"
 	"simple-blog/pkg/global"
@@ -88,4 +89,18 @@ func GetPostSummary(content string, length int) string {
 		plainSummary = string(subSummary)
 	}
 	return plainSummary
+}
+
+func GetUseCDNContent(htmlContent template.HTML) template.HTML {
+	content := string(htmlContent)
+	if global.Config.CDNHost != "" {
+		// 针对资源引用，如 image 和 video
+		content = strings.ReplaceAll(content, "src=\""+global.Config.Host+global.Config.UploadAccessPath, "src=\""+global.Config.CDNHost+global.Config.UploadAccessPath)
+		content = strings.ReplaceAll(content, "src='"+global.Config.Host+global.Config.UploadAccessPath, "src='"+global.Config.CDNHost+global.Config.UploadAccessPath)
+
+		content = strings.ReplaceAll(content, "src=\""+global.Config.UploadAccessPath, "src=\""+global.Config.CDNHost+global.Config.UploadAccessPath)
+		content = strings.ReplaceAll(content, "src='"+global.Config.UploadAccessPath, "src='"+global.Config.CDNHost+global.Config.UploadAccessPath)
+
+	}
+	return template.HTML(content)
 }

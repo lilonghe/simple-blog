@@ -29,6 +29,8 @@ var (
 		SiteBegin        *time.Time `yaml:"siteBegin"`
 		UploadPath       string     `yaml:"uploadPath"`
 		UploadAccessPath string     `yaml:"uploadAccessPath"`
+		CDNHost          string     `yaml:"cdnHost"`
+		Host             string     `yaml:"host"`
 	}{}
 
 	Options       = map[string]string{}
