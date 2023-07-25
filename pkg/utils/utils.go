@@ -78,3 +78,14 @@ func TranslateMessage(c *gin.Context, key string) string {
 	}
 	return global.Translate[key][lang]
 }
+
+func GetPostSummary(content string, length int) string {
+	plainSummary := strings.ReplaceAll(global.HTMLFormat.Sanitize(content), "\n", " ")
+	subSummary := []rune(plainSummary)
+	if len(subSummary) > length {
+		plainSummary = string(subSummary[0:length]) + "......"
+	} else {
+		plainSummary = string(subSummary)
+	}
+	return plainSummary
+}

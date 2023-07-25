@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"simple-blog/pkg/global"
+	"simple-blog/pkg/utils"
 
 	"simple-blog/pkg/models"
 
@@ -23,13 +24,7 @@ func Index(c *gin.Context) {
 	posts, total, _ := models.GetPostList(limit, (page-1)*limit)
 
 	for k, v := range posts {
-		plainSummary := global.HTMLFormat.Sanitize(v.Summary)
-		subSummary := []rune(plainSummary)
-		if len(subSummary) > 140 {
-			posts[k].Summary = string(subSummary[0:140]) + "......"
-		} else {
-			posts[k].Summary = string(subSummary)
-		}
+		posts[k].Summary = utils.GetPostSummary(v.Summary, 140)
 	}
 
 	resp := map[string]interface{}{
@@ -77,6 +72,7 @@ func PostDetail(c *gin.Context) {
 		cates, tags := models.GetPostCateAndTag(post.Id)
 		post.Cates = cates
 		post.Tags = tags
+		post.Summary = utils.GetPostSummary(post.Summary, 200)
 		resp["post"] = *post
 	} else {
 		c.Redirect(301, "/")
@@ -111,6 +107,7 @@ func PageDetail(c *gin.Context) {
 	}
 
 	if post != nil {
+		post.Summary = utils.GetPostSummary(post.Summary, 200)
 		resp["post"] = *post
 		resp["pathname"] = pathname
 	} else {

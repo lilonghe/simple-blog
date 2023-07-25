@@ -2,14 +2,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-<title>{{ or (index .options "title") .post.Pathname }}</title>
+<title>{{if .post.Title}}{{.post.Title}} - {{end}}{{index .options "title"}}</title>
 {{if index .options "favicon_url"}}<link rel="icon" href="{{index .options "favicon_url"}}">{{end}}
 {{if index .options "keywords"}}<meta name="keywords" content="{{index .options "keywords"}}">{{end}}
-{{if index .options "description"}}<meta name="description" content="{{index .options "description"}}">{{end}}
-<meta name="og:title" content="{{or (index .options "title") .post.Pathname }}">
+{{if .post.Summary}}<meta name="description" content="{{.post.Summary}}">
+{{else if index .options "description"}}<meta name="description" content="{{index .options "description"}}">{{end}}
+<meta name="og:title" content="{{if .post.Title}}{{.post.Title}} - {{end}}{{index .options "title"}}">
 <meta name="og:url" content="{{index .options "site_url"}}{{if .post.Pathname }}/post/{{.post.Pathname}}.html{{end}}">
 {{if index .options "favicon_url"}}<meta name="og:image" content="{{index .options "favicon_url"}}">{{end}}
-{{if index .options "description"}}<meta name="og:description" content="{{index .options "description"}}">{{end}}
+{{if .post.Summary}}<meta name="og:description" content="{{.post.Summary}}">
+{{else if index .options "description"}}<meta name="og:description" content="{{index .options "description"}}">{{end}}
 <link rel="stylesheet" href="/assets/css/main.css" type="text/css" />
 </head>
 <body>
@@ -26,13 +28,22 @@
        
     </header>
     <div id="main">
-        
         {{template "content" .}}
         {{if .post.AllowComment}}<div id="external-comment"></div>{{end}}
     </div>
     <script src="/assets/js/main.js"></script>
-    {{if .post.AllowComment}}
-        {{index .commentConfig "name"}}
-    {{end}}
+{{if .post.AllowComment}}
+    {{index .commentConfig "name"}}
+{{end}}
+{{if index .options "analyze_code"}}
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SB17YPC326"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SB17YPC326');
+</script>
+{{end}}
 </body>
 </html>

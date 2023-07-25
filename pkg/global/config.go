@@ -35,7 +35,7 @@ var (
 	ThemeConfig   = map[string]template.HTML{}
 	CommentConfig = map[string]template.HTML{}
 
-	HTMLFormat = bluemonday.StripTagsPolicy()
+	HTMLFormat = bluemonday.StrictPolicy()
 
 	Translate = map[string]TranslateMessage{}
 )
