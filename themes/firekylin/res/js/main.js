@@ -7,6 +7,7 @@ window.addEventListener('load', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+  const cdnHost = 'https://cdn.lilonghe.net';
   let io = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.intersectionRatio > 0) {
@@ -14,11 +15,20 @@ document.addEventListener('DOMContentLoaded', function () {
         io.unobserve(img);
 
         const imgObj = new Image()
+
+        let src = img.dataset.src;
+        if (src.startsWith('/static/upload')) {
+          src = cdnHost + src
+        } else if (img.dataset.src.startsWith('https://note.lilonghe.net/static/upload')) {
+          src = src.replace('https://note.lilonghe.net', cdnHost)
+        }
+        
         imgObj.onload = function() {
-          img.src = img.dataset.src;
+          img.src = src;
           img.style.filter = '';
         }
-        imgObj.src = img.dataset.src;
+        
+        imgObj.src = src;
       }
     });
   }, { rootMargin: '300px' });
