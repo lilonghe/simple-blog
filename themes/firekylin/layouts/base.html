@@ -35,15 +35,6 @@
 {{if .post.AllowComment}}
     {{index .commentConfig "name"}}
 {{end}}
-{{if index .options "analyze_code"}}
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SB17YPC326"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-SB17YPC326');
-</script>
-{{end}}
+{{if index .options "analyze_code"}}{{index .options "analyze_code"}}{{end}}
 </body>
 </html>

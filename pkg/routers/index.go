@@ -28,7 +28,7 @@ func Index(c *gin.Context) {
 	}
 
 	resp := map[string]interface{}{
-		"options":     global.Options,
+		"options":     utils.GetRenderOptions(),
 		"themeConfig": global.ThemeConfig,
 
 		"posts": posts,
@@ -63,7 +63,7 @@ func PostDetail(c *gin.Context) {
 		post, _ = models.GetPublishedPostByPathname(pathname, 0)
 	}
 	resp := map[string]interface{}{
-		"options":       global.Options,
+		"options":       utils.GetRenderOptions(),
 		"themeConfig":   global.ThemeConfig,
 		"commentConfig": global.CommentConfig,
 	}
@@ -102,7 +102,7 @@ func PageDetail(c *gin.Context) {
 
 	post, _ := models.GetPublishedPostByPathname(pathname, 1)
 	resp := map[string]interface{}{
-		"options":       global.Options,
+		"options":       utils.GetRenderOptions(),
 		"themeConfig":   global.ThemeConfig,
 		"commentConfig": global.CommentConfig,
 	}
@@ -160,7 +160,7 @@ func Archives(c *gin.Context) {
 	}
 
 	resp := map[string]interface{}{
-		"options": global.Options,
+		"options": utils.GetRenderOptions(),
 		"datas":   respData,
 	}
 

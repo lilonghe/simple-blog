@@ -104,3 +104,17 @@ func GetUseCDNContent(htmlContent template.HTML) template.HTML {
 	}
 	return template.HTML(content)
 }
+
+func GetRenderOptions() map[string]interface{} {
+	options := global.Options
+	newOptions := make(map[string]interface{}, 0)
+
+	for k, v := range options {
+		if k == "analyze_code" {
+			newOptions[k] = template.HTML(v)
+		} else {
+			newOptions[k] = v
+		}
+	}
+	return newOptions
+}
