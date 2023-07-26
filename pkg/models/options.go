@@ -35,9 +35,11 @@ func LoadOption() {
 				panic(err)
 			}
 		} else if v.Key == "comment" {
-			err = json.Unmarshal([]byte(v.Value), &global.CommentConfig)
-			if err != nil {
-				panic(err)
+			if v.Value != "" {
+				err = json.Unmarshal([]byte(v.Value), &global.CommentConfig)
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
 	}

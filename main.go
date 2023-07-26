@@ -52,7 +52,7 @@ func main() {
 	r.GET("/archives", routers.Archives)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
-	r.Static("/upload", "./upload")
+	r.Static(global.Config.UploadAccessPath, global.Config.UploadPath)
 
 	r.POST("/api/admin/login", adminRouters.Login)
 	authorized := r.Group("/api/admin")
