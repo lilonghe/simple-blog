@@ -3,6 +3,7 @@ package adminRouters
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -25,7 +26,7 @@ func Upload(c *gin.Context) {
 
 	accessUrl := ""
 	relativePath := time.Now().Format("20060102")
-	fileSuffix := path.Ext(file.Filename)
+	fileSuffix := strings.ToLower(path.Ext(file.Filename))
 	saveName := "upload_" + strings.ReplaceAll(uuid.NewString(), "-", "") + fileSuffix
 
 	// get upload config, must config upload platform and CDN host
@@ -56,7 +57,7 @@ func uploadTencent(ossConfig map[string]string, file *multipart.FileHeader, save
 		return "", err
 	}
 
-	url, _ := url.Parse(ossConfig["origin"])
+	url, _ := url.Parse(fmt.Sprintf("https://%v.cos.%v.myqcloud.com", ossConfig["bucket"], ossConfig["region"]))
 	bucket := &cos.BaseURL{BucketURL: url}
 	client := cos.NewClient(bucket, &http.Client{
 		Transport: &cos.AuthorizationTransport{
@@ -84,9 +85,13 @@ func uploadTencent(ossConfig map[string]string, file *multipart.FileHeader, save
 func uploadLocal(c *gin.Context, file *multipart.FileHeader, saveName string, relativePath string) (string, error) {
 	utils.AutoCreateFolder(global.Config.UploadPath, relativePath)
 	relativeFullPath := global.Config.UploadPath + "/" + relativePath + "/" + saveName
-	err := c.SaveUploadedFile(file, path.Join(global.Config.UploadPath, relativeFullPath))
+	err := c.SaveUploadedFile(file, relativeFullPath)
 	if err != nil {
 		return "", err
 	}
-	return global.Options["site_url"] + path.Join(global.Config.UploadAccessPath, relativeFullPath), err
+	baseUrl := global.Options["site_url"]
+	if global.Config.CDNHost != "" {
+		baseUrl = global.Config.CDNHost
+	}
+	return baseUrl + path.Join(global.Config.UploadAccessPath, relativePath, saveName), err
 }
