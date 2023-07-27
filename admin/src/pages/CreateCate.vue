@@ -23,7 +23,7 @@ const handleSubmit = () => {
         if (!error) {
             let success = await globalStore.createOrEditCate(form.value)
             if (success) {
-                router.push('/cate/list')
+                router.push('/category')
             }
         }
     })

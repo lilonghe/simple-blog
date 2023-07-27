@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NDataTable, NPopconfirm, NInput } from 'naive-ui';
+import { NDataTable, NPopconfirm, NInput, NButton } from 'naive-ui';
 import { computed, h, onMounted, ref } from 'vue';
 import { useGlobalStore } from '@/stores/global';
 import { RouterLink } from 'vue-router';
@@ -41,7 +41,7 @@ const columns = [
                     h(
                         RouterLink,
                         {
-                            to: '/cate/edit/' + row.id,
+                            to: '/category/edit/' + row.id,
                             class: 'link'
                         },
                         {
@@ -84,6 +84,9 @@ const list = computed(() => {
 <div>
     <div class="mb-2 w-1/3">
         <n-input placeholder="Search" v-model:value="keyword" />
+    </div>
+    <div class="mb-2">
+        <router-link to="/category/create"><n-button type="primary">Create</n-button></router-link>
     </div>
     <n-data-table 
         :columns="columns"

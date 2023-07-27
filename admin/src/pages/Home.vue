@@ -70,7 +70,7 @@ const loadAllPost = async () => {
             :value="systemInfo.count.tags" />
     </div>
   </n-card>
-  <n-card title="System">
+  <n-card title="System" class="mt-3">
     <n-tag>System: {{systemInfo.versions.platform}}</n-tag>
     <n-tag class="ml-1">MySQL: {{systemInfo.versions.mysqlVersion}}</n-tag>
   </n-card>

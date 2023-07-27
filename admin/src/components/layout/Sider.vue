@@ -19,91 +19,40 @@ const menuOptions: MenuOption[] = [
     key: '/',
   },
   {
-    label: "Post management",
-    key: 'post-management',
-    children: [
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/post/list'
-            },
-            { default: () => 'Post list' }
-        ),
-        key: '/post/list',
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/post/create'
-            },
-            { default: () => 'Post create' }
-        ),
-        key: '/post/create',
-      }
-    ]
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: '/post'
+        },
+        { default: () => 'Post' }
+    ),
+    key: '/post',
   },
   {
-    label: "Cate management",
-    key: 'cate-management',
-    children: [
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/cate/list'
-            },
-            { default: () => 'Cate list' }
-        ),
-        key: '/cate/list',
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/cate/create'
-            },
-            { default: () => 'Cate create' }
-        ),
-        key: '/cate/create',
-      }
-    ]
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: '/category'
+        },
+        { default: () => 'Category' }
+    ),
+    key: '/category',
   },
   {
-    label: "Tag management",
-    key: 'tag-management',
-    children: [
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/tag/list'
-            },
-            { default: () => 'Tag list' }
-        ),
-        key: '/tag/list',
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/tag/create'
-            },
-            { default: () => 'Tag create' }
-        ),
-        key: '/tag/create',
-      }
-    ]
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: '/tag'
+        },
+        { default: () => 'Tag' }
+    ),
+    key: '/tag',
   },
   {
-    label: "System management",
+    label: "System",
     key: 'system-management',
     children: [
       {

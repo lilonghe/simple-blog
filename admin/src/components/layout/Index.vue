@@ -29,7 +29,7 @@ const handleLogout = async () => {
 <template>
 <n-layout class="h-screen">
     <n-layout-header bordered class="h-12 flex flex-row items-center">
-        <div class="ml-3">
+        <div class="ml-8">
             <span class="font-bold text-lg">{{globalStore.options.title}}</span>
         </div>
         <div class="ml-auto mr-4 flex flex-row gap-4">

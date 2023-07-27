@@ -23,7 +23,7 @@ const handleSubmit = () => {
         if (!error) {
             let success = await globalStore.createOrEditTag(form.value)
             if (success) {
-                router.push('/tag/list')
+                router.push('/tag')
             }
         }
     })

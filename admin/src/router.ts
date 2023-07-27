@@ -13,19 +13,19 @@ import VisitList from './pages/management/VisitList.vue'
 
 const routes = [
     { path: '/', component: Home },
-    { path: '/post/list', component: PostList },
-    { path: '/post/create', component: CreatePost },
-    { path: '/post/edit/:id', component: CreatePost },
+    { path: '/post', component: PostList, meta: { title: 'Post Manage'} },
+    { path: '/post/create', component: CreatePost, meta: { title: 'Create Post'}  },
+    { path: '/post/edit/:id', component: CreatePost, meta: { title: 'Edit Post'}  },
     { path: '/login', component: Login },
-    { path: '/cate/list', component: CateList },
-    { path: '/cate/create', component: CreateCate },
-    { path: '/cate/edit/:id', component: CreateCate },
-    { path: '/tag/list', component: TagList },
-    { path: '/tag/create', component: CreateTag },
-    { path: '/tag/edit/:id', component: CreateTag },
+    { path: '/category', component: CateList, meta: { title: 'Category Manage'}  },
+    { path: '/category/create', component: CreateCate, meta: { title: 'Create Category'}  },
+    { path: '/category/edit/:id', component: CreateCate, meta: { title: 'Edit Category'}  },
+    { path: '/tag', component: TagList, meta: { title: 'Tag Manage'}  },
+    { path: '/tag/create', component: CreateTag, meta: { title: 'Create Tag'}  },
+    { path: '/tag/edit/:id', component: CreateTag, meta: { title: 'Edit Tag'} },
 
-    { path: '/options/general', component: OptionsGeneral },
-    { path: '/options/visit/list', component: VisitList },
+    { path: '/options/general', component: OptionsGeneral, meta: { title: 'Basic Setting'}  },
+    { path: '/options/visit/list', component: VisitList, meta: { title: 'Visit History'}  },
 ]
 
 const router = createRouter({

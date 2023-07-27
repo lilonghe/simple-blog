@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getPostListReq, deletePostReq } from '@/services'
 import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
-import { NDataTable, NTag, NInput, NPopconfirm, NSelect } from 'naive-ui'
+import { NDataTable, NTag, NInput, NPopconfirm, NSelect, NButton } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { formatTime, debounce } from '@/utils'
 
@@ -178,6 +178,9 @@ const handleDelete = async (id: number) => {
         v-model:value="filterParams.is_public" 
         :options="visibilityList" />
     </div>
+  </div>
+  <div class="mb-2">
+    <router-link to="/post/create"><n-button type="primary">Create</n-button></router-link>
   </div>
   <n-data-table
     :loading="loading"
