@@ -83,7 +83,7 @@ const list = computed(() => {
 <template>
 <div>
     <div class="mb-2 w-1/3">
-        <n-input placeholder="Search" v-model:value="keyword" />
+        <n-input placeholder="Search name or path" v-model:value="keyword" />
     </div>
     <div class="mb-2">
         <router-link to="/category/create"><n-button type="primary">Create</n-button></router-link>
