@@ -8,7 +8,7 @@
     --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
     --content-width: 900px;
     --content-max-width: 95%;
-    --background-color: #fff;
+    --background-color: #ffffffb3;
     --text-color: #333;
     --border-color: #333;
     --article-gap: 30px;
@@ -16,12 +16,20 @@
     --toc-bg: #ffffffed;
     --toc-after-bg: #ffffffed;
     --code-bg: #f2f2f2;
+    --code-color: chocolate;
+    --header-height: 65px;
+}
+
+@font-face {
+    font-family: "logo";
+    src: url("logo.ttf") format("truetype");
 }
 
 body {
     color: var(--text-color);
     font-family: monospace;
     font-weight: 300;
+    background-color: var(--background-color);
 }
 
 body, html {
@@ -42,7 +50,6 @@ img {
 }
 
 #main {
-    background-color: var(--background-color);
     width: var(--content-width);
     max-width: var(--content-max-width);
     margin: auto;
@@ -63,7 +70,7 @@ h3 {
 }
 
 h1,h2,h3 {
-    font-weight: 400;
+    font-weight: 300;
 }
 
 article {
@@ -115,11 +122,12 @@ article .entry-content :where(ul, ol, dl) {
     list-style: nu;
 }
 
-article > code {
+article .entry-content p code {
     display: inline;
-    padding: 0 6px;
+    padding: 2px 6px;
     background-color: var(--code-bg);
     border-radius: var(--article-radius);
+    color: var(--code-color);
 }
 
 article pre code {
@@ -240,6 +248,12 @@ article p {
     box-shadow: var(--shadow);
     padding: 10px 20px;
     margin-bottom: var(--article-gap);
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+    backdrop-filter: blur(10px);
+    z-index: 2;
+    height: var(--header-height);
 }
 
 .header-content {
@@ -258,6 +272,10 @@ article p {
 
 .header-content .title {
     color: var(--text-color);
+    font-family: logo;
+    line-height: 1;
+    font-size: 40px;
+    margin-top: 5px;
 }
 
 @media screen and (max-width: 769px) {
@@ -273,7 +291,7 @@ article p {
     .toc::after {
         content: '';
     }
-    
+
     #main {
         width: 100%;
         max-width: 100%;
@@ -311,7 +329,7 @@ article p {
         --shadow: 0 0px 0px 0 rgb(255 255 255 / 10%), 0 0px 1px 0px rgb(255 255 255 / 30%), 0 0px 5px 0 rgb(120 105 105 / 40%);
         --content-width: 900px;
         --content-max-width: 95%;
-        --background-color: #000;
+        --background-color: #000000d6;
         --text-color: #ccc;
         --border-color: #ccc;
         --toc-bg: #111;
