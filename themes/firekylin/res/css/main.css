@@ -8,7 +8,8 @@
     --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
     --content-width: 900px;
     --content-max-width: 95%;
-    --background-color: #ffffffb3;
+    --background-color: #000;
+    --header-background-color: #00000099;
     --text-color: #333;
     --border-color: #333;
     --article-gap: 30px;
@@ -171,6 +172,7 @@ article p {
     transition: all .3s;
     left: -260px;
     backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 .toc:hover {
@@ -246,12 +248,13 @@ article p {
 
 .header {
     box-shadow: var(--shadow);
-    padding: 10px 20px;
+    padding: 10px 0;
     margin-bottom: var(--article-gap);
     position: sticky;
     top: 0;
-    background-color: var(--background-color);
+    background-color: var(--header-background-color);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 2;
     height: var(--header-height);
 }
@@ -329,12 +332,15 @@ article p {
         --shadow: 0 0px 0px 0 rgb(255 255 255 / 10%), 0 0px 1px 0px rgb(255 255 255 / 30%), 0 0px 5px 0 rgb(120 105 105 / 40%);
         --content-width: 900px;
         --content-max-width: 95%;
-        --background-color: #000000d6;
         --text-color: #ccc;
         --border-color: #ccc;
         --toc-bg: #111;
         --toc-after-bg: #222;
         --code-bg: #333;
+    }
+
+    .header {
+        box-shadow: none;
     }
 }
 
