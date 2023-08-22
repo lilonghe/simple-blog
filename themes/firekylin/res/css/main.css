@@ -8,8 +8,8 @@
     --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
     --content-width: 900px;
     --content-max-width: 95%;
-    --background-color: #000;
-    --header-background-color: #00000099;
+    --background-color: #fff;
+    --header-background-color: #ffffff99;
     --text-color: #333;
     --border-color: #333;
     --article-gap: 30px;
@@ -337,6 +337,8 @@ article p {
         --toc-bg: #111;
         --toc-after-bg: #222;
         --code-bg: #333;
+        --header-background-color: #00000099;
+        --background-color: #000;
     }
 
     .header {
