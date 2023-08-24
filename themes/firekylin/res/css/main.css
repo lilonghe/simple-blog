@@ -129,6 +129,7 @@ article .entry-content p code {
     background-color: var(--code-bg);
     border-radius: var(--article-radius);
     color: var(--code-color);
+    margin: 0 2px;
 }
 
 article pre code {
@@ -163,7 +164,7 @@ article p {
     padding: 20px 6px;
     background-color: var(--toc-bg);
     position: fixed;
-    top: 0;
+    top: var(--header-height);
     height: 100vh;
     margin: 0;
     border: none;
@@ -180,7 +181,7 @@ article p {
 }
 
 .toc:after {
-    content: 'Outline';
+    content: 'OUTLINE';
     position: absolute;
     right: -1.5em;
     writing-mode: vertical-lr;
@@ -324,6 +325,15 @@ article p {
     }
     .comment form {
         width: 80%;
+    }
+}
+
+@media (min-width: 1500px) {
+    .toc {
+        left: 0px;
+    }
+    .toc:after {
+        display: none;
     }
 }
 
