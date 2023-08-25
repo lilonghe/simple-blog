@@ -2,6 +2,7 @@ package routers
 
 import (
 	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -165,4 +166,15 @@ func Archives(c *gin.Context) {
 	}
 
 	c.HTML(200, "archive.html", resp)
+}
+
+func SitemapTxt(c *gin.Context) {
+	text, _ := url.JoinPath(global.Options["site_url"], "archives")
+	postList, _, _ := models.GetAllPostList(99999, 0)
+	for _, v := range postList {
+		link, _ := url.JoinPath(global.Options["site_url"], "post", v.Pathname)
+		text = text + "\n" + link
+	}
+
+	c.String(200, text)
 }

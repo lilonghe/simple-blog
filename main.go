@@ -50,6 +50,7 @@ func main() {
 	r.GET("/post/:pathname", routers.PostDetail)
 	r.GET("/page/:pathname", routers.PageDetail)
 	r.GET("/archives", routers.Archives)
+	r.GET("/sitemap.txt", routers.SitemapTxt)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 	r.Static(global.Config.UploadAccessPath, global.Config.UploadPath)
