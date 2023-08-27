@@ -170,7 +170,7 @@ func Archives(c *gin.Context) {
 
 func SitemapTxt(c *gin.Context) {
 	text, _ := url.JoinPath(global.Options["site_url"], "archives")
-	postList, _, _ := models.GetAllPostList(99999, 0)
+	postList, _, _ := models.GetPostList(99999, 0)
 	for _, v := range postList {
 		link, _ := url.JoinPath(global.Options["site_url"], "post", v.Pathname)
 		text = text + "\n" + link
