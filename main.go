@@ -55,32 +55,34 @@ func main() {
 	r.Static("/assets", "./themes/"+theme+"/res")
 	r.Static(global.Config.UploadAccessPath, global.Config.UploadPath)
 
-	r.POST("/api/admin/login", adminRouters.Login)
-	authorized := r.Group("/api/admin")
-	authorized.Use(middlewares.AuthRequired())
-	{
-		authorized.GET("/user", adminRouters.GetCurrentUser)
-		authorized.GET("/system", adminRouters.Dashboard)
-		authorized.GET("/options", adminRouters.GetOptions)
-		authorized.POST("/options", adminRouters.UpdateOptions)
-		authorized.POST("/logout", adminRouters.Logout)
-		authorized.POST("/upload", adminRouters.Upload)
-		authorized.GET("/visit/list", adminRouters.GetVisitList)
+	if global.Config.EnableAdmin {
+		r.POST("/api/admin/login", adminRouters.Login)
+		authorized := r.Group("/api/admin")
+		authorized.Use(middlewares.AuthRequired())
+		{
+			authorized.GET("/user", adminRouters.GetCurrentUser)
+			authorized.GET("/system", adminRouters.Dashboard)
+			authorized.GET("/options", adminRouters.GetOptions)
+			authorized.POST("/options", adminRouters.UpdateOptions)
+			authorized.POST("/logout", adminRouters.Logout)
+			authorized.POST("/upload", adminRouters.Upload)
+			authorized.GET("/visit/list", adminRouters.GetVisitList)
 
-		authorized.GET("/post/list", adminRouters.GetPostList)
-		authorized.POST("/post", adminRouters.CreateOrEditPost)
-		authorized.GET("/post/:id", adminRouters.GetEditPost)
-		authorized.DELETE("/post/:id", adminRouters.DeletePost)
+			authorized.GET("/post/list", adminRouters.GetPostList)
+			authorized.POST("/post", adminRouters.CreateOrEditPost)
+			authorized.GET("/post/:id", adminRouters.GetEditPost)
+			authorized.DELETE("/post/:id", adminRouters.DeletePost)
 
-		authorized.GET("/cate/list", adminRouters.GetCateList)
-		authorized.POST("/cate", adminRouters.CreateOrEditCate)
-		authorized.GET("/cate/:id", adminRouters.GetCate)
-		authorized.DELETE("/cate/:id", adminRouters.DeleteCate)
+			authorized.GET("/cate/list", adminRouters.GetCateList)
+			authorized.POST("/cate", adminRouters.CreateOrEditCate)
+			authorized.GET("/cate/:id", adminRouters.GetCate)
+			authorized.DELETE("/cate/:id", adminRouters.DeleteCate)
 
-		authorized.GET("/tag/list", adminRouters.GetTagList)
-		authorized.POST("/tag", adminRouters.CreateOrEditTag)
-		authorized.GET("/tag/:id", adminRouters.GetTag)
-		authorized.DELETE("/tag/:id", adminRouters.DeleteTag)
+			authorized.GET("/tag/list", adminRouters.GetTagList)
+			authorized.POST("/tag", adminRouters.CreateOrEditTag)
+			authorized.GET("/tag/:id", adminRouters.GetTag)
+			authorized.DELETE("/tag/:id", adminRouters.DeleteTag)
+		}
 	}
 
 	r.Run()
@@ -97,6 +99,10 @@ func loadTemplates(templatesDir string) multitemplate.Renderer {
 	includes, err := filepath.Glob(templatesDir + "/includes/*.html")
 	if err != nil {
 		panic(err.Error())
+	}
+
+	if len(layouts) == 0 || len(includes) == 0 {
+		panic("can not find theme: " + templatesDir)
 	}
 
 	// Generate our templates map from our layouts/ and includes/ directories

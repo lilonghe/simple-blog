@@ -31,6 +31,7 @@ var (
 		UploadAccessPath string     `yaml:"uploadAccessPath"`
 		CDNHost          string     `yaml:"cdnHost"`
 		Host             string     `yaml:"host"`
+		EnableAdmin      bool       `yaml:"enableAdmin"`
 	}{}
 
 	Options       = map[string]string{}
