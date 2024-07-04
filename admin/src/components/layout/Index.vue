@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NLayout, NLayoutSider, NLayoutContent, NLayoutHeader } from 'naive-ui'
-import Sider from '@/components/layout/sider.vue'
+import Sider from '@/components/layout/Sider.vue'
 import Content from '@/components/layout/Content.vue'
 import { onMounted } from 'vue'
 import { useGlobalStore } from '@/stores/global'

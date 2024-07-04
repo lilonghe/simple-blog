@@ -10,3 +10,7 @@ export function debounce(func: Function, wait = 300) {
         func()
     }, wait)
 }
+
+export function getRealPath(path: string = '') {
+    return (import.meta.env.BASE_URL + path).replace('//', '/');
+}

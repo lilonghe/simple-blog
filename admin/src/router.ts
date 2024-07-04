@@ -10,6 +10,7 @@ import TagList from './pages/TagList.vue'
 import CreateTag from './pages/CreateTag.vue'
 import OptionsGeneral from './pages/management/General.vue'
 import VisitList from './pages/management/VisitList.vue'
+import { getRealPath } from './utils'
 
 const routes = [
     { path: '/', component: Home },
@@ -29,7 +30,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(getRealPath()),
     routes,
 })
 

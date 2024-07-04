@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios'
+import { getRealPath } from '.'
 
 axios.interceptors.request.use(config => {
-    config.baseURL = window.baseUrl
+    config.baseURL = import.meta.env.VITE_BASE_API_URL || '/api';
     config.withCredentials = true
     return config
 })
@@ -10,8 +11,8 @@ axios.interceptors.response.use(response => {
     if (response.data) {
         if (response.data.code) {
             if (response.data.code === "NO_LOGIN") {
-                if (window.location.pathname !== '/login') {
-                    window.location.href = "/login"
+                if (window.location.pathname !== getRealPath('/login')) {
+                    window.location.href = getRealPath("/login")
                 }
             } else {
                 window.$message.error(response.data.msg)
