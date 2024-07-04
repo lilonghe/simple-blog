@@ -1,0 +1,12 @@
+{{define "content"}}
+    <section id="page-post">
+        <article class="post detail">
+            {{if index .post.PostOptions "featuredImage"}}
+                <div class="featured-image">
+                    <img data-src="{{index .post.PostOptions "featuredImage"}}" loading="lazy">
+                </div>
+            {{end}}
+	        <div class="entry-content">{{.post.Content}}</div>
+        </article>
+    </section>
+{{end}}

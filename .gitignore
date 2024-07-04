@@ -6,3 +6,6 @@ dist
 tools/posts
 
 config.yml
+
+mysql/data
+mysql/config
