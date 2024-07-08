@@ -25,7 +25,11 @@ func Index(c *gin.Context) {
 	posts, total, _ := models.GetPostList(limit, (page-1)*limit)
 
 	for k, v := range posts {
-		posts[k].Summary = utils.GetPostSummary(v.Summary, 140)
+		if len(v.Summary) == 0 {
+			posts[k].Summary = utils.GetPostSummary(string(posts[k].Content), 140)
+		} else {
+			posts[k].Summary = utils.GetPostSummary(v.Summary, 140)
+		}
 	}
 
 	resp := map[string]interface{}{
