@@ -36,9 +36,16 @@ func GetVisitList(limit, offset int, keyword string) ([]Visit, int64) {
 
 func GetWeekVisitListTop(limit int) []map[string]interface{} {
 	datas := make([]map[string]interface{}, 0)
-	sess := global.Store.Where("1 = 1 and create_time >= ?", time.Now().AddDate(0, 0, -7).Format("2006-01-02"))
 
-	err := sess.Table(Visit{}).Select("pathname, COUNT(DISTINCT ip) as count").GroupBy("pathname, ip").OrderBy("count(pathname) desc").Limit(limit, 0).Find(&datas)
+	err := global.Store.SQL(`SELECT unique_visits.pathname, title, COUNT(1) AS count
+	FROM (SELECT DISTINCT ip, pathname FROM `+Visit{}.TableName()+`
+		WHERE create_time >= ?	
+	) AS unique_visits
+	left join `+Post{}.TableName()+` on `+Post{}.TableName()+`.pathname = unique_visits.pathname
+	GROUP BY pathname, title
+	ORDER BY count desc
+	LIMIT ? `, time.Now().AddDate(0, 0, -7).Format("2006-01-02"), limit).Find(&datas)
+
 	if err != nil {
 		panic(err)
 	}

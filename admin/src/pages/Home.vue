@@ -77,7 +77,7 @@ const loadAllPost = async () => {
   <n-card title="Visit top" class="mt-3">
     <div class="flex flex-col gap-2">
       <div v-for="item in systemInfo.count.weekVisitTop" class="flex gap-2 items-center">
-        <n-tag size="small">{{ item.count }}</n-tag><a :href="item.pathname" >{{ item.pathname }}</a>
+        <n-tag size="small">{{ item.count }}</n-tag><a :href="`/post/${item.pathname}.html`" target="_blank" >{{ item.title }}</a>
       </div>
     </div>
     
