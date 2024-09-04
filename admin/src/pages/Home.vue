@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getSystemInfoReq, getPostListReq } from '@/services'
-import { onMounted, ref } from 'vue'
-import { NCard, NTag, NStatistic } from 'naive-ui';
+import { getPostListReq, getSystemInfoReq } from '@/services';
 import { SVGGraph } from 'calendar-graph';
+import { NCard, NStatistic, NTag } from 'naive-ui';
+import { onMounted, ref } from 'vue';
 
 const systemInfo = ref()
 
@@ -73,6 +73,14 @@ const loadAllPost = async () => {
   <n-card title="System" class="mt-3">
     <n-tag>System: {{systemInfo.versions.platform}}</n-tag>
     <n-tag class="ml-1">MySQL: {{systemInfo.versions.mysqlVersion}}</n-tag>
+  </n-card>
+  <n-card title="Visit top" class="mt-3">
+    <div class="flex flex-col gap-2">
+      <div v-for="item in systemInfo.count.weekVisitTop" class="flex gap-2 items-center">
+        <n-tag size="small">{{ item.count }}</n-tag><a :href="item.pathname" >{{ item.pathname }}</a>
+      </div>
+    </div>
+    
   </n-card>
 </div>
 </template>
