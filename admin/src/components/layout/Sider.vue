@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NMenu, MenuOption } from 'naive-ui'
-import { h } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { MenuOption, NMenu } from 'naive-ui';
+import { h } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 
 const route = useRoute()
 
@@ -28,6 +28,17 @@ const menuOptions: MenuOption[] = [
         { default: () => 'Post' }
     ),
     key: '/post',
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: '/page'
+        },
+        { default: () => 'Page' }
+    ),
+    key: '/page',
   },
   {
     label: () =>

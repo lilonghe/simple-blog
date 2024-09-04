@@ -1,10 +1,11 @@
 package adminRouters
 
 import (
-	"github.com/gin-gonic/gin"
 	"runtime"
 	"simple-blog/pkg/models"
 	"simple-blog/pkg/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 type DashboardResponse struct {
@@ -15,9 +16,10 @@ type DashboardResponse struct {
 func Dashboard(c *gin.Context) {
 	resp := DashboardResponse{}
 	resp.Count = map[string]interface{}{
-		"posts": models.GetPostCount(),
-		"cates": models.GetCateCount(),
-		"tags":  models.GetTagCount(),
+		"posts":        models.GetPostCount(),
+		"cates":        models.GetCateCount(),
+		"tags":         models.GetTagCount(),
+		"weekVisitTop": models.GetWeekVisitListTop(5),
 	}
 	resp.Versions = map[string]interface{}{
 		"platform":     runtime.GOOS,

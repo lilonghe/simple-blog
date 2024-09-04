@@ -170,9 +170,9 @@ func GetPostCount() int64 {
 	return count
 }
 
-func GetAdminPostList(limit, offset int, condiBean PostListFilterViewModal, keyword string) ([]Post, int64) {
+func GetAdminPostList(limit, offset int, condiBean PostListFilterViewModal, keyword string, pageType int) ([]Post, int64) {
 	datas := make([]Post, 0)
-	sess := global.Store.Where(" status != 4 and type = 0")
+	sess := global.Store.Where(" status != 4 and type = ?", pageType)
 	if keyword != "" {
 		sess = sess.Where("title like ?", "%"+keyword+"%")
 	}

@@ -15,6 +15,7 @@ func GetPostList(c *gin.Context) {
 	archive := c.Query("archive")
 	status := c.Query("status")
 	isPublic := c.Query("is_public")
+	pageType, _ := strconv.Atoi(c.Query("type"))
 
 	condiBean := models.PostListFilterViewModal{}
 	if status != "" {
@@ -25,7 +26,7 @@ func GetPostList(c *gin.Context) {
 		val, _ := strconv.ParseBool(isPublic)
 		condiBean.IsPublic = &val
 	}
-	list, total := models.GetAdminPostList(pageSize, page*pageSize-pageSize, condiBean, keyword)
+	list, total := models.GetAdminPostList(pageSize, page*pageSize-pageSize, condiBean, keyword, pageType)
 
 	if archive == "true" {
 		archiveList := make([]models.PostArchiveView, 0)
