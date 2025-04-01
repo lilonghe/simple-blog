@@ -23,8 +23,11 @@ services:
       - dbUrl=root:123456@tcp(db)/blog?charset=utf8
     volumes:
       - ./server/config.yml:/app/config.yml
+      - ./server/themes:/app/themes
 
   frontend:
     build: ./admin
     ports:
       - 8081:80
+    volumes:
+      - ./admin/nginx.conf:/etc/nginx/conf.d/default.conf
