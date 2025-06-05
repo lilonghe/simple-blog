@@ -4,6 +4,7 @@ import (
 	"simple-blog/pkg/models"
 	"simple-blog/pkg/utils"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,12 @@ func GetPostList(c *gin.Context) {
 		val, _ := strconv.ParseBool(isPublic)
 		condiBean.IsPublic = &val
 	}
+	if archive == "true" {
+		now := time.Now()
+		t := time.Date(now.Year(), 1, 1, 0, 0, 0, 0, now.Location())
+		condiBean.CreateTime = &t
+	}
+
 	list, total := models.GetAdminPostList(pageSize, page*pageSize-pageSize, condiBean, keyword, pageType)
 
 	if archive == "true" {
@@ -40,6 +47,24 @@ func GetPostList(c *gin.Context) {
 		}
 		utils.GetPageResponse(c, archiveList, total)
 	} else {
+		// 将浏览量数据合并到文章列表中
+		paths := make([]string, 0)
+		for _, v := range list {
+			paths = append(paths, v.Pathname)
+		}
+		visitMapList := models.GetVisitCountByPathList(paths)
+
+		for i := range list {
+			for _, visitMap := range visitMapList {
+				pathname := visitMap["pathname"].(string)
+				count := int(visitMap["count"].(int64))
+				if pathname == list[i].Pathname {
+					list[i].VisitCount = count
+					break
+				}
+			}
+		}
+
 		utils.GetPageResponse(c, list, total)
 	}
 

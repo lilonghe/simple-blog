@@ -27,6 +27,7 @@ type Post struct {
 	Cates       []Cate                 `json:"cates,omitempty" sql:"-" xorm:"-"`
 	Tags        []Tag                  `json:"tags,omitempty" sql:"-" xorm:"-"`
 	PostOptions map[string]interface{} `json:"post_options,omitempty" sql:"-" xorm:"-"`
+	VisitCount  int                    `json:"visit_count,omitempty" sql:"-" xorm:"-"`
 }
 
 type CreatePostModel struct {
@@ -60,8 +61,9 @@ type PostArchiveView struct {
 }
 
 type PostListFilterViewModal struct {
-	Status   *int
-	IsPublic *bool
+	Status     *int
+	IsPublic   *bool
+	CreateTime *time.Time
 }
 
 func GetPostList(limit, offset int) ([]Post, int64, error) {
@@ -173,6 +175,7 @@ func GetPostCount() int64 {
 func GetAdminPostList(limit, offset int, condiBean PostListFilterViewModal, keyword string, pageType int) ([]Post, int64) {
 	datas := make([]Post, 0)
 	sess := global.Store.Where(" status != 4 and type = ?", pageType)
+
 	if keyword != "" {
 		sess = sess.Where("title like ?", "%"+keyword+"%")
 	}
@@ -182,8 +185,11 @@ func GetAdminPostList(limit, offset int, condiBean PostListFilterViewModal, keyw
 	if condiBean.IsPublic != nil {
 		sess = sess.Where("is_public = ?", *condiBean.IsPublic)
 	}
+	if condiBean.CreateTime != nil {
+		sess = sess.Where("create_time >= ?", *condiBean.CreateTime)
+	}
 
-	total, err := sess.OrderBy("create_time desc").Limit(limit, offset).FindAndCount(&datas, condiBean)
+	total, err := sess.OrderBy("create_time desc").Limit(limit, offset).FindAndCount(&datas)
 	if err != nil {
 		panic(err)
 	}

@@ -74,6 +74,10 @@ const columns = [
     render: (row: any) => formatTime(row.create_time)
   },
   {
+    title: 'Visit',
+    key: 'visit_count',
+  },
+  {
     title: 'Action',
     key: 'action',
     render: (row: any) => {

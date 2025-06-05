@@ -51,3 +51,19 @@ func GetWeekVisitListTop(limit int) []map[string]interface{} {
 	}
 	return datas
 }
+
+func GetVisitCountByPathList(pathList []string) []map[string]interface{} {
+	datas := make([]map[string]interface{}, 0)
+
+	sql := `SELECT unique_visits.pathname, COUNT(1) AS count
+	FROM (SELECT DISTINCT ip, pathname FROM ` + Visit{}.TableName() + `) AS unique_visits
+	left join ` + Post{}.TableName() + ` on ` + Post{}.TableName() + `.pathname = unique_visits.pathname
+	GROUP BY unique_visits.pathname`
+
+	err := global.Store.SQL(sql).In("unique_visits.pathname", pathList).Find(&datas)
+
+	if err != nil {
+		panic(err)
+	}
+	return datas
+}
