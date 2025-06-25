@@ -6,6 +6,8 @@ import { createPostReq, getEditPostReq, uploadFileReq } from '@/services'
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
 
+const LOCAL_POST_SAVE_KEY = 'post-content'
+
 interface PostFormModel {
   id?: number;
   title?: string
@@ -40,6 +42,9 @@ onMounted(() => {
     globalStore.getTags()
     if (route.params.id) {
         getTargetPost(route.params.id as any)
+    }
+    if (localStorage.getItem(LOCAL_POST_SAVE_KEY)) {
+        form.value.markdown_content = localStorage.getItem(LOCAL_POST_SAVE_KEY) || ''
     }
 })
 
@@ -80,6 +85,7 @@ const submit = async (type?: string) => {
     if (!code) {
         if (form.value.status === 0) {
             window.$message.success('Save success')
+            localStorage.removeItem(LOCAL_POST_SAVE_KEY)
         } else {
             window.$message.success('Publish success')
         }
@@ -106,6 +112,8 @@ const handlePublish = async () => {
 const handleEditChange = (markdown: string, html: string) => {
     form.value.markdown_content = markdown
     form.value.content = html
+
+    localStorage.setItem('creaet_markdown_content', markdown)
 }
 
 const handleUploadImage = (pos: string, file: any) => {
