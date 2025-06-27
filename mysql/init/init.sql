@@ -163,3 +163,21 @@ CREATE TABLE `note_user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_general_ci;
 
+
+CREATE TABLE `note_whisper` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `content` TEXT NOT NULL COMMENT '内容',
+  `is_public` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1：公开，0:不公开',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_general_ci COMMENT='whisper短内容表';
+
+CREATE TABLE `note_operation_log` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `op_type` VARCHAR(64) NOT NULL COMMENT '操作类型',
+  `op_target_id` INT NOT NULL DEFAULT 0 COMMENT '被操作对象ID',
+  `op_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+  `before_content` TEXT COMMENT '操作前内容（JSON）',
+  `after_content` TEXT COMMENT '操作后内容（JSON）',
+  `op_detail` VARCHAR(255) COMMENT '备注'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE= utf8mb4_general_ci COMMENT='操作日志表';

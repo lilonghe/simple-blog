@@ -45,6 +45,17 @@ const menuOptions: MenuOption[] = [
       h(
         RouterLink,
         {
+          to: '/whisper'
+        },
+        { default: () => 'Whisper' }
+    ),
+    key: '/whisper',
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
           to: '/category'
         },
         { default: () => 'Category' }

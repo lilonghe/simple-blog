@@ -38,7 +38,7 @@ const handleLogout = async () => {
         </div>
     </n-layout-header>
     <n-layout has-sider style="height: calc(100vh - 3rem)">
-        <n-layout-sider bordered>
+        <n-layout-sider bordered :collapsed-width="0" collapse-mode="width" show-trigger="arrow-circle">
             <sider />
         </n-layout-sider>
         <n-layout-content class="pt-2 pb-2 mr-3 ml-3">

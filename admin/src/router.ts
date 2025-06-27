@@ -12,6 +12,7 @@ import VisitList from './pages/management/VisitList.vue'
 import PageList from './pages/PageList.vue'
 import PostList from './pages/PostList.vue'
 import TagList from './pages/TagList.vue'
+import WhisperList from './pages/WhisperList.vue'
 import { getRealPath } from './utils'
 
 const routes = [
@@ -32,6 +33,7 @@ const routes = [
 
     { path: '/options/general', component: OptionsGeneral, meta: { title: 'Basic Setting'}  },
     { path: '/options/visit/list', component: VisitList, meta: { title: 'Visit History'}  },
+    { path: '/whisper', component: WhisperList, meta: { title: 'Whisper Manage'} },
 ]
 
 const router = createRouter({

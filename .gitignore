@@ -9,3 +9,7 @@ config.yml
 
 mysql/data
 mysql/config
+
+simple-blog
+
+.env.*

@@ -118,3 +118,36 @@ export async function uploadFileReq(params:any) {
 export async function getVisitListReq(params: any) {
     return request("/admin/visit/list", { params })
 }
+
+export async function getWhisperListReq(params: any) {
+    return request("/admin/whisper", { params })
+}
+
+export async function createWhisperReq(params: any) {
+    return request("/admin/whisper", {
+        method: "POST",
+        data: params,
+    })
+}
+
+export async function updateWhisperReq(id: number, params: any) {
+    return request(`/admin/whisper/${id}`, {
+        method: "PUT",
+        data: params,
+    })
+}
+
+export async function deleteWhisperReq(id: number) {
+    return request(`/admin/whisper/${id}`, {
+        method: "DELETE",
+    })
+}
+
+export async function updateWhisperVisibilityReq(id: number, is_public: boolean) {
+    return request(`/admin/whisper/${id}/visibility`, {
+        method: "PUT",
+        data: { is_public },
+    })
+}
+
+

@@ -182,3 +182,30 @@ func SitemapTxt(c *gin.Context) {
 
 	c.String(200, text)
 }
+
+// whisper 页面渲染
+func WhisperPage(c *gin.Context) {
+	limit, _ := strconv.Atoi(global.Options["postsListSize"])
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * limit
+	whispers, total, _ := models.GetWhisperList(limit, offset)
+
+	resp := map[string]interface{}{
+		"options":     utils.GetRenderOptions(),
+		"themeConfig": global.ThemeConfig,
+		"whispers":    whispers,
+		"total":       total,
+		"page":        page,
+		"limit":       limit,
+	}
+	if page*limit < int(total) {
+		resp["next"] = page + 1
+	}
+	if page > 1 {
+		resp["prev"] = page - 1
+	}
+	c.HTML(200, "whisper.html", resp)
+}

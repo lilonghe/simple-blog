@@ -33,7 +33,7 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowHeaders:     []string{"content-type"},
 		AllowCredentials: true,
-		AllowMethods:     []string{"DELETE"},
+		AllowMethods:     []string{"DELETE", "PUT"},
 		AllowOriginFunc: func(origin string) bool {
 			return true
 		},
@@ -51,6 +51,7 @@ func main() {
 	r.GET("/page/:pathname", routers.PageDetail)
 	r.GET("/archives", routers.Archives)
 	r.GET("/sitemap.txt", routers.SitemapTxt)
+	r.GET("/whisper", routers.WhisperPage)
 
 	r.Static("/assets", "./themes/"+theme+"/res")
 	r.Static(global.Config.UploadAccessPath, global.Config.UploadPath)
@@ -82,6 +83,13 @@ func main() {
 			authorized.POST("/tag", adminRouters.CreateOrEditTag)
 			authorized.GET("/tag/:id", adminRouters.GetTag)
 			authorized.DELETE("/tag/:id", adminRouters.DeleteTag)
+
+			// whisper 管理接口
+			authorized.GET("/whisper", adminRouters.GetWhisperList)
+			authorized.POST("/whisper", adminRouters.CreateWhisper)
+			authorized.PUT("/whisper/:id/visibility", adminRouters.UpdateWhisperVisibility)
+			authorized.DELETE("/whisper/:id", adminRouters.DeleteWhisper)
+			authorized.PUT("/whisper/:id", adminRouters.EditWhisper)
 		}
 	}
 

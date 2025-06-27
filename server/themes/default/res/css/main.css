@@ -404,3 +404,28 @@ th, td {
     padding: 4px 6px;
     max-width: 300px;
 }
+
+
+/* whisper */
+.whisper-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .whisper {
+        display: inline-flex;
+        flex-direction: column;
+        width: 300px;
+        padding: 10px;
+        background: var(--background-color);
+        box-shadow: var(--shadow);
+        border-radius: 5px;
+    
+        .whisper-time {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-top: 5px;
+            margin-left: auto;
+        }
+    }    
+}

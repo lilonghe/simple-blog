@@ -1,0 +1,23 @@
+{{define "content"}}
+<section id="page-whisper">
+    <div class="whisper-list">
+        {{ range .whispers }}
+            <article class="whisper">
+                <div class="whisper-content">{{ .Content }}</div>
+                <small class="whisper-time">{{.CreateTime.Format "2006-01-02 15:04:05"}}</small>
+            </article>
+        {{ end}}
+
+        {{ if or .prev .next}}
+        <nav class="pagination">
+            {{ if .prev }}
+                <a class="prev" href="/whisper?page={{.prev}}">Prev</a>
+            {{ end }}
+            {{ if .next }}
+                <a class="next" href="/whisper?page={{.next}}">Next</a>
+            {{ end }}
+        </nav>
+        {{ end }}
+    </div>
+</section>
+{{end}} 
