@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin, NImage } from 'naive-ui'
+import { NGrid, NGi, NInput, NInputGroup, NInputGroupLabel, NButton, NCheckboxGroup, NCheckbox, NSelect, NSwitch, NFormItem, NForm, NSpin, NImage, NDatePicker } from 'naive-ui'
 import { useGlobalStore } from '@/stores/global'
 import { computed, onMounted, ref } from 'vue'
 import { createPostReq, getEditPostReq, uploadFileReq } from '@/services'
@@ -22,7 +22,7 @@ interface PostFormModel {
   pathname?: string
   featuredImage?: string
   options?: string
-  create_time?: string
+  create_time: number
 }
 
 const globalStore = useGlobalStore();
@@ -30,6 +30,7 @@ const form = ref<PostFormModel>({
     is_public: true,
     allow_comment: true,
     status: 0,
+    create_time: new Date().getTime()
 })
 const targetPost = ref<PostFormModel>()
 const formRef = ref()
@@ -53,6 +54,7 @@ const getTargetPost = async (id: number) => {
     if (data) {
         targetPost.value = data
         form.value = data
+        form.value.create_time = new Date(data.create_time).getTime()
         if (data.options) {
             let { featuredImage } = JSON.parse(data.options)
             form.value.featuredImage = featuredImage
@@ -74,7 +76,7 @@ const submit = async (type?: string) => {
     preProcessFormData()
     let params = {
         ...form.value,
-        create_time: form.value.create_time || dayjs().format(),
+        create_time:  dayjs(form.value.create_time).format(),
         update_time: dayjs().format(),
     }
     if (type === 'publish') {
@@ -178,36 +180,33 @@ const loaded = computed(() => !route.params.id || (route.params.id && targetPost
                 <n-button v-on:click="handleSave" v-if="targetPost?.status != 3">Save</n-button>
                 <n-button type="primary" v-on:click="handlePublish">Publish</n-button>
             </div>
-            <div>
-                <div class="text-xl mt-6 mb-1">Catgory</div>
-                <n-form-item :show-label="false" :show-feedback="false">
+            <div class="flex gap-6 flex-col mt-[80px] pr-16">
+                <div>
+                    <n-form-item label="Publish Time" :show-label="true" :show-feedback="false">
+                        <n-date-picker class="flex flex-col" v-model:value="form.create_time" type="datetime" />
+                    </n-form-item>
+                </div>
+                <n-form-item label="Category" :show-feedback="false">
                     <n-checkbox-group class="flex flex-col" v-model:value="form.cate_list">
                         <n-checkbox v-for="item in globalStore.cates" :value="item.id">{{item.name}}</n-checkbox>
                     </n-checkbox-group>
                 </n-form-item>
-            </div>
-            <div>
-                <div class="text-xl mt-4">Tag</div>
-                <n-form-item :show-label="false" :show-feedback="false">
+                <n-form-item label="Tag" :show-feedback="false">
                     <n-select multiple tag filterable :options="globalStore.tagOptions" v-model:value="form.tag_list" />
                 </n-form-item>
-            </div>
-            <div>
-                <div class="text-xl mt-4">Public</div>
-                <n-form-item :show-label="false" :show-feedback="false">
-                    <n-switch v-model:value="form.is_public"/>
+                <div class="flex gap-12">
+                    <n-form-item label="Public" :show-feedback="false">
+                        <n-switch v-model:value="form.is_public"/>
+                    </n-form-item>
+                    <n-form-item label="Allow comment" :show-feedback="false">
+                        <n-switch v-model:value="form.allow_comment" />
+                    </n-form-item>
+                </div>
+                
+                <n-form-item label="Banner">
+                    <n-input placeholder="Image URL" v-model:value="form.featuredImage" />
+                    <n-image :src="form.featuredImage" />
                 </n-form-item>
-            </div>
-            <div>
-                <div class="text-xl mt-4">Allow comment</div>
-                <n-form-item :show-label="false" :show-feedback="false">
-                    <n-switch v-model:value="form.allow_comment" />
-                </n-form-item>
-            </div>
-            <div>
-                <div class="text-xl mt-4">Featured Image</div>
-                <n-input placeholder="img url" v-model:value="form.featuredImage" />
-                <n-image :src="form.featuredImage" />
             </div>
         </n-gi>
     </n-grid>

@@ -2,7 +2,7 @@
 import { deletePostReq, getPostListReq } from '@/services'
 import { debounce, formatTime } from '@/utils'
 import { NButton, NDataTable, NInput, NPopconfirm, NSelect, NTag } from 'naive-ui'
-import { computed, h, onMounted, ref, watch } from 'vue'
+import { computed, h, onMounted, ref, render, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const paginationParams = ref({ pageSize: 10, page: 1,})

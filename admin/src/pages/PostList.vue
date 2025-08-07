@@ -41,10 +41,26 @@ watch(filterParams, (now, old) => {
   }
 }, { deep: true })
 
+const handleViewPost = (pathname: string) => {
+  window.open('/post/' + pathname + '.html')
+}
+
 const columns = [
   {
     title: 'Title',
     key: 'title',
+    render: (row: any) => {
+      return h(
+        'a',
+        {
+          onClick: () => row.status !==0 && handleViewPost(row.pathname),
+          class: row.status !== 0 ? 'link cursor-pointer' : 'cursor-not-allowed'
+        },
+        {
+          default: () => row.title
+        }
+      )
+    }
   },
   {
     title: 'Status',
