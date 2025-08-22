@@ -5,12 +5,12 @@
 }
 
 :root {
-    --shadow: 0 0px 0px 0 rgb(0 0 0 / 6%), 0 0px 1px 0px rgb(0 0 0 / 10%), 0 0px 5px 0 rgb(91 91 94 / 10%);
+    --shadow: 0 0 20px 3px #cccccc7a;
     --content-width: 1000px;
     --content-max-width: 95%;
     --background-color: #fff;
-    --header-background-color: #ffffff99;
-    --text-color: #333;
+    --header-background-color: #fdfdfdb5;
+    --text-color: #000c;
     --border-color: #333;
     --article-gap: 30px;
     --article-radius: 12px;
@@ -38,16 +38,23 @@ html {
 
 body {
     color: var(--text-color);
-    font-family: SF Pro SC,SF Pro Text,SF Pro Icons,PingFang SC,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: SF Pro SC,SF Pro Text,SF Pro Icons,PingFang SC,system-ui,Helvetica Neue,Helvetica,Arial,sans-serif;
     font-weight: 300;
     background-color: var(--background-color);
     background-image: linear-gradient(to right, #9d9c9b2b 1px, transparent 1px), linear-gradient(to bottom, #9d9c9b2b 1px, transparent 1px);
     background-size: 50px 50px;
     overflow: auto;
     scroll-behavior: smooth;
+
+    animation: bodyBg;
+    scroll-timeline-name: --scroll-bg;
+    animation-timeline: --scroll-bg;
 }
 
-
+@keyframes bodyBg {
+    0% { background-position-x: 0; }
+    100% { background-position-x: 10vw; }
+}
 
 a,a:hover {
     color: #2479CC;
@@ -57,7 +64,6 @@ a,a:hover {
 img {
     max-width: 30vw;
     max-height: 50vh;
-    /* border: 1px solid var(--border-color); */
 }
 
 video {
@@ -108,12 +114,12 @@ article h1.title {
     font-size: 32px;
 }
 
-.index-post-time {
+/* .index-post-time {
     color: #CCC;
     margin-bottom: 10px;
     display: block;
     margin-top: -10px;
-}
+} */
 
 article h1.title a {
     color: var(--text-color);
@@ -227,7 +233,7 @@ article p {
     display: inherit;
 }
 
-#page-index .post {
+/* #page-index .post {
     box-shadow: var(--shadow);
     padding: 10px 20px;
     border: 0;
@@ -235,7 +241,7 @@ article p {
     margin-bottom: var(--article-gap);
     border-radius: var(--article-radius);
     background-color: var(--background-color);
-}
+} */
 
 .post-url, .more {
     display: none;
@@ -367,7 +373,7 @@ article p {
     }
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {
         --shadow: 0 0px 0px 0 rgb(255 255 255 / 10%), 0 0px 1px 0px rgb(255 255 255 / 30%), 0 0px 5px 0 rgb(120 105 105 / 40%);
         --content-width: 900px;
@@ -380,7 +386,7 @@ article p {
         --header-background-color: #00000099;
         --background-color: #000;
     }
-}
+} */
 
 
 #external-comment {
@@ -405,6 +411,77 @@ th, td {
     max-width: 300px;
 }
 
+
+/* index */
+#page-index {
+    padding: 26px;
+    background: rgba(var(--background-color), .99);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    box-shadow: 0 0 10px 1px #cccccc7a;
+}
+#page-index .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+#page-index .index-post-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#page-index .index-post-meta .entry-content {
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+
+    font-size: 14px;
+    text-shadow: 0 0 black;
+}
+#page-index .post .title {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+}
+#page-index .featured-image-thump {
+    flex-shrink: 0;
+}
+#page-index .index-post-time {
+    font-size: 12px;
+}
+#page-index .featured-image-thump img {
+    margin: 0;
+    width: 180px;
+    height: 120px;
+}
+
+@media screen and (max-width: 769px)  {
+    #page-index {
+        padding: 15px;
+    }
+    #page-index .post {
+        gap: 10px;
+    }
+    #page-index .featured-image-thump img {
+        width: 120px;
+        height: 120px;
+    }
+
+    /* post detail */
+    #page-post .featured-image img {
+        height: auto;
+        min-height: 160px;
+        max-height: 300px;
+    }
+}
 
 /* whisper */
 .whisper-list {
