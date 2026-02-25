@@ -139,7 +139,8 @@ func Archives(c *gin.Context) {
 		month := v.CreateTime.Format("01")
 		match := false
 		for k, item := range respData {
-			if item.Year == year && item.Month == month {
+			// if item.Year == year && item.Month == month {
+			if item.Year == year {
 				respData[k].List = append(respData[k].List, models.PostArchiveView{
 					Pathname:   v.Pathname,
 					Title:      v.Title,
