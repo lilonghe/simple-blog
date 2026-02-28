@@ -7,9 +7,9 @@ import (
 
 type Visit struct {
 	Id         int32     `json:"id" xorm:"pk autoincr"`
-	Pathname   string    `json:"pathname"`
+	Pathname   string    `json:"pathname" xorm:"index(idx_path_ip)"`
 	UserAgent  string    `json:"user_agent"`
-	Ip         string    `json:"ip"`
+	Ip         string    `json:"ip" xorm:"index(idx_path_ip)"`
 	CreateTime time.Time `json:"create_time"`
 }
 
@@ -55,12 +55,11 @@ func GetWeekVisitListTop(limit int) []map[string]interface{} {
 func GetVisitCountByPathList(pathList []string) []map[string]interface{} {
 	datas := make([]map[string]interface{}, 0)
 
-	sql := `SELECT unique_visits.pathname, COUNT(1) AS count
-	FROM (SELECT DISTINCT ip, pathname FROM ` + Visit{}.TableName() + `) AS unique_visits
-	left join ` + Post{}.TableName() + ` on ` + Post{}.TableName() + `.pathname = unique_visits.pathname
-	GROUP BY unique_visits.pathname`
-
-	err := global.Store.SQL(sql).In("unique_visits.pathname", pathList).Find(&datas)
+	err := global.Store.Table(Visit{}.TableName()).
+		Select("pathname, COUNT(DISTINCT ip) AS count").
+		In("pathname", pathList).
+		GroupBy("pathname").
+		Find(&datas)
 
 	if err != nil {
 		panic(err)
