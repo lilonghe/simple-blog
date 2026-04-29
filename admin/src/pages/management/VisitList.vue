@@ -6,25 +6,23 @@ import { formatTime, debounce } from '@/utils'
 import { useGlobalStore } from '@/stores/global'
 
 const globalStore = useGlobalStore()
-const paginationParams = ref({ pageSize: 10, page: 1,})
+const paginationParams = ref({ pageSize: 10, page: 1 })
 const filterParams = ref({ keyword: undefined })
-const dataList = ref([])
+const dataList = ref<any[]>([])
 const total = ref(0)
-const pagination = computed(() => {
-  return {
-    ...paginationParams.value,
-    itemCount: total.value,
-  }
-})
 const loading = ref(false)
+
+const pagination = computed(() => ({
+  ...paginationParams.value,
+  itemCount: total.value,
+}))
 
 const loadData = async () => {
   loading.value = true
-  let { data } = await getVisitListReq({...paginationParams.value, ...filterParams.value});
+  const { data } = await getVisitListReq({ ...paginationParams.value, ...filterParams.value })
   if (data) {
-    const { list, total: totalCount } = data;
-    dataList.value = list
-    total.value = totalCount
+    dataList.value = data.list
+    total.value = data.total
   }
   loading.value = false
 }
@@ -33,38 +31,49 @@ onMounted(() => {
   loadData()
 })
 
-watch(filterParams, (now, old) => {
-  if (now.keyword !== old.keyword) {
-    paginationParams.value.page = 1
-    debounce(loadData)
-  } else {
-    handlePageChange(1)
-  }
-}, { deep: true })
+watch(
+  filterParams,
+  (now, old) => {
+    if (now.keyword !== old.keyword) {
+      paginationParams.value.page = 1
+      debounce(loadData)
+    } else {
+      handlePageChange(1)
+    }
+  },
+  { deep: true },
+)
 
 const columns = [
   {
-    title: 'Create Time',
+    title: 'Visited',
     key: 'create_time',
+    width: 180,
     render: (row: any) => formatTime(row.create_time),
     className: 'nowrap',
   },
   {
-    title: 'Post Path',
+    title: 'Path',
     key: 'pathname',
-    render: (row: any) => h(
-      'a', 
-      { href: globalStore.options.site_url + '/post/' + row.pathname + '.html', class: 'link', target: '_blank' },
-      { default: () => row.pathname },
-    ),
+    render: (row: any) =>
+      h(
+        'a',
+        {
+          href: globalStore.options.site_url + '/post/' + row.pathname + '.html',
+          class: 'link',
+          target: '_blank',
+        },
+        { default: () => row.pathname },
+      ),
   },
   {
-    title: 'User Agent',
+    title: 'User agent',
     key: 'user_agent',
   },
   {
     title: 'IP',
     key: 'ip',
+    width: 150,
     className: 'nowrap',
   },
 ]
@@ -76,26 +85,35 @@ const handlePageChange = (page: number) => {
 </script>
 
 <template>
-<div>
-  <div class="mb-2 flex gap-4">
-    <div class="w-1/4" >
-      <n-input 
-        placeholder="Search User Agent" 
-        v-model:value="filterParams.keyword" />
-    </div>
+  <div class="page-stack">
+    <section class="page-surface page-surface--padded">
+      <div class="page-toolbar">
+        <div>
+          <p class="section-kicker">Traffic trace</p>
+          <h2 class="section-title">{{ total || 0 }} visit records</h2>
+          <p class="section-copy">
+            Search by user agent and inspect what content paths are drawing real attention.
+          </p>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-field filter-field--wide">
+          <n-input v-model:value="filterParams.keyword" placeholder="Search user agent" />
+        </div>
+      </div>
+
+      <div class="data-table-wrap">
+        <n-data-table
+          :loading="loading"
+          :remote="true"
+          :data="dataList"
+          :columns="columns"
+          :pagination="pagination"
+          striped
+          @update:page="handlePageChange"
+        />
+      </div>
+    </section>
   </div>
-  <n-data-table
-    :loading="loading"
-    :remote="true"
-    :data="dataList"
-    :columns="columns"
-    :pagination="pagination"
-    @update:page="handlePageChange" />
-    
-</div>
 </template>
-
-<style>
-
-  
-</style>

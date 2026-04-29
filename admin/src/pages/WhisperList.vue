@@ -1,53 +1,96 @@
 <template>
-  <div>
-    <div class="mb-2 flex gap-4">
-      <n-input placeholder="搜索内容" v-model:value="filterParams.keyword" style="width: 200px" @change="loadData" />
-      <n-select
-        placeholder="公开性"
-        clearable
-        v-model:value="filterParams.is_public"
-        :options="[
-          { label: '公开', value: 'true' },
-          { label: '私密', value: 'false' }
-        ]"
-        style="width: 120px"
-        @update:value="loadData"
-      />
-      <n-button type="primary" @click="openEdit()">Create</n-button>
-    </div>
-    <n-data-table
-      :loading="loading"
-      :remote="true"
-      :data="whisperList"
-      :columns="columns"
-      :pagination="pagination"
-      @update:page="handlePageChange"
-    />
-    <n-modal v-model:show="editVisible" preset="dialog" :show-icon="false" :title="editForm.id ? 'Edit' : 'Create'">
-      <n-form ref="formRef" :model="editForm" :rules="rules" label-placement="top" :show-label="false">
-        <n-form-item label="内容" path="content">
-          <n-input v-model:value="editForm.content" type="textarea" rows="4" placeholder="内容"/>
-        </n-form-item>
-        <n-form-item label="公开性" path="is_public" :show-feedback="false">
-          <n-switch v-model:value="editForm.is_public">
-            <template #checked>公开</template>
-            <template #unchecked>私密</template>
-          </n-switch>
-        </n-form-item>
-      </n-form>
-      <template #action>
-        <n-button @click="editVisible=false">取消</n-button>
-        <n-button type="primary" @click="save" style="margin-left: 8px;">保存</n-button>
-      </template>
-    </n-modal>
+  <div class="page-stack">
+    <section class="page-surface page-surface--padded">
+      <div class="page-toolbar">
+        <div>
+          <p class="section-kicker">Micro notes</p>
+          <h2 class="section-title">{{ total || 0 }} whispers collected</h2>
+          <p class="section-copy">
+            Short thoughts should be quick to write and edit, without interruptive modals.
+          </p>
+        </div>
+        <n-button type="primary" @click="openEdit()">
+          {{ isEditorOpen ? 'Editing whisper' : 'New whisper' }}
+        </n-button>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-field filter-field--wide">
+          <n-input v-model:value="filterParams.keyword" placeholder="Search content" />
+        </div>
+        <div class="filter-field">
+          <n-select
+            v-model:value="filterParams.is_public"
+            clearable
+            placeholder="Visibility"
+            :options="visibilityOptions"
+          />
+        </div>
+      </div>
+
+      <div v-if="isEditorOpen" class="inline-editor">
+        <div class="inline-editor__header">
+          <div>
+            <h3 class="section-title">{{ editForm.id ? 'Edit whisper' : 'Create whisper' }}</h3>
+            <p class="section-copy">
+              Keep it brief. These notes work best when they read like clean fragments.
+            </p>
+          </div>
+          <n-button tertiary @click="cancelEdit">Cancel</n-button>
+        </div>
+
+        <n-form ref="formRef" :model="editForm" :rules="rules" label-placement="top">
+          <n-form-item label="Content" path="content">
+            <n-input v-model:value="editForm.content" type="textarea" rows="4" placeholder="Write a short note" />
+          </n-form-item>
+          <n-form-item label="Visibility" path="is_public" :show-feedback="false">
+            <n-switch v-model:value="editForm.is_public">
+              <template #checked>Public</template>
+              <template #unchecked>Private</template>
+            </n-switch>
+          </n-form-item>
+          <div class="form-actions">
+            <n-button @click="cancelEdit">Cancel</n-button>
+            <n-button type="primary" @click="save">Save whisper</n-button>
+          </div>
+        </n-form>
+      </div>
+
+      <div class="data-table-wrap">
+        <n-data-table
+          :loading="loading"
+          :remote="true"
+          :data="whisperList"
+          :columns="columns"
+          :pagination="pagination"
+          striped
+          @update:page="handlePageChange"
+        />
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, h, onMounted, computed } from 'vue'
-import { NDataTable, NInput, NPopconfirm, NButton, NSwitch, NSelect, NModal, NForm, NFormItem } from 'naive-ui'
-import { getWhisperListReq, createWhisperReq, updateWhisperReq, deleteWhisperReq, updateWhisperVisibilityReq } from '@/services'
-import { formatTime } from '@/utils'
+import { ref, h, onMounted, computed, watch } from 'vue'
+import {
+  NDataTable,
+  NInput,
+  NPopconfirm,
+  NButton,
+  NSwitch,
+  NSelect,
+  NForm,
+  NFormItem,
+} from 'naive-ui'
+import {
+  getWhisperListReq,
+  createWhisperReq,
+  updateWhisperReq,
+  deleteWhisperReq,
+  updateWhisperVisibilityReq,
+} from '@/services'
+import { formatTime, debounce } from '@/utils'
 import type { FormInst, FormRules } from 'naive-ui'
 
 interface Whisper {
@@ -63,8 +106,8 @@ const whisperList = ref<Whisper[]>([])
 const total = ref(0)
 const loading = ref(false)
 
-const editVisible = ref(false)
-const editForm = ref<Partial<Whisper>>({ id: 0, content: '', is_public: true })
+const isEditorOpen = ref(false)
+const editForm = ref<Partial<Whisper>>({ content: '', is_public: true })
 
 const pagination = computed(() => ({
   page: paginationParams.value.page,
@@ -75,17 +118,20 @@ const pagination = computed(() => ({
 const formRef = ref<FormInst | null>(null)
 
 const rules: FormRules = {
-  content: [
-    { required: true, message: '内容不能为空', trigger: ['input', 'blur'] }
-  ]
+  content: [{ required: true, message: 'Content cannot be empty.', trigger: ['input', 'blur'] }],
 }
+
+const visibilityOptions = [
+  { label: 'Public', value: 'true' },
+  { label: 'Private', value: 'false' },
+]
 
 const loadData = async () => {
   loading.value = true
   const params: any = {
     page: paginationParams.value.page,
     limit: paginationParams.value.pageSize,
-    ...filterParams.value
+    ...filterParams.value,
   }
   const { data } = await getWhisperListReq(params)
   if (data) {
@@ -97,45 +143,74 @@ const loadData = async () => {
 
 onMounted(loadData)
 
+watch(
+  filterParams,
+  (now, old) => {
+    if (now.keyword !== old.keyword) {
+      paginationParams.value.page = 1
+      debounce(loadData)
+    } else {
+      handlePageChange(1)
+    }
+  },
+  { deep: true },
+)
+
 const columns = [
   {
-    title: '内容',
+    title: 'Content',
     key: 'content',
     ellipsis: { tooltip: true },
   },
   {
-    title: '公开',
+    title: 'Public',
     key: 'is_public',
-    width: 80,
+    width: 96,
     render: (row: Whisper) =>
       h(NSwitch, {
         value: row.is_public,
         onUpdateValue: (val: boolean) => changePublic(row, val),
-      })
+      }),
   },
   {
-    title: '创建时间',
+    title: 'Created',
     key: 'create_time',
     render: (row: Whisper) => formatTime(row.create_time),
-    width: 200,
+    width: 180,
   },
   {
-    title: '操作',
+    title: 'Action',
     key: 'action',
-    width: 180,
-    render: (row: Whisper) => h('div', { class: 'flex gap-4' }, [
-      h(NButton, {
-        size: 'small',
-        onClick: () => openEdit(row)
-      }, { default: () => '编辑' }),
-      h(NPopconfirm, {
-        onPositiveClick: () => handleDelete(row.id),
-      }, {
-        trigger: () => h(NButton, { size: 'small', type: 'error' }, { default: () => '删除' }),
-        default: () => `确定删除？`,
-      })
-    ])
-  }
+    width: 160,
+    render: (row: Whisper) =>
+      h('div', { class: 'table-actions' }, [
+        h(
+          'a',
+          {
+            class: 'table-action cursor-pointer',
+            onClick: () => openEdit(row),
+          },
+          { default: () => 'Edit' },
+        ),
+        h(
+          NPopconfirm,
+          {
+            onPositiveClick: () => handleDelete(row.id),
+          },
+          {
+            trigger: () =>
+              h(
+                'a',
+                {
+                  class: 'table-action table-action--danger cursor-pointer',
+                },
+                { default: () => 'Delete' },
+              ),
+            default: () => 'Delete this whisper?',
+          },
+        ),
+      ]),
+  },
 ]
 
 function handlePageChange(page: number) {
@@ -149,22 +224,27 @@ function openEdit(row?: Whisper) {
   } else {
     editForm.value = { content: '', is_public: true }
   }
-  editVisible.value = true
+  isEditorOpen.value = true
+}
+
+function cancelEdit() {
+  isEditorOpen.value = false
+  editForm.value = { content: '', is_public: true }
 }
 
 async function save() {
   if (!formRef.value) return
   await formRef.value.validate(async (errors) => {
     if (!errors) {
-      let res;
+      let res
       if (editForm.value.id) {
         res = await updateWhisperReq(editForm.value.id, editForm.value)
       } else {
         res = await createWhisperReq(editForm.value)
       }
       if (!res.code) {
-        window.$message.success('保存成功')
-        editVisible.value = false
+        window.$message.success('Save success')
+        cancelEdit()
       }
       loadData()
     }
@@ -174,7 +254,7 @@ async function save() {
 async function handleDelete(id: number) {
   const res = await deleteWhisperReq(id)
   if (!res.code) {
-    window.$message.success('删除成功')
+    window.$message.success('Delete success')
     if (whisperList.value.length === 1 && paginationParams.value.page > 1) {
       paginationParams.value.page--
     }
@@ -185,8 +265,8 @@ async function handleDelete(id: number) {
 async function changePublic(row: Whisper, val: boolean) {
   const res = await updateWhisperVisibilityReq(row.id, val)
   if (!res.code) {
-    window.$message.success('修改成功')
+    window.$message.success('Update success')
   }
   loadData()
 }
-</script> 
+</script>

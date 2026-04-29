@@ -19,9 +19,14 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: 5563,
       proxy: {
-        "/admin": {
-          target: env.VITE_BASE_API_URL + '/admin',
+        "/api": {
+          target: env.VITE_BASE_API_URL,
           changeOrigin: true,
+          configure(proxy) {
+            proxy.on('proxyReq', proxyReq => {
+              console.log('req:', proxyReq.path)
+            })
+          },
         },
       },
     },

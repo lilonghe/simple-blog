@@ -1,110 +1,113 @@
 <script setup lang="ts">
-import { MenuOption, NMenu } from 'naive-ui';
-import { h } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
+import type { MenuOption } from 'naive-ui'
+import { NMenu } from 'naive-ui'
+import { computed, h } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const menuOptions: MenuOption[] = [
+interface NavItem {
+  label: string
+  key: string
+}
+
+interface NavGroup {
+  type: 'group'
+  label: string
+  key: string
+  children: NavItem[]
+}
+
+const renderLink = (label: string, to: string) => () =>
+  h(
+    RouterLink,
+    {
+      to,
+      class: 'admin-nav__link',
+    },
+    { default: () => label },
+  )
+
+const navigation: Array<NavItem | NavGroup> = [
   {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/',
-          activeClass: 'active'
-        },
-        { default: () => 'Dashboard' }
-    ),
+    label: 'Overview',
     key: '/',
   },
   {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/post'
-        },
-        { default: () => 'Post' }
-    ),
-    key: '/post',
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/page'
-        },
-        { default: () => 'Page' }
-    ),
-    key: '/page',
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/whisper'
-        },
-        { default: () => 'Whisper' }
-    ),
-    key: '/whisper',
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/category'
-        },
-        { default: () => 'Category' }
-    ),
-    key: '/category',
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: '/tag'
-        },
-        { default: () => 'Tag' }
-    ),
-    key: '/tag',
-  },
-  {
-    label: "System",
-    key: 'system-management',
+    type: 'group',
+    label: 'Publishing',
+    key: 'publishing',
     children: [
       {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/options/general'
-            },
-            { default: () => 'Basic setting' }
-        ),
+        label: 'Posts',
+        key: '/post',
+      },
+      {
+        label: 'Pages',
+        key: '/page',
+      },
+      {
+        label: 'Whispers',
+        key: '/whisper',
+      },
+    ],
+  },
+  {
+    type: 'group',
+    label: 'Taxonomy',
+    key: 'taxonomy',
+    children: [
+      {
+        label: 'Categories',
+        key: '/category',
+      },
+      {
+        label: 'Tags',
+        key: '/tag',
+      },
+    ],
+  },
+  {
+    type: 'group',
+    label: 'Settings',
+    key: 'settings',
+    children: [
+      {
+        label: 'General',
         key: '/options/general',
       },
       {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: '/options/visit/list'
-            },
-            { default: () => 'Visit List' }
-        ),
+        label: 'Visit history',
         key: '/options/visit/list',
       },
-    ]
+    ],
   },
 ]
 
+const menuOptions: MenuOption[] = navigation.map((item) => {
+  if ('children' in item) {
+    return {
+      ...item,
+      children: item.children.map((child) => ({
+        ...child,
+        label: renderLink(child.label, child.key),
+      })),
+    }
+  }
+
+  return {
+    ...item,
+    label: renderLink(item.label, item.key),
+  }
+})
+
+const routeKeys = navigation.flatMap((item) => ('children' in item ? item.children : item)).map((item) => item.key)
+
+const selectedKey = computed(() => {
+  return routeKeys.findLast((key) => route.path === key || route.path.startsWith(`${key}/`)) ?? '/'
+})
 </script>
 
 <template>
-    <n-menu :options="menuOptions" :value="route.fullPath" />
+<n-menu class="admin-nav" :options="menuOptions" :value="selectedKey" />
 </template>

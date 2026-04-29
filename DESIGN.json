@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-29T00:00:00+08:00",
+  "title": "Design System: Simple Blog Admin",
+  "extensions": {
+    "northStar": "The Monochrome Writing Desk",
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink Body",
+        "canonical": "#161719",
+        "tonalRamp": ["#111214", "#161719", "#222325", "#5F6368", "#80858B"]
+      },
+      "graphite": {
+        "role": "primary",
+        "displayName": "Graphite Action",
+        "canonical": "#222325",
+        "tonalRamp": ["#111214", "#161719", "#222325", "#5F6368"]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Paper Canvas",
+        "canonical": "#F2F2F0",
+        "tonalRamp": ["#EBEBE8", "#F2F2F0", "#F7F7F5", "#FBFBF9"]
+      }
+    },
+    "elevationTokens": {
+      "panelLift": "0 16px 40px rgba(17, 18, 20, 0.06)",
+      "strongPanelLift": "0 20px 56px rgba(17, 18, 20, 0.08)",
+      "shellLift": "0 18px 60px rgba(17, 18, 20, 0.08)"
+    },
+    "motionTokens": {
+      "defaultTransition": "color 0.2s ease, border-color 0.2s ease, transform 0.2s ease"
+    },
+    "componentNotes": {
+      "buttons": "Buttons are compact, graphite-forward, and neutral in expression. Primary buttons carry the darkest recurring tone.",
+      "cards": "Cards use paper-white surfaces, subtle borders, and ambient shadows. They should never feel glossy or inflated.",
+      "navigation": "Navigation sits inside a distinct shell. Active states invert into graphite with light text."
+    },
+    "rules": {
+      "dos": [
+        "Keep the system monochrome and paper-toned.",
+        "Use radius restraint: 18px for major shells, 14px or below for nested surfaces.",
+        "Use typography and spacing to create hierarchy before adding stronger color or decoration."
+      ],
+      "donts": [
+        "Do not use pure black or pure white.",
+        "Do not reintroduce saturated brand accents.",
+        "Do not use gradients, glassmorphism, or oversized radius-heavy cards."
+      ]
+    }
+  }
+}

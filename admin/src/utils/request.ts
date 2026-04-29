@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { getRealPath } from '.'
 
 axios.interceptors.request.use(config => {
-    config.baseURL = import.meta.env.VITE_BASE_API_URL || '/api';
+    config.baseURL = '/api';
     config.withCredentials = true
     return config
 })

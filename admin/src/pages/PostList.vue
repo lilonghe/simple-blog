@@ -1,29 +1,27 @@
 <script setup lang="ts">
 import { getPostListReq, deletePostReq } from '@/services'
-import { onMounted, ref, h, computed, watchEffect, watch } from 'vue'
+import { onMounted, ref, h, computed, watch } from 'vue'
 import { NDataTable, NTag, NInput, NPopconfirm, NSelect, NButton } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { formatTime, debounce } from '@/utils'
 
-const paginationParams = ref({ pageSize: 10, page: 1,})
+const paginationParams = ref({ pageSize: 10, page: 1 })
 const filterParams = ref({ status: undefined, is_public: undefined, keyword: undefined })
-const postList = ref([])
+const postList = ref<any[]>([])
 const total = ref(0)
-const pagination = computed(() => {
-  return {
-    ...paginationParams.value,
-    itemCount: total.value,
-  }
-})
 const loading = ref(false)
+
+const pagination = computed(() => ({
+  ...paginationParams.value,
+  itemCount: total.value,
+}))
 
 const loadData = async () => {
   loading.value = true
-  let { data } = await getPostListReq({...paginationParams.value, ...filterParams.value});
+  const { data } = await getPostListReq({ ...paginationParams.value, ...filterParams.value })
   if (data) {
-    const { list, total: totalCount } = data;
-    postList.value = list
-    total.value = totalCount
+    postList.value = data.list
+    total.value = data.total
   }
   loading.value = false
 }
@@ -32,14 +30,18 @@ onMounted(() => {
   loadData()
 })
 
-watch(filterParams, (now, old) => {
-  if (now.keyword !== old.keyword) {
-    paginationParams.value.page = 1
-    debounce(loadData)
-  } else {
-    handlePageChange(1)
-  }
-}, { deep: true })
+watch(
+  filterParams,
+  (now, old) => {
+    if (now.keyword !== old.keyword) {
+      paginationParams.value.page = 1
+      debounce(loadData)
+    } else {
+      handlePageChange(1)
+    }
+  },
+  { deep: true },
+)
 
 const handleViewPost = (pathname: string) => {
   window.open('/post/' + pathname + '.html')
@@ -49,113 +51,108 @@ const columns = [
   {
     title: 'Title',
     key: 'title',
-    render: (row: any) => {
-      return h(
-        'a',
-        {
-          onClick: () => row.status !==0 && handleViewPost(row.pathname),
-          class: row.status !== 0 ? 'link cursor-pointer' : 'cursor-not-allowed'
-        },
-        {
-          default: () => row.title
-        }
-      )
-    }
+    render: (row: any) =>
+      h('div', { class: 'table-title-cell' }, [
+        h(
+          'a',
+          {
+            onClick: () => row.status !== 0 && handleViewPost(row.pathname),
+            class: row.status !== 0 ? 'link cursor-pointer' : 'table-link-disabled',
+          },
+          { default: () => row.title },
+        ),
+        h('span', { class: 'table-title-cell__meta' }, `/post/${row.pathname}.html`),
+      ]),
   },
   {
     title: 'Status',
     key: 'status',
-    render: (row: any) => {
-      return h(
-          NTag, 
-          {
-            type: row.status === 3 ? 'success' : 'default',
-          },
-          {
-            default: () => row.status === 3 ? 'Published' : 'Draft'
-          }
-        ) 
-    }
+    width: 110,
+    render: (row: any) =>
+      h(
+        NTag,
+        {
+          type: row.status === 3 ? 'success' : 'default',
+        },
+        {
+          default: () => (row.status === 3 ? 'Published' : 'Draft'),
+        },
+      ),
   },
   {
     title: 'Visibility',
     key: 'is_public',
-    render: (row: any) => {
-      return row.is_public ? 'Public' : 'Private'
-    }
+    width: 110,
+    render: (row: any) => (row.is_public ? 'Public' : 'Private'),
   },
   {
-    title: 'Publish time',
+    title: 'Published',
     key: 'create_time',
-    render: (row: any) => formatTime(row.create_time)
+    width: 180,
+    render: (row: any) => formatTime(row.create_time),
   },
   {
-    title: 'Visit',
+    title: 'Visits',
     key: 'visit_count',
+    width: 90,
   },
   {
     title: 'Action',
     key: 'action',
-    render: (row: any) => {
-      return h(
-        'div',
-        {
-          class: 'flex gap-4',
-        },
-        [
-          h(
-            RouterLink,
-            {
-              to: '/post/edit/' + row.id,
-              class: 'link'
-            },
-            {
-              default: () => 'Edit',
-            }
-          ),
-          h(
-            NPopconfirm,
-            {
-              onPositiveClick: () => handleDelete(row.id),
-
-            },
-            {
-              trigger: () => h(
+    width: 140,
+    render: (row: any) =>
+      h('div', { class: 'table-actions' }, [
+        h(
+          RouterLink,
+          {
+            to: '/post/edit/' + row.id,
+            class: 'table-action',
+          },
+          {
+            default: () => 'Edit',
+          },
+        ),
+        h(
+          NPopconfirm,
+          {
+            onPositiveClick: () => handleDelete(row.id),
+          },
+          {
+            trigger: () =>
+              h(
                 'a',
                 {
-                  class: 'link cursor-pointer',
-                }, {
-                  default: () => 'Delete',
-              }),
-              default: () => `Are you sure to delete ${row.title}?`,
-            }
-          )
-        ]
-      )
-    }
-  }
+                  class: 'table-action table-action--danger cursor-pointer',
+                },
+                { default: () => 'Delete' },
+              ),
+            default: () => `Delete "${row.title}"?`,
+          },
+        ),
+      ]),
+  },
 ]
 
 const statusList = [
   {
     label: 'Published',
-    value: '3'
+    value: '3',
   },
   {
     label: 'Draft',
-    value: '0'
+    value: '0',
   },
 ]
 
 const visibilityList = [
   {
     label: 'Public',
-    value: 'true'
+    value: 'true',
   },
   {
-    label: 'Viewable With Link(Private)',
-    value: 'false'
-  }
+    label: 'Private link only',
+    value: 'false',
+  },
 ]
 
 const handlePageChange = (page: number) => {
@@ -164,7 +161,7 @@ const handlePageChange = (page: number) => {
 }
 
 const handleDelete = async (id: number) => {
-  let { code } = await deletePostReq(id)
+  const { code } = await deletePostReq(id)
   if (!code) {
     window.$message.success('Delete success')
     if (postList.value.length === 1) {
@@ -173,47 +170,57 @@ const handleDelete = async (id: number) => {
     loadData()
   }
 }
-
 </script>
 
 <template>
-<div>
-  <div class="mb-2 flex gap-4">
-    <div class="w-1/4" >
-      <n-input 
-        placeholder="Search title" 
-        v-model:value="filterParams.keyword" />
-    </div>
-    <div class="w-1/4" >
-      <n-select 
-        placeholder="Filter post status" 
-        clearable 
-        v-model:value="filterParams.status" 
-        :options="statusList" />
-    </div>
-    <div class="w-1/4" >
-      <n-select 
-        placeholder="Filter post visibility" 
-        clearable 
-        v-model:value="filterParams.is_public" 
-        :options="visibilityList" />
-    </div>
+  <div class="page-stack">
+    <section class="page-surface page-surface--padded">
+      <div class="page-toolbar">
+        <div>
+          <p class="section-kicker">Library</p>
+          <h2 class="section-title">{{ total || 0 }} posts in the archive</h2>
+          <p class="section-copy">
+            Keep titles, visibility and publishing state under control from one consistent table.
+          </p>
+        </div>
+        <router-link to="/post/create">
+          <n-button type="primary">Create post</n-button>
+        </router-link>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-field filter-field--wide">
+          <n-input v-model:value="filterParams.keyword" placeholder="Search title" />
+        </div>
+        <div class="filter-field">
+          <n-select
+            v-model:value="filterParams.status"
+            clearable
+            placeholder="Status"
+            :options="statusList"
+          />
+        </div>
+        <div class="filter-field">
+          <n-select
+            v-model:value="filterParams.is_public"
+            clearable
+            placeholder="Visibility"
+            :options="visibilityList"
+          />
+        </div>
+      </div>
+
+      <div class="data-table-wrap">
+        <n-data-table
+          :loading="loading"
+          :remote="true"
+          :data="postList"
+          :columns="columns"
+          :pagination="pagination"
+          striped
+          @update:page="handlePageChange"
+        />
+      </div>
+    </section>
   </div>
-  <div class="mb-2">
-    <router-link to="/post/create"><n-button type="primary">Create</n-button></router-link>
-  </div>
-  <n-data-table
-    :loading="loading"
-    :remote="true"
-    :data="postList"
-    :columns="columns"
-    :pagination="pagination"
-    @update:page="handlePageChange" />
-    
-</div>
 </template>
-
-<style>
-
-  
-</style>

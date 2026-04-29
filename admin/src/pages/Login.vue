@@ -1,68 +1,89 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginReq } from '@/services'
-import { NButton, NForm, NFormItem, NInput, FormInst, FormRules } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, type FormInst, type FormRules } from 'naive-ui'
 import { useSesssionStore } from '@/stores/session'
+import { useGlobalStore } from '@/stores/global'
 
 interface ModelType {
-    name: string
-    password: string
+  name: string
+  password: string
 }
 
 const sessionStore = useSesssionStore()
-const formRef = ref<FormInst | null>();
-const model = ref<ModelType>({ name: '', password: '' });
+const globalStore = useGlobalStore()
+const formRef = ref<FormInst | null>(null)
+const model = ref<ModelType>({ name: '', password: '' })
 const rules: FormRules = {
-    name: [{ required: true, message: 'please input username', trigger: ['input', 'blur'] }],
-    password: [{required: true, message: 'please input password', trigger: ['input', 'blur']}]
+  name: [{ required: true, message: 'Please enter your username.', trigger: ['input', 'blur'] }],
+  password: [{ required: true, message: 'Please enter your password.', trigger: ['input', 'blur'] }],
 }
 
 const router = useRouter()
 
-const login = (e: any) => {
-    e.preventDefault()
-    formRef?.value?.validate(async (errors: any) => {
-        if (!errors) {
-            let { code } = await loginReq(model.value.name, model.value.password)
-            if (!code) {
-                sessionStore.getUser()
-                router.replace('/')
-            }
-        }
-    })
-    
+onMounted(() => {
+  globalStore.getOptions()
+})
+
+const login = async () => {
+  formRef.value?.validate(async (errors: any) => {
+    if (!errors) {
+      const { code } = await loginReq(model.value.name, model.value.password)
+      if (!code) {
+        await sessionStore.getUser()
+        router.replace('/')
+      }
+    }
+  })
 }
 </script>
 
 <template>
-<div class="form">
-    <n-form
-    ref="formRef"
-    :label-width="80"
-    :rules="rules"
-    :model="model"
-  >
-    <n-form-item label="Name" path="name">
-      <n-input v-model:value="model.name" placeholder="Username" />
-    </n-form-item>
-    <n-form-item label="Password" path="password">
-      <n-input @keyup.enter.native="login" type="password" v-model:value="model.password" placeholder="Password" />
-    </n-form-item>
-    <div class="flex justify-end">
-      <n-button :style="{width: '100%'}" block attr-type="button" @click="login">Login</n-button>
-    </div>
-  </n-form>
-</div>
-</template>
+  <div class="auth-shell">
+    <section class="auth-panel">
+      <div class="auth-panel__copy">
+        <div>
+          <span class="auth-panel__eyebrow">Simple Blog Admin</span>
+          <h1 class="auth-panel__title">
+            {{ globalStore.options.title || 'A cleaner desk for your publishing work.' }}
+          </h1>
+          <p class="auth-panel__body">
+            Write, revise and keep the blog organized from one calm workspace. The layout stays
+            quiet so the content can stay front and center.
+          </p>
+        </div>
 
-<style>
-.form {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-}
-  
-</style>
+        <div class="auth-panel__meta">
+          <span class="auth-meta-pill">Focused writing</span>
+          <span class="auth-meta-pill">Structured publishing</span>
+          <span class="auth-meta-pill">Minimal overhead</span>
+        </div>
+      </div>
+
+      <div class="auth-panel__form">
+        <div>
+          <h2 class="auth-form__heading">Sign in</h2>
+          <p class="auth-form__copy">Use your admin account to continue into the workspace.</p>
+        </div>
+
+        <n-form ref="formRef" :rules="rules" :model="model" label-placement="top">
+          <n-form-item label="Username" path="name">
+            <n-input v-model:value="model.name" placeholder="Enter username" />
+          </n-form-item>
+          <n-form-item label="Password" path="password">
+            <n-input
+              v-model:value="model.password"
+              type="password"
+              placeholder="Enter password"
+              @keydown.enter.prevent="login"
+            />
+          </n-form-item>
+          <div class="form-actions">
+            <n-button block type="primary" @click="login">Enter workspace</n-button>
+          </div>
+        </n-form>
+      </div>
+    </section>
+  </div>
+</template>

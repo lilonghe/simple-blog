@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { RouterView, useRoute, RouterLink } from 'vue-router';
+import { computed } from 'vue'
+import { RouterView, useRoute, RouterLink } from 'vue-router'
 import BackIcon from '@/assets/back.svg'
 const route = useRoute()
+const pageSection = computed(() => (route.meta.section as string) || 'Workspace')
+const pageDescription = computed(() => route.meta.description as string | undefined)
 </script>
 <template>
-<div v-if="route.meta.title" class="flex items-center mt-1 mb-3 gap-2">
-    <router-link v-if="route.meta.back" :to="(route.meta.back as string)" class="flex">
-        <img :src="BackIcon" class="w-[20px] h-[20px] cursor-pointer" />
+<section class="page-shell">
+  <header v-if="route.meta.title" class="page-heading">
+    <router-link v-if="route.meta.back" :to="route.meta.back as string" class="page-heading__back">
+      <img :src="BackIcon" class="h-[18px] w-[18px]" />
     </router-link>
-    <h2 class="font-normal m-0">{{ route.meta.title }}</h2>
-</div>
-<router-view :key="route.fullPath"></router-view>
+    <div class="page-heading__copy">
+      <p class="page-eyebrow">{{ pageSection }}</p>
+      <h1 class="page-title">{{ route.meta.title }}</h1>
+      <p v-if="pageDescription" class="page-description">{{ pageDescription }}</p>
+    </div>
+  </header>
+  <router-view :key="route.fullPath"></router-view>
+</section>
 </template>
