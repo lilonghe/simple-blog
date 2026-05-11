@@ -179,8 +179,8 @@ const loaded = computed(() => !route.params.id || targetPost.value?.id !== undef
               <mavon-editor
                 ref="editorRef"
                 v-model="form.markdown_content"
-                :on-img-add="handleUploadImage"
-                :on-change="handleEditChange"
+                @imgAdd="handleUploadImage"
+                @change="handleEditChange"
                 :box-shadow="false"
                 :ishljs="false"
               />
